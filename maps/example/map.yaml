@@ -1,0 +1,9 @@
+name: example
+displayName: Example Map
+teamCount: 2
+teamSize: 1
+
+worldSpawn: "5:1:5"
+spawnList:
+  - "1:1:1"
+  - "14:1:14"
