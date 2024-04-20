@@ -1,4 +1,4 @@
-package archyonix.ewars.shared.lib.shared.libs
+package archyonix.ewars.entities.player
 
 import net.minestom.server.entity.Player
 import net.minestom.server.tag.Tag
