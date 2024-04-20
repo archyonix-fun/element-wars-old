@@ -2,6 +2,8 @@ package archyonix.ewars.game.handler
 
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.handler.SpectatorEventHandler
+import archyonix.ewars.entities.team.functions.distributeTeams
+import archyonix.ewars.entities.team.functions.useGameTeams
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
 import archyonix.ewars.game.events.InitGameEvent
@@ -40,6 +42,11 @@ class GameEventHandler : PublicEventNode("game") {
 
                 GameStage.COUNTDOWN -> {
                     game!!.schedule.scheduleNextTick(CountdownTask())
+                }
+
+                GameStage.RUNTIME -> {
+                    game!!.teams = useGameTeams()
+                    distributeTeams()
                 }
 
                 else -> {}

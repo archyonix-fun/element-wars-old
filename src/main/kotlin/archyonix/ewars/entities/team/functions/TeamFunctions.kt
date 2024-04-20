@@ -1,0 +1,60 @@
+package archyonix.ewars.entities.team.functions
+
+import archyonix.ewars.entities.player._setTeam
+import archyonix.ewars.entities.player.backToSpawn
+import archyonix.ewars.entities.team.GameTeam
+import archyonix.ewars.game.Game
+import archyonix.ewars.shared.lib.game
+import net.minestom.server.coordinate.Pos
+import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
+import java.io.File
+import java.util.*
+
+private fun loadTeams(count: Int): Set<GameTeam> {
+    val teamSet: MutableSet<GameTeam> = HashSet()
+    val configFile = File("config/teams.yaml")
+    val config = YamlConfiguration.loadConfiguration(configFile)
+    for (name in config.getKeys(false)) {
+        val displayName = config.getString("$name.displayName")!!
+        val color = config.getString("$name.color")!!
+        val teamData = GameTeam(name, displayName, color)
+        teamSet.add(teamData)
+        if (teamSet.size >= count) break
+    }
+    if (teamSet.size < count) {
+        throw Error("The number of configured teams does not match the required value: ${teamSet.size} < $count")
+    }
+    return teamSet
+}
+
+fun useGameTeams(): Map<String, GameTeam> {
+    val gameTeams: MutableMap<String, GameTeam> = HashMap()
+    val spawnList: List<Pos> = game!!.map.SPAWN_LIST
+    var n = 0
+    for (team in loadTeams(game!!.map.TEAM_COUNT)) {
+        team.spawn = spawnList[n++]
+        gameTeams[team.id] = team
+    }
+    return gameTeams
+}
+
+private fun pickRandomFreeTeam(): GameTeam {
+    val freeTeams: MutableList<GameTeam> = ArrayList()
+    for (team in game!!.teams!!.values) {
+        if (team.getPlayers().size < team.maxPlayers) freeTeams.add(team)
+    }
+    if(freeTeams.isEmpty()) throw Error("All teams are full")
+
+    val random = Random()
+    return freeTeams[random.nextInt(freeTeams.size)]
+}
+
+fun distributeTeams() {
+    for (player in game!!.getPlayers()) {
+        val team = pickRandomFreeTeam()
+        player._setTeam(team)
+        player.backToSpawn()
+    }
+}
+
+fun findTeamById(id: String) = game!!.teams!![id]

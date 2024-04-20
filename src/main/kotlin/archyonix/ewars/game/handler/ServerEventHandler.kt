@@ -6,8 +6,8 @@ import archyonix.ewars.shared.lib.events
 import archyonix.ewars.shared.lib.game
 import archyonix.ewars.shared.lib.gameArgs
 import archyonix.ewars.entities.player.PlayerType
-import archyonix.ewars.entities.player.getType
-import archyonix.ewars.entities.player.setType
+import archyonix.ewars.entities.player._getType
+import archyonix.ewars.entities.player._setType
 import net.minestom.server.event.PublicEventNode
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
 import net.minestom.server.event.player.PlayerPacketOutEvent
@@ -21,7 +21,7 @@ class ServerEventHandler() : PublicEventNode("server") {
 
             val player = event.player
             val isAccess = gameArgs!!.PLAYER_LIST.contains(player.username)
-            player.setType(if (isAccess) PlayerType.PLAYER else PlayerType.SPECTATOR)
+            player._setType(if (isAccess) PlayerType.PLAYER else PlayerType.SPECTATOR)
 
             player.respawnPoint = game!!.map.WORLD_SPAWN
         }
@@ -29,7 +29,7 @@ class ServerEventHandler() : PublicEventNode("server") {
         addListener(PlayerSpawnEvent::class.java) { event ->
             val player = event.player
 
-            events!!.call(PlayerJoinTheGameEvent(player, player.getType()))
+            events!!.call(PlayerJoinTheGameEvent(player, player._getType()))
         }
 
         addListener(PlayerPacketOutEvent::class.java) { event ->
@@ -38,7 +38,7 @@ class ServerEventHandler() : PublicEventNode("server") {
             if (packet is PlayerInfoUpdatePacket) {
                 if(!packet.actions().contains(PlayerInfoUpdatePacket.Action.ADD_PLAYER)) return@addListener
                 val addPlayer = findPlayerByUsername(packet.entries()[0].username)
-                event.isCancelled = addPlayer?.getType() == PlayerType.SPECTATOR
+                event.isCancelled = addPlayer?._getType() == PlayerType.SPECTATOR
             }
         }
 

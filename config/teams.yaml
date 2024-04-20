@@ -1,0 +1,6 @@
+red:
+  displayName: "Красные"
+  color: "#eb120e"
+blue:
+  displayName: "Синие"
+  color: "#1a58c4"
