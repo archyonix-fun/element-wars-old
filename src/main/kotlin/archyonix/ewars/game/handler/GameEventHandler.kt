@@ -8,6 +8,7 @@ import archyonix.ewars.game.events.InitGameEvent
 import archyonix.ewars.game.events.PlayerJoinTheGameEvent
 import archyonix.ewars.game.functions.configurePlayer
 import archyonix.ewars.game.functions.configureSpectator
+import archyonix.ewars.game.task.CountdownTask
 import archyonix.ewars.game.task.ExpectationTask
 import archyonix.ewars.shared.lib.events
 import archyonix.ewars.shared.lib.game
@@ -36,7 +37,10 @@ class GameEventHandler : PublicEventNode("game") {
                 GameStage.EXPECTATION -> {
                     game!!.schedule.scheduleNextTick(ExpectationTask())
                 }
-                GameStage.COUNTDOWN -> {}
+
+                GameStage.COUNTDOWN -> {
+                    game!!.schedule.scheduleNextTick(CountdownTask())
+                }
 
                 else -> {}
             }
