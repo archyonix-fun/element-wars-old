@@ -1,6 +1,7 @@
 package archyonix.ewars.shared.lib
 
 import archyonix.ewars.game.Game
+import archyonix.ewars.game.events.InitGameEvent
 import archyonix.ewars.game.handler.ServerEventHandler
 import archyonix.ewars.shared.lib.shared.args.GameArgs
 import net.minestom.server.MinecraftServer
@@ -16,6 +17,7 @@ fun main(args: Array<String>) {
     game = Game()
 
     events = ServerEventHandler()
+    events!!.call(InitGameEvent(game!!))
     MinecraftServer.getGlobalEventHandler().addChild(events!!)
 
     server.start("0.0.0.0", 25565)
