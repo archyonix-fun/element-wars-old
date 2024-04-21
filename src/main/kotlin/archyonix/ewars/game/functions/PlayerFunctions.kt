@@ -5,7 +5,7 @@ import net.minestom.server.entity.GameMode
 import net.minestom.server.entity.Player
 
 fun configurePlayer(player: Player) {
-    player.setGameMode(GameMode.ADVENTURE)
+    player.setGameMode(GameMode.SURVIVAL)
 }
 fun configureSpectator(player: Player) {
     player.setGameMode(GameMode.SPECTATOR)

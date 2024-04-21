@@ -1,4 +1,4 @@
-package archyonix.ewars.shared.lib.shared.args
+package archyonix.ewars.shared.args
 
 class GameArgs(private val args: Array<String>) {
     init {

@@ -1,4 +1,4 @@
-package archyonix.ewars.shared.lib;
+package archyonix.ewars.shared;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;

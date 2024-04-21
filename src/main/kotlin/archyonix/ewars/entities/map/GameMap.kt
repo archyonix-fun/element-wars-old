@@ -1,7 +1,7 @@
 package archyonix.ewars.entities.map
 
-import archyonix.ewars.shared.lib.WorldLoader
-import archyonix.ewars.shared.lib.shared.libs.toPos
+import archyonix.ewars.shared.WorldLoader
+import archyonix.ewars.shared.libs.toPos
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.instance.IChunkLoader
 import net.minestom.server.instance.block.Block

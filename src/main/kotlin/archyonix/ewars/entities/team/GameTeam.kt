@@ -1,7 +1,7 @@
 package archyonix.ewars.entities.team
 
 import archyonix.ewars.entities.player._getTeam
-import archyonix.ewars.shared.lib.game
+import archyonix.ewars.game
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.minestom.server.MinecraftServer

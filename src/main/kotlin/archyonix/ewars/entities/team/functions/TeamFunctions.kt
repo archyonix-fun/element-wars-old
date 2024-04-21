@@ -3,8 +3,7 @@ package archyonix.ewars.entities.team.functions
 import archyonix.ewars.entities.player._setTeam
 import archyonix.ewars.entities.player.backToSpawn
 import archyonix.ewars.entities.team.GameTeam
-import archyonix.ewars.game.Game
-import archyonix.ewars.shared.lib.game
+import archyonix.ewars.game
 import net.minestom.server.coordinate.Pos
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File

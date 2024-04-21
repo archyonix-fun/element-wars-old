@@ -1,4 +1,4 @@
-package archyonix.ewars.shared.lib.shared.libs
+package archyonix.ewars.shared.libs
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title

@@ -2,9 +2,9 @@ package archyonix.ewars.game.handler
 
 import archyonix.ewars.game.events.PlayerJoinTheGameEvent
 import archyonix.ewars.game.functions.findPlayerByUsername
-import archyonix.ewars.shared.lib.events
-import archyonix.ewars.shared.lib.game
-import archyonix.ewars.shared.lib.gameArgs
+import archyonix.ewars.events
+import archyonix.ewars.game
+import archyonix.ewars.gameArgs
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player._getType
 import archyonix.ewars.entities.player._setType

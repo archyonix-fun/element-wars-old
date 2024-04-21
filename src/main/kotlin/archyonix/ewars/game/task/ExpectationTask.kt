@@ -1,8 +1,8 @@
 package archyonix.ewars.game.task
 
 import archyonix.ewars.game.enums.GameStage
-import archyonix.ewars.shared.lib.game
-import archyonix.ewars.shared.lib.shared.libs.createTitle
+import archyonix.ewars.game
+import archyonix.ewars.shared.libs.createTitle
 import net.kyori.adventure.title.Title
 import java.time.Duration
 import kotlin.system.exitProcess
