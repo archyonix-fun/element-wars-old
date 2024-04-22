@@ -1,0 +1,22 @@
+name: "main-base"
+area: 24
+
+schematic:
+  tier-1:
+    displayName: "Костёр"
+    schema: "schemas/tier-1.schema"
+    data:
+      health: 100
+      spawnPos: "0:0:0"
+  tier-2:
+    displayName: "Лагерь"
+    schema: "schemas/tier-2.schema"
+    data:
+      health: 250
+      spawnPos: "0:0:0"
+  tier-3:
+    displayName: "Крепость"
+    schema: "schemas/tier-3.schema"
+    data:
+      health: 500
+      spawnPos: "0:0:0"
