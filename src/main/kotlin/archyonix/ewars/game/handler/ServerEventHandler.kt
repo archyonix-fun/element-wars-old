@@ -17,19 +17,19 @@ import net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket
 class ServerEventHandler() : PublicEventNode("server") {
     init {
         addListener(AsyncPlayerConfigurationEvent::class.java) { event ->
-            event.spawningInstance = game!!.instance
+            event.spawningInstance = game.instance
 
             val player = event.player
-            val isAccess = gameArgs!!.PLAYER_LIST.contains(player.username)
+            val isAccess = gameArgs.PLAYER_LIST.contains(player.username)
             player._setType(if (isAccess) PlayerType.PLAYER else PlayerType.SPECTATOR)
 
-            player.respawnPoint = game!!.map.WORLD_SPAWN
+            player.respawnPoint = game.map.WORLD_SPAWN
         }
 
         addListener(PlayerSpawnEvent::class.java) { event ->
             val player = event.player
 
-            events!!.call(PlayerJoinTheGameEvent(player, player._getType()))
+            events.call(PlayerJoinTheGameEvent(player, player._getType()))
         }
 
         addListener(PlayerPacketOutEvent::class.java) { event ->

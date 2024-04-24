@@ -48,4 +48,4 @@ fun loadItems(): Map<String, GameItem> {
 val GameItemIdTag = Tag.String("itemId")
 fun ItemStack.hasGameItem() = hasTag(GameItemIdTag)
 
-fun findItemById(id: String) = game!!.items[id]!!
+fun findItemById(id: String) = game.items[id]!!

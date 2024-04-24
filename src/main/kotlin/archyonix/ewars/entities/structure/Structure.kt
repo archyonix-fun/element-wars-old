@@ -1,7 +1,10 @@
 package archyonix.ewars.entities.structure
 
+import archyonix.ewars.structureManager
+
 abstract class Structure(
-    val data: StructureData,
+    typeId: String,
     val teamId: String,
 ) {
+    val data: StructureData = structureManager.findDataByTypeId(typeId)
 }

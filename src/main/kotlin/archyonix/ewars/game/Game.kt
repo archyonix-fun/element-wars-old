@@ -12,7 +12,7 @@ import archyonix.ewars.events
 import archyonix.ewars.gameArgs
 
 class Game {
-    val map = GameMap(gameArgs!!.MAP_NAME)
+    val map = GameMap(gameArgs.MAP_NAME)
     val instance = GameInstance(map)
     val schedule = instance.scheduler()
     var teams: Map<String, GameTeam>? = null
@@ -20,7 +20,7 @@ class Game {
     var stage = GameStage.EXPECTATION
         set(value) {
             field = value
-            events!!.call(ChangeGameStageEvent(value))
+            events.call(ChangeGameStageEvent(value))
         }
 
     val maxPlayers = map.TEAM_COUNT * map.TEAM_SIZE

@@ -1,7 +1,7 @@
 name: "main-base"
 area: 24
 
-schematic:
+variants:
   tier-1:
     displayName: "Костёр"
     schema: "schemas/tier-1.schem"
@@ -10,13 +10,13 @@ schematic:
       spawnPos: "0:0:0"
   tier-2:
     displayName: "Лагерь"
-    schema: "schemas/tier-2.schema"
+    schema: "schemas/tier-2.schem"
     data:
       health: 250
       spawnPos: "0:0:0"
   tier-3:
     displayName: "Крепость"
-    schema: "schemas/tier-3.schema"
+    schema: "schemas/tier-3.schem"
     data:
       health: 500
       spawnPos: "0:0:0"

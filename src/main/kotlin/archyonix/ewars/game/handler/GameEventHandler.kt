@@ -3,7 +3,7 @@ package archyonix.ewars.game.handler
 import archyonix.ewars.entities.item.action.handler.ItemActionHandler
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.handler.SpectatorEventHandler
-import archyonix.ewars.entities.structure.StructureData
+import archyonix.ewars.entities.structure.StructureVariant
 import archyonix.ewars.entities.team.functions.distributeTeams
 import archyonix.ewars.entities.team.functions.useGameTeams
 import archyonix.ewars.events
@@ -30,29 +30,26 @@ class GameEventHandler : PublicEventNode("game") {
 
             val username = event.player.username
             val type = event.playerType.name
-            val count = game!!.getPlayers().size
-            val max = game!!.maxPlayers
+            val count = game.getPlayers().size
+            val max = game.maxPlayers
 
             println("$username joined to server. PlayerType=$type ($count/$max)")
-
-            val data = StructureData("main-base")
-            data.build(Pos(5.0, 0.0, 5.0))
         }
         addListener(InitGameEvent::class.java) { event ->
-            events!!.call(ChangeGameStageEvent(event.game.stage))
+            events.call(ChangeGameStageEvent(event.game.stage))
         }
         addListener(ChangeGameStageEvent::class.java) { event ->
             when (event.stage) {
                 GameStage.EXPECTATION -> {
-                    game!!.schedule.scheduleNextTick(ExpectationTask())
+                    game.schedule.scheduleNextTick(ExpectationTask())
                 }
 
                 GameStage.COUNTDOWN -> {
-                    game!!.schedule.scheduleNextTick(CountdownTask())
+                    game.schedule.scheduleNextTick(CountdownTask())
                 }
 
                 GameStage.RUNTIME -> {
-                    game!!.teams = useGameTeams()
+                    game.teams = useGameTeams()
                     distributeTeams()
                     giveBuildMainBaseTools()
                 }

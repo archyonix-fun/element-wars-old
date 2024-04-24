@@ -8,8 +8,8 @@ import java.time.Duration
 class CountdownTask : Runnable {
     private var countdown: Int = 10
     override fun run() {
-        val count = game!!.getPlayers().size
-        val max = game!!.maxPlayers
+        val count = game.getPlayers().size
+        val max = game.maxPlayers
 
         val title = createTitle(
             "$countdown",
@@ -17,15 +17,15 @@ class CountdownTask : Runnable {
             1200
         )
 
-        val isCountdown = game!!.stage == GameStage.COUNTDOWN
+        val isCountdown = game.stage == GameStage.COUNTDOWN
         if (count == max && isCountdown) {
-            if (countdown-- <= 0) game!!.stage = GameStage.RUNTIME
+            if (countdown-- <= 0) game.stage = GameStage.RUNTIME
             else {
-                for (player in game!!.getPlayers()) {
+                for (player in game.getPlayers()) {
                     player.showTitle(title)
                 }
-                game!!.schedule.buildTask(this).delay(Duration.ofSeconds(1)).schedule()
+                game.schedule.buildTask(this).delay(Duration.ofSeconds(1)).schedule()
             }
-        } else if(isCountdown) game!!.stage = GameStage.EXPECTATION
+        } else if(isCountdown) game.stage = GameStage.EXPECTATION
     }
 }

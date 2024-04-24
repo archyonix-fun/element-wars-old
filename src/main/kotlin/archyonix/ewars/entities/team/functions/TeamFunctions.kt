@@ -28,9 +28,9 @@ private fun loadTeams(count: Int): Set<GameTeam> {
 
 fun useGameTeams(): Map<String, GameTeam> {
     val gameTeams: MutableMap<String, GameTeam> = HashMap()
-    val spawnList: List<Pos> = game!!.map.SPAWN_LIST
+    val spawnList: List<Pos> = game.map.SPAWN_LIST
     var n = 0
-    for (team in loadTeams(game!!.map.TEAM_COUNT)) {
+    for (team in loadTeams(game.map.TEAM_COUNT)) {
         team.spawn = spawnList[n++]
         gameTeams[team.id] = team
     }
@@ -39,7 +39,7 @@ fun useGameTeams(): Map<String, GameTeam> {
 
 private fun pickRandomFreeTeam(): GameTeam {
     val freeTeams: MutableList<GameTeam> = ArrayList()
-    for (team in game!!.teams!!.values) {
+    for (team in game.teams!!.values) {
         if (team.getPlayers().size < team.maxPlayers) freeTeams.add(team)
     }
     if(freeTeams.isEmpty()) throw Error("All teams are full")
@@ -49,11 +49,11 @@ private fun pickRandomFreeTeam(): GameTeam {
 }
 
 fun distributeTeams() {
-    for (player in game!!.getPlayers()) {
+    for (player in game.getPlayers()) {
         val team = pickRandomFreeTeam()
         player._setTeam(team)
         player.backToSpawn()
     }
 }
 
-fun findTeamById(id: String) = game!!.teams!![id]
+fun findTeamById(id: String) = game.teams!![id]

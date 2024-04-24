@@ -14,11 +14,11 @@ class GameTeam(
     color: String
 ) {
     val color = TextColor.fromHexString(color)
-    val maxPlayers = game!!.map.TEAM_SIZE
+    val maxPlayers = game.map.TEAM_SIZE
     val minecraftTeam = createMinecraftTeam()
     var spawn = Pos(.0, .0, .0)
 
-    fun getPlayers() = game!!.getPlayers().filter {
+    fun getPlayers() = game.getPlayers().filter {
         try {
             val team = it._getTeam()
             team.id == id
