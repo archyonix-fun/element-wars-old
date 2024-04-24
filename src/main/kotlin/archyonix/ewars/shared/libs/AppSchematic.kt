@@ -1,63 +1,45 @@
 package archyonix.ewars.shared.libs
 
 import dev.hypera.scaffolding.region.Region
-import dev.hypera.scaffolding.schematic.Schematic
 import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.instance.Instance
 import net.minestom.server.instance.batch.AbsoluteBlockBatch
 import net.minestom.server.instance.block.Block
+import net.minestom.server.utils.Direction
+import org.jglrxavpok.hephaistos.nbt.CompressedProcesser
 import org.jglrxavpok.hephaistos.nbt.NBTCompound
 import org.jglrxavpok.hephaistos.nbt.NBTException
-import java.io.OutputStream
+import org.jglrxavpok.hephaistos.nbt.NBTReader
+import java.io.IOException
+import java.io.InputStream
 import java.util.concurrent.CompletableFuture
 
-class AppSchematic : Schematic {
+class AppSchematic(
+    private val direction: Direction = Direction.SOUTH
+) {
     private val regionBlocks: MutableList<Region.Block> = ArrayList()
     private var width: Short = 0
     private var height: Short = 0
     private var length: Short = 0
-    private var palette: MutableMap<String, Int> = HashMap()
+    private var palette: MutableMap<Int, String> = HashMap()
     private lateinit var blocksData: ByteArray
     private var read = false
-    private var offsetX = 0
-    private var offsetY = 0
-    private var offsetZ = 0
 
-    @Throws(NBTException::class)
-    override fun read(nbtTag: NBTCompound) {
-        readSizes(nbtTag)
-        readBlockPalette(nbtTag)
-        readOffsets(nbtTag)
-        readBlocks()
-        read = true
+    @Throws(IOException::class, NBTException::class)
+    fun read(inputStream: InputStream) {
+        val reader = NBTReader(inputStream, CompressedProcesser.GZIP)
+        this.read((reader.readNamed().second as NBTCompound))
+        reader.close()
+        inputStream.close()
     }
 
     @Throws(NBTException::class)
-    private fun readOffsets(nbtTag: NBTCompound) {
-        val metaData = nbtTag.getCompound("Metadata")
-        if (metaData == null) {
-            throw NBTException("Invalid Schematic: No Metadata")
-        } else {
-            val weOffsetX = metaData.getInt("WEOffsetX")
-            if (weOffsetX == null) {
-                throw NBTException("Invalid Schematic: No WEOffsetX In Metadata")
-            } else {
-                offsetX = weOffsetX
-                val weOffsetY = metaData.getInt("WEOffsetY")
-                if (weOffsetY == null) {
-                    throw NBTException("Invalid Schematic: No WEOffsetY In Metadata")
-                } else {
-                    offsetY = weOffsetY
-                    val weOffsetZ = metaData.getInt("WEOffsetZ")
-                    if (weOffsetZ == null) {
-                        throw NBTException("Invalid Schematic: No WEOffsetZ In Metadata")
-                    } else {
-                        offsetZ = weOffsetZ
-                    }
-                }
-            }
-        }
+    fun read(nbtTag: NBTCompound) {
+        readSizes(nbtTag)
+        readBlockPalette(nbtTag)
+        readBlocks()
+        read = true
     }
 
     @Throws(NBTException::class)
@@ -101,18 +83,8 @@ class AppSchematic : Schematic {
                         val key = var5.next() as String
                         val value = nbtPalette.getInt(key)
                             ?: throw NBTException("Invalid Schematic: Palette contains invalid value")
-                        palette[key] = value
+                        palette[value] = facingWithDir(key)
                     }
-                    palette = palette.entries.stream().sorted(java.util.Map.Entry.comparingByValue()).collect(
-                        { LinkedHashMap() },
-                        { map: LinkedHashMap<String, Int>, (key, value): Map.Entry<String, Int> ->
-                            map[key] = value
-                        },
-                        { obj: LinkedHashMap<String, Int>, m: LinkedHashMap<String, Int>? ->
-                            obj.putAll(
-                                m!!
-                            )
-                        })
                     val blocksData = nbtTag.getByteArray("BlockData")
                     if (blocksData != null && blocksData.size != 0) {
                         this.blocksData = blocksData.copyArray()
@@ -128,7 +100,6 @@ class AppSchematic : Schematic {
     private fun readBlocks() {
         var index = 0
         var i = 0
-        val paletteKeys: List<String?> = ArrayList(palette.keys)
         while (i < blocksData.size) {
             var value = 0
             var varIntLength = 0
@@ -142,13 +113,13 @@ class AppSchematic : Schematic {
                     val x = index % (width * length) % width
                     val y = index / (width * length)
                     val z = index % (width * length) / width
-                    val stateId = getStateId(paletteKeys[value]!!)
+                    val stateId = getStateId(palette[value]!!)
                     regionBlocks.add(
                         Region.Block(
                             Pos(
-                                (x + offsetX).toDouble(),
-                                (y + offsetY).toDouble(),
-                                (z + offsetZ).toDouble()
+                                x.toDouble(),
+                                y.toDouble(),
+                                z.toDouble()
                             ), stateId
                         )
                     )
@@ -160,9 +131,7 @@ class AppSchematic : Schematic {
         }
     }
 
-    override fun write(outputStream: OutputStream, region: Region) {}
-
-    override fun build(instance: Instance, position: Point): CompletableFuture<Region?> {
+    fun build(instance: Instance, position: Point): CompletableFuture<Region?> {
         return if (!read) {
             throw IllegalStateException("Schematic not read")
         } else {
@@ -175,7 +144,7 @@ class AppSchematic : Schematic {
                     val regionBlock =
                         var6.next() as Region.Block
                     val absoluteBlockPosition =
-                        regionBlock.position().add(position)
+                        regionBlock.position().withDirection(direction, width).add(position)
                     val stateId = regionBlock.stateId()
                     val block =
                         Block.fromStateId(stateId)
@@ -203,21 +172,6 @@ class AppSchematic : Schematic {
                 }
             }
             future
-        }
-    }
-
-    fun blocks(): Map<String, Region.Block> {
-        return if (!read) {
-            throw IllegalStateException("Schematic not read")
-        } else {
-            val blocks: MutableMap<String, Region.Block> = HashMap()
-            val var6: Iterator<*> = regionBlocks.iterator()
-            while (var6.hasNext()) {
-                val regionBlock = var6.next() as Region.Block
-                val pos = regionBlock.position.sub(offsetX.toDouble(), offsetY.toDouble(), offsetZ.toDouble())
-                blocks["${pos.blockX()}:${pos.blockY()}:${pos.blockZ()}"] = regionBlock
-            }
-            blocks
         }
     }
 
@@ -255,38 +209,36 @@ class AppSchematic : Schematic {
         }
     }
 
-    override fun getWidth(): Short {
-        return width
-    }
+    private fun facingWithDir(palette: String): String {
+        if (!palette.contains("facing")) return palette
+        return when (direction) {
+            Direction.NORTH -> {
+                palette.replace("facing=north", "facing==south")
+                    .replace("facing=south", "facing==north")
+                    .replace("facing=east", "facing==west")
+                    .replace("facing=west", "facing==east")
+                    .replace("==", "=")
+            }
 
-    override fun getHeight(): Short {
-        return height
-    }
+            Direction.EAST -> {
+                palette
+                    .replace("facing=north", "facing==east")
+                    .replace("facing=east", "facing==south")
+                    .replace("facing=south", "facing==west")
+                    .replace("facing=west", "facing==north")
+                    .replace("==", "=")
+            }
 
-    override fun getLength(): Short {
-        return length
-    }
+            Direction.WEST -> {
+                palette
+                    .replace("facing=north", "facing==west")
+                    .replace("facing=west", "facing==south")
+                    .replace("facing=south", "facing==east")
+                    .replace("facing=east", "facing==north")
+                    .replace("==", "=")
+            }
 
-    override fun getOffsetX(): Int {
-        return offsetX
-    }
-
-    override fun getOffsetY(): Int {
-        return offsetY
-    }
-
-    override fun getOffsetZ(): Int {
-        return offsetZ
-    }
-
-    override fun apply(setter: Block.Setter) {
-        val var2: Iterator<*> = regionBlocks.iterator()
-        while (var2.hasNext()) {
-            val block = var2.next() as Region.Block
-            val pos = block.position()
-            val minestomBlock = Block.fromStateId(block.stateId())
-                ?: throw IllegalStateException("Invalid block state id: " + block.stateId())
-            setter.setBlock(pos, minestomBlock)
+            else -> palette
         }
     }
 }

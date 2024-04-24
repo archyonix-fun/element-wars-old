@@ -32,14 +32,14 @@ fun Pos.withDirection(dir: Direction, area: Short): Pos {
 
     val newX = when(dir) {
         Direction.WEST -> abs(x - width)
-        Direction.SOUTH -> z
-        Direction.NORTH -> abs(z - width)
+        Direction.NORTH -> z
+        Direction.SOUTH -> abs(z - width)
         else -> x
     }
     val newZ = when(dir) {
         Direction.WEST -> abs(z - width)
-        Direction.SOUTH -> x
-        Direction.NORTH -> abs(x - width)
+        Direction.NORTH -> x
+        Direction.SOUTH -> abs(x - width)
         else -> z
     }
 
