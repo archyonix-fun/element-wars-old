@@ -1,5 +1,6 @@
 package archyonix.ewars.entities.structure
 
+import archyonix.ewars.regionManager
 import java.io.File
 import java.util.*
 
@@ -18,6 +19,11 @@ class StructureManager {
 
     private fun addType(data: StructureData) {
         structureTypes[data.id] = data
+    }
+
+    fun addStructure(structure: Structure) {
+        regionManager.addRegion(structure.region)
+        structures[structure.id] = structure
     }
 
     fun findStructuresByTeam(teamId: String) = structures.values.filter { it.teamId == teamId }

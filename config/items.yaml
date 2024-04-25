@@ -9,4 +9,4 @@ bmb_tool:
     BUILD_STRUCTURE:
       trigger: "RIGHT_CLICK_BLOCK"
       data:
-        structure_id: "main-base"
+        structureId: "main-base"

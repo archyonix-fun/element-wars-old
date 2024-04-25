@@ -1,9 +1,9 @@
 package archyonix.ewars.game.handler
 
 import archyonix.ewars.entities.item.action.handler.ItemActionHandler
+import archyonix.ewars.entities.item.functions.findItemById
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.handler.SpectatorEventHandler
-import archyonix.ewars.entities.structure.StructureVariant
 import archyonix.ewars.entities.team.functions.distributeTeams
 import archyonix.ewars.entities.team.functions.useGameTeams
 import archyonix.ewars.events
@@ -17,7 +17,6 @@ import archyonix.ewars.game.functions.configureSpectator
 import archyonix.ewars.game.functions.giveBuildMainBaseTools
 import archyonix.ewars.game.task.CountdownTask
 import archyonix.ewars.game.task.ExpectationTask
-import net.minestom.server.coordinate.Pos
 import net.minestom.server.event.PublicEventNode
 
 class GameEventHandler : PublicEventNode("game") {
@@ -34,6 +33,8 @@ class GameEventHandler : PublicEventNode("game") {
             val max = game.maxPlayers
 
             println("$username joined to server. PlayerType=$type ($count/$max)")
+
+            event.player.inventory.addItemStack(findItemById("bmb_tool").buildItemStack())
         }
         addListener(InitGameEvent::class.java) { event ->
             events.call(ChangeGameStageEvent(event.game.stage))

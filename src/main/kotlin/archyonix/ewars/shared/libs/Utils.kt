@@ -4,6 +4,8 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.title.Title.Times
 import net.minestom.server.coordinate.Pos
+import net.minestom.server.coordinate.Vec
+import net.minestom.server.entity.Player
 import net.minestom.server.utils.Direction
 import java.time.Duration
 import kotlin.math.abs
@@ -44,4 +46,15 @@ fun Pos.withDirection(dir: Direction, area: Short): Pos {
     }
 
     return Pos(newX, y, newZ)
+}
+
+fun Player.getDirection(): Direction {
+    val yaw = position.yaw
+    return when {
+        yaw > -135 && yaw <= -45 -> Direction.EAST
+        yaw > -45 && yaw <= 45 -> Direction.SOUTH
+        yaw > 45 && yaw <= 135 -> Direction.WEST
+        yaw > 135 || yaw <= -135 -> Direction.NORTH
+        else -> Direction.SOUTH
+    }
 }
