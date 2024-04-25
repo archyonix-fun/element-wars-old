@@ -1,10 +1,11 @@
 package archyonix.ewars.entities.structure
 
 import java.io.File
+import java.util.*
 
 class StructureManager {
     private val structureTypes: MutableMap<String, StructureData> = HashMap()
-    private val structures: MutableSet<Structure> = HashSet()
+    private val structures: MutableMap<UUID, Structure> = HashMap()
 
     init {
         val structureDir = File("config/structures")
@@ -19,6 +20,6 @@ class StructureManager {
         structureTypes[data.id] = data
     }
 
-    fun findStructuresByTeam(teamId: String) = structures.filter { it.teamId == teamId }
-    fun findDataByTypeId(typeId: String) = structureTypes[typeId]!!
+    fun findStructuresByTeam(teamId: String) = structures.values.filter { it.teamId == teamId }
+    fun configByTypeId(typeId: String) = structureTypes[typeId]!!
 }
