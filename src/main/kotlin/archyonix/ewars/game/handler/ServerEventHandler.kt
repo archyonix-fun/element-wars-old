@@ -10,6 +10,7 @@ import archyonix.ewars.entities.player._getType
 import archyonix.ewars.entities.player._setType
 import net.minestom.server.event.PublicEventNode
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
+import net.minestom.server.event.player.AsyncPlayerPreLoginEvent
 import net.minestom.server.event.player.PlayerPacketOutEvent
 import net.minestom.server.event.player.PlayerSpawnEvent
 import net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket
@@ -21,6 +22,7 @@ class ServerEventHandler() : PublicEventNode("server") {
 
             val player = event.player
             val isAccess = gameArgs.PLAYER_LIST.contains(player.username)
+            if(game.getPlayers().size >= game.maxPlayers && isAccess) player.kick("Мест нет")
             player._setType(if (isAccess) PlayerType.PLAYER else PlayerType.SPECTATOR)
 
             player.respawnPoint = game.map.WORLD_SPAWN
@@ -36,7 +38,7 @@ class ServerEventHandler() : PublicEventNode("server") {
             val packet = event.packet
 
             if (packet is PlayerInfoUpdatePacket) {
-                if(!packet.actions().contains(PlayerInfoUpdatePacket.Action.ADD_PLAYER)) return@addListener
+                if (!packet.actions().contains(PlayerInfoUpdatePacket.Action.ADD_PLAYER)) return@addListener
                 val addPlayer = findPlayerByUsername(packet.entries()[0].username)
                 event.isCancelled = addPlayer?._getType() == PlayerType.SPECTATOR
             }
