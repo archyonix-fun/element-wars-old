@@ -1,6 +1,6 @@
 name: "main-base"
 area: 7
-controller: MainBase
+controller: archyonix.ewars.entities.structure.controllers.MainBase
 tags:
   - "BREAKABLE"
 

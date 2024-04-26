@@ -1,7 +1,6 @@
 package archyonix.ewars
 
 import archyonix.ewars.entities.item.action.ActionManager
-import archyonix.ewars.entities.region.RegionManager
 import archyonix.ewars.entities.structure.StructureManager
 import archyonix.ewars.game.Game
 import archyonix.ewars.game.events.InitGameEvent
@@ -14,7 +13,6 @@ lateinit var gameArgs: GameArgs
 lateinit var game: Game
 val actionManager = ActionManager()
 val structureManager = StructureManager()
-val regionManager = RegionManager()
 
 fun main(args: Array<String>) {
     val server = MinecraftServer.init()

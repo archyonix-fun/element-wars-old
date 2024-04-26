@@ -1,16 +1,25 @@
 package archyonix.ewars.entities.region
 
-class Region(
-    val startX: Int,
-    val startZ: Int,
-    val endX: Int,
-    val endZ: Int,
-) {
-    fun contains(region: Region): Boolean {
-        if(region.startX > endX) return true
-        if(region.endX < startX) return true
+import net.minestom.server.coordinate.Point
 
-        if(region.startZ > endZ) return true
-        return region.endZ < startZ
+class Region(
+    private val startX: Int,
+    private val startZ: Int,
+    private val endX: Int,
+    private val endZ: Int,
+) {
+    constructor(pos: Point, radius: Int) : this(
+        pos.blockX() - radius,
+        pos.blockZ() - radius,
+        pos.blockX() + radius,
+        pos.blockZ() + radius,
+    )
+
+    fun contains(region: Region): Boolean {
+        if (region.startX > endX) return false
+        if (region.endX < startX) return false
+
+        if (region.startZ > endZ) return false
+        return region.endZ >= startZ
     }
 }
