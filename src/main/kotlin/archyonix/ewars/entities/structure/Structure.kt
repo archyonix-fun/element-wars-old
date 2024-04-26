@@ -1,10 +1,13 @@
 package archyonix.ewars.entities.structure
 
+import archyonix.ewars.entities.player._getTeam
 import archyonix.ewars.entities.region.Region
 import archyonix.ewars.game
-import archyonix.ewars.regionManager
-import archyonix.ewars.shared.libs.CellPosition
+import archyonix.ewars.shared.libs.firstFromTop
+import archyonix.ewars.shared.libs.getDirection
 import archyonix.ewars.structureManager
+import net.minestom.server.coordinate.Point
+import net.minestom.server.entity.Player
 import net.minestom.server.instance.block.Block
 import net.minestom.server.utils.Direction
 import java.util.*
@@ -12,44 +15,43 @@ import kotlin.math.floor
 
 abstract class Structure<Variant : Enum<*>>(
     typeId: String,
-    val teamId: String,
-    val pos: CellPosition,
-    val direction: Direction
+    builder: Player,
 ) {
-    val id: UUID = UUID.randomUUID()
-    val config: StructureData = structureManager.configByTypeId(typeId)
-    val data: MutableMap<String, String> = HashMap()
-    val region: Region = createRegion()
-    val tags: MutableSet<StructureTag> = HashSet(config.tags)
+    private val config: StructureData = structureManager.configByTypeId(typeId)
+    private val direction: Direction = builder.getDirection()
+    private val pos: Point = builder.position.sub(config.area / 2.0).firstFromTop()
     private var currentVariant: Variant? = null
 
-    fun init() {
-        if (!regionManager.validateRegion(region)) throw RuntimeException("Invalid region")
-        structureManager.addStructure(this)
+    val id: UUID = UUID.randomUUID()
+    val teamId: String = builder._getTeam().id
+    val data: MutableMap<String, String> = HashMap()
+
+    val region: Region = createRegion()
+
+    init {
+        if (!structureManager.validateRegion(region)) throw RuntimeException("Ошибка")
     }
 
     private fun createRegion(): Region {
         val radius = floor(config.area / 2.0).toInt()
-        return Region(pos.x - radius, pos.z - radius, pos.x + radius, pos.z + radius)
+        return Region(pos, radius)
     }
 
     fun build(variant: Variant) {
+        deconstruct()
         currentVariant = variant
-        config.variants[currentVariant!!.name]!!.getSchema(direction).build(game.instance, pos.toPos())
+        config.variants[currentVariant!!.name]!!.getSchema(direction).build(game.instance, pos)
     }
 
-    fun deconstruct() {
-        if(currentVariant != null) {
-            config.variants[currentVariant!!.name]!!.getSchema(direction).build(game.instance, pos.toPos(), fill = Block.AIR)
+    private fun deconstruct() {
+        if (currentVariant != null) {
+            config.variants[currentVariant!!.name]!!.getSchema(direction)
+                .build(game.instance, pos, fill = Block.AIR)
         }
     }
 
     fun destroy() {
+        deconstruct()
         structureManager.removeStructure(this)
     }
-}
-
-enum class StructureTag {
-    BREAKABLE,
-    PLANT
 }

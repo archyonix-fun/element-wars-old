@@ -9,7 +9,7 @@ class StructureData(
     private val config = YamlConfiguration.loadConfiguration(File("config/structures/$id/structure.yaml"))
     val area: Int = config.getInt("area")
     val variants = readVariants()
-    val tags = config.getStringList("tags").map { StructureTag.valueOf(it) }.toSet()
+    val controllerURI = config.getString("controller")
 
     private fun readVariants(): Map<String, StructureVariant> {
         val variants: MutableMap<String, StructureVariant> = HashMap()

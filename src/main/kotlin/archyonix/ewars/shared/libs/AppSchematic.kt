@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture
 import kotlin.math.round
 
 class AppSchematic(
-    private val direction: Direction = Direction.SOUTH
+    private val direction: Direction
 ) {
     private val regionBlocks: MutableList<Region.Block> = ArrayList()
     private var width: Short = 0
@@ -84,7 +84,9 @@ class AppSchematic(
                         val key = var5.next() as String
                         val value = nbtPalette.getInt(key)
                             ?: throw NBTException("Invalid Schematic: Palette contains invalid value")
-                        palette[value] = facingWithDir(key)
+                        palette[value] = key
+                            .facingWithDir(direction)
+                            .rotationWithDir(direction)
                     }
                     val blocksData = nbtTag.getByteArray("BlockData")
                     if (blocksData != null && blocksData.size != 0) {
@@ -132,7 +134,12 @@ class AppSchematic(
         }
     }
 
-    fun build(instance: Instance, position: Point, percent: Float = 1F, fill: Block? = null): CompletableFuture<Region?> {
+    fun build(
+        instance: Instance,
+        position: Point,
+        percent: Float = 1F,
+        fill: Block? = null
+    ): CompletableFuture<Region?> {
         return if (!read) {
             throw IllegalStateException("Schematic not read")
         } else {
@@ -144,7 +151,7 @@ class AppSchematic(
                 val limit = round(regionBlocks.size * percent)
                 val var6: Iterator<*> = regionBlocks.iterator()
                 while (var6.hasNext()) {
-                    if(n++ > limit) break
+                    if (n++ > limit) break
                     val regionBlock =
                         var6.next() as Region.Block
                     val absoluteBlockPosition =
@@ -210,39 +217,6 @@ class AppSchematic(
                     block.stateId()
                 }
             }
-        }
-    }
-
-    private fun facingWithDir(palette: String): String {
-        if (!palette.contains("facing")) return palette
-        return when (direction) {
-            Direction.NORTH -> {
-                palette.replace("facing=north", "facing==south")
-                    .replace("facing=south", "facing==north")
-                    .replace("facing=east", "facing==west")
-                    .replace("facing=west", "facing==east")
-                    .replace("==", "=")
-            }
-
-            Direction.EAST -> {
-                palette
-                    .replace("facing=north", "facing==east")
-                    .replace("facing=east", "facing==south")
-                    .replace("facing=south", "facing==west")
-                    .replace("facing=west", "facing==north")
-                    .replace("==", "=")
-            }
-
-            Direction.WEST -> {
-                palette
-                    .replace("facing=north", "facing==west")
-                    .replace("facing=west", "facing==south")
-                    .replace("facing=south", "facing==east")
-                    .replace("facing=east", "facing==north")
-                    .replace("==", "=")
-            }
-
-            else -> palette
         }
     }
 }

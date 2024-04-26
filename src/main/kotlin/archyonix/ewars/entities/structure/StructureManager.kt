@@ -1,6 +1,6 @@
 package archyonix.ewars.entities.structure
 
-import archyonix.ewars.regionManager
+import archyonix.ewars.entities.region.Region
 import java.io.File
 import java.util.*
 
@@ -22,13 +22,18 @@ class StructureManager {
     }
 
     fun addStructure(structure: Structure<*>) {
-        regionManager.addRegion(structure.region)
         structures[structure.id] = structure
     }
 
     fun removeStructure(structure: Structure<*>) {
-        regionManager.remRegion(structure.region)
         structures.remove(structure.id)
+    }
+
+    fun validateRegion(region: Region): Boolean {
+        for (reg in structures.values.map { it.region }) {
+            if (reg.contains(region)) return false
+        }
+        return true
     }
 
     fun findStructuresByTeam(teamId: String) = structures.values.filter { it.teamId == teamId }
