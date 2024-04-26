@@ -2,14 +2,15 @@ package archyonix.ewars.entities.structure
 
 import archyonix.ewars.entities.region.Region
 import archyonix.ewars.game
+import archyonix.ewars.regionManager
 import archyonix.ewars.shared.libs.CellPosition
 import archyonix.ewars.structureManager
+import net.minestom.server.instance.block.Block
 import net.minestom.server.utils.Direction
 import java.util.*
-import kotlin.collections.HashSet
 import kotlin.math.floor
 
-class Structure(
+abstract class Structure<Variant : Enum<*>>(
     typeId: String,
     val teamId: String,
     val pos: CellPosition,
@@ -19,18 +20,36 @@ class Structure(
     val config: StructureData = structureManager.configByTypeId(typeId)
     val data: MutableMap<String, String> = HashMap()
     val region: Region = createRegion()
-    val tags: MutableSet<StructureTag> = HashSet()
+    val tags: MutableSet<StructureTag> = HashSet(config.tags)
+    private var currentVariant: Variant? = null
+
+    fun init() {
+        if (!regionManager.validateRegion(region)) throw RuntimeException("Invalid region")
+        structureManager.addStructure(this)
+    }
 
     private fun createRegion(): Region {
         val radius = floor(config.area / 2.0).toInt()
         return Region(pos.x - radius, pos.z - radius, pos.x + radius, pos.z + radius)
     }
 
-    fun build() {
-        config.variants["tier-1"]!!.getSchema(direction).build(game.instance, pos.toPos())
+    fun build(variant: Variant) {
+        currentVariant = variant
+        config.variants[currentVariant!!.name]!!.getSchema(direction).build(game.instance, pos.toPos())
+    }
+
+    fun deconstruct() {
+        if(currentVariant != null) {
+            config.variants[currentVariant!!.name]!!.getSchema(direction).build(game.instance, pos.toPos(), fill = Block.AIR)
+        }
+    }
+
+    fun destroy() {
+        structureManager.removeStructure(this)
     }
 }
 
 enum class StructureTag {
     BREAKABLE,
+    PLANT
 }

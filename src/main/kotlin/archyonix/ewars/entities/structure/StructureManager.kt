@@ -6,7 +6,7 @@ import java.util.*
 
 class StructureManager {
     private val structureTypes: MutableMap<String, StructureData> = HashMap()
-    private val structures: MutableMap<UUID, Structure> = HashMap()
+    private val structures: MutableMap<UUID, Structure<*>> = HashMap()
 
     init {
         val structureDir = File("config/structures")
@@ -21,9 +21,14 @@ class StructureManager {
         structureTypes[data.id] = data
     }
 
-    fun addStructure(structure: Structure) {
+    fun addStructure(structure: Structure<*>) {
         regionManager.addRegion(structure.region)
         structures[structure.id] = structure
+    }
+
+    fun removeStructure(structure: Structure<*>) {
+        regionManager.remRegion(structure.region)
+        structures.remove(structure.id)
     }
 
     fun findStructuresByTeam(teamId: String) = structures.values.filter { it.teamId == teamId }

@@ -7,7 +7,10 @@ class Region(
     val endZ: Int,
 ) {
     fun contains(region: Region): Boolean {
-        return ((region.startX in startX..endX) || (region.endX in startX..endX))
-                && ((region.startZ in startZ..endX) || (region.endZ in endZ..endZ))
+        if(region.startX > endX) return true
+        if(region.endX < startX) return true
+
+        if(region.startZ > endZ) return true
+        return region.endZ < startZ
     }
 }

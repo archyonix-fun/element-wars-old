@@ -1,22 +1,25 @@
 name: "main-base"
 area: 7
+controller: MainBase
+tags:
+  - "BREAKABLE"
 
 variants:
-  tier-1:
+  CAMP_FILE:
     displayName: "Костёр"
-    schema: "schemas/1.schem"
+    schema: "schemas/campfire.schem"
     data:
       health: 100
       spawnPos: "0:0:0"
-  tier-2:
+  CAMP:
     displayName: "Лагерь"
-    schema: "schemas/tier-2.schem"
+    schema: "schemas/camp.schem"
     data:
       health: 250
       spawnPos: "0:0:0"
-  tier-3:
+  FORTRESS:
     displayName: "Крепость"
-    schema: "schemas/tier-3.schem"
+    schema: "schemas/fortress.schem"
     data:
       health: 500
       spawnPos: "0:0:0"

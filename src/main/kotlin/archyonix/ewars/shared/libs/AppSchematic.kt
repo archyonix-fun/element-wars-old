@@ -14,6 +14,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTReader
 import java.io.IOException
 import java.io.InputStream
 import java.util.concurrent.CompletableFuture
+import kotlin.math.round
 
 class AppSchematic(
     private val direction: Direction = Direction.SOUTH
@@ -131,7 +132,7 @@ class AppSchematic(
         }
     }
 
-    fun build(instance: Instance, position: Point): CompletableFuture<Region?> {
+    fun build(instance: Instance, position: Point, percent: Float = 1F, fill: Block? = null): CompletableFuture<Region?> {
         return if (!read) {
             throw IllegalStateException("Schematic not read")
         } else {
@@ -139,8 +140,11 @@ class AppSchematic(
             CompletableFuture.runAsync {
                 val blockBatch = AbsoluteBlockBatch()
                 val futures: MutableList<CompletableFuture<Void>> = ArrayList()
+                var n = 1
+                val limit = round(regionBlocks.size * percent)
                 val var6: Iterator<*> = regionBlocks.iterator()
                 while (var6.hasNext()) {
+                    if(n++ > limit) break
                     val regionBlock =
                         var6.next() as Region.Block
                     val absoluteBlockPosition =
@@ -152,7 +156,7 @@ class AppSchematic(
                         futures.add(instance.loadOptionalChunk(absoluteBlockPosition).thenRun {
                             blockBatch.setBlock(
                                 absoluteBlockPosition,
-                                block
+                                fill ?: block
                             )
                         })
                     }

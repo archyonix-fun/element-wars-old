@@ -7,7 +7,7 @@ class RegionManager {
     fun remRegion(region: Region) = regions.remove(region)
     fun validateRegion(region: Region): Boolean {
         for(reg in regions) {
-            if (reg.contains(region) || region.contains(reg)) return false else continue
+            if (reg.contains(region)) return false
         }
         return true
     }
