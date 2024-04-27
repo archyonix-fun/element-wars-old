@@ -148,8 +148,10 @@ class AppSchematic(
                 val blockBatch = AbsoluteBlockBatch()
                 val futures: MutableList<CompletableFuture<Void>> = ArrayList()
                 var n = 1
-                val limit = round(regionBlocks.size * percent)
-                val var6: Iterator<*> = regionBlocks.iterator()
+                val blocks = regionBlocks
+                    .filter { if (fill != null) true else Block.fromStateId(it.stateId) != Block.AIR }
+                val limit = round(blocks.size * percent)
+                val var6: Iterator<*> = blocks.iterator()
                 while (var6.hasNext()) {
                     if (n++ > limit) break
                     val regionBlock =
@@ -159,11 +161,11 @@ class AppSchematic(
                     val stateId = regionBlock.stateId()
                     val block =
                         Block.fromStateId(stateId)
-                    if (block != null) {
+                    if (block != null && (fill != null || block != Block.AIR)) {
                         futures.add(instance.loadOptionalChunk(absoluteBlockPosition).thenRun {
                             blockBatch.setBlock(
                                 absoluteBlockPosition,
-                                fill ?: block
+                                if (block != Block.AIR) fill ?: block else block
                             )
                         })
                     }

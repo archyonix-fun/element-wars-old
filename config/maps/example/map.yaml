@@ -1,6 +1,6 @@
 name: example
 displayName: Example Map
-teamCount: 2
+teamCount: 1
 teamSize: 1
 
 worldSpawn: "5:1:5"

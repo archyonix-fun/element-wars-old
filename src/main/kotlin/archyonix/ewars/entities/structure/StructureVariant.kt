@@ -11,6 +11,7 @@ class StructureVariant(
 ) {
     val variantName: String = section.name
     val displayName: String = section.getString("displayName")!!
+    val buildPoints: Int = section.getInt("buildPoints")
     val data: Map<String, String> = readData()
     private val schema: String = section.getString("schema")!!
     fun getSchema(direction: Direction): AppSchematic {

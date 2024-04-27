@@ -115,3 +115,7 @@ fun String.rotationWithDir(direction: Direction): String {
     val _newRotation = (newRotation % 16) - 1
     return this.replace("rotation=$_rotation", "rotation=$_newRotation")
 }
+
+fun String.colorWithTeam(teamId: String) {
+
+}
