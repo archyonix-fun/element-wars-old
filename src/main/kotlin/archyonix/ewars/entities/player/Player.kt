@@ -2,6 +2,8 @@ package archyonix.ewars.entities.player
 
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.entities.team.functions.findTeamById
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextColor
 import net.minestom.server.entity.Player
 import net.minestom.server.tag.Tag
 
@@ -21,3 +23,18 @@ fun Player._setTeam(team: GameTeam) {
 }
 
 fun Player.backToSpawn() = teleport(_getTeam().spawn)
+fun Player.sendInfo(message: String) = sendMessage(
+    Component.text("[I]: ", TextColor.fromHexString("#0cb2aa")).append(
+        Component.text(message, TextColor.fromHexString("#a2a2a2"))
+    )
+)
+fun Player.sendWarning(message: String) = sendMessage(
+    Component.text("[W]: ", TextColor.fromHexString("#d7a116")).append(
+        Component.text(message, TextColor.fromHexString("#a2a2a2"))
+    )
+)
+fun Player.sendError(message: String) = sendMessage(
+    Component.text("[E]: ", TextColor.fromHexString("#c51c29")).append(
+        Component.text(message, TextColor.fromHexString("#a2a2a2"))
+    )
+)
