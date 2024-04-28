@@ -2,30 +2,25 @@ package archyonix.ewars.entities.structure
 
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.Region
-import archyonix.ewars.shared.libs.firstFromTop
-import archyonix.ewars.shared.libs.getDirection
-import archyonix.ewars.structureManager
-import net.minestom.server.entity.Player
 import net.minestom.server.instance.block.Block
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
-@Suppress("UNCHECKED_CAST")
-class StructureBuilder(
-    private val player: Player,
-    structureId: String,
-    variantId: String? = null,
+class StructureBuilder<Variant: Enum<*>>(
+    structure: Structure<Variant>,
+    variant: Variant
 ) {
-    private val config: StructureData = structureManager.configByTypeId(structureId)
-    private val pos = player.position.firstFromTop()
+    private val config: StructureData = structure.config
+    private val pos = structure.pos
     private val maxAnother = config.area * 2
     private val baseRegion: Region
     private val airRegion: Region
     private var buildProgress = 0
     private val radius = floor(config.area / 2.0).toInt()
-    private val variant = config.variants[variantId ?: config.defaultVariant]
-    private val direction = player.getDirection()
+    private val variant = config.variants[variant.name]
+    private val direction = structure.direction
+    private val schema = this.variant!!.getSchema(direction)
 
     init {
         val minX = pos.blockX() - radius
@@ -54,7 +49,6 @@ class StructureBuilder(
 
     fun placeBlueprint(): Boolean {
         val position = pos.add((-radius).toDouble(), 1.0, (-radius).toDouble())
-        val schema = variant?.getSchema(direction) ?: return false
         schema.build(game.instance, position, fill = Block.SCAFFOLDING)
 
         return true
@@ -68,16 +62,11 @@ class StructureBuilder(
 
     private fun build(): Boolean {
         val position = pos.add((-radius).toDouble(), 1.0, (-radius).toDouble())
-        val schema = variant?.getSchema(direction) ?: return false
-        schema.build(game.instance, position, percent = buildProgress.toFloat() / variant.buildPoints)
+        schema.build(game.instance, position,
+            percent = buildProgress.toFloat() / variant!!.buildPoints,
+            particles = true
+        )
 
         return true
-    }
-
-    fun <T : Structure<*>> build(structureId: String): Structure<*> {
-        val config = structureManager.configByTypeId(structureId)
-        val structureClass = javaClass.classLoader.loadClass(config.controllerURI)
-        val structure = structureClass.getDeclaredConstructor(Player::class.java).newInstance(player) as Structure<*>
-        return structure as T
     }
 }

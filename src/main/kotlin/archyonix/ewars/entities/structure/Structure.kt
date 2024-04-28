@@ -1,57 +1,58 @@
 package archyonix.ewars.entities.structure
 
 import archyonix.ewars.entities.player._getTeam
-import archyonix.ewars.entities.region.Region
+import archyonix.ewars.entities.player.sendError
+import archyonix.ewars.entities.player.sendInfo
+import archyonix.ewars.entities.player.sendWarning
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.firstFromTop
 import archyonix.ewars.shared.libs.getDirection
 import archyonix.ewars.structureManager
+import net.kyori.adventure.sound.Sound
 import net.minestom.server.coordinate.Point
 import net.minestom.server.entity.Player
-import net.minestom.server.instance.block.Block
+import net.minestom.server.sound.SoundEvent
 import net.minestom.server.utils.Direction
 import java.util.*
-import kotlin.math.floor
 
 abstract class Structure<Variant : Enum<*>>(
     typeId: String,
-    builder: Player,
+    defaultVariant: Variant,
+    val player: Player,
 ) {
-    private val config: StructureData = structureManager.configByTypeId(typeId)
-    private val direction: Direction = builder.getDirection()
-    private val pos: Point = builder.position.sub(config.area / 2.0).firstFromTop()
-    private var currentVariant: Variant? = null
+    val config: StructureData = structureManager.configByTypeId(typeId)
+    val direction: Direction = player.getDirection()
+    val pos: Point = player.position.firstFromTop()
 
     val id: UUID = UUID.randomUUID()
-    val teamId: String = builder._getTeam().id
+    val teamId: String = player._getTeam().id
     val data: MutableMap<String, String> = HashMap()
-
-    val region: Region = createRegion()
+    private var currentVariant: Variant? = null
 
     init {
-        if (!structureManager.validateRegion(region)) throw RuntimeException("Ошибка")
+        buildVariant(defaultVariant)
     }
 
-    private fun createRegion(): Region {
-        val radius = floor(config.area / 2.0).toInt()
-        return Region(pos, radius)
-    }
-
-    fun build(variant: Variant) {
-        deconstruct()
-        currentVariant = variant
-        config.variants[currentVariant!!.name]!!.getSchema(direction).build(game.instance, pos)
-    }
-
-    private fun deconstruct() {
-        if (currentVariant != null) {
-            config.variants[currentVariant!!.name]!!.getSchema(direction)
-                .build(game.instance, pos, fill = Block.AIR)
+    fun buildVariant(variant: Variant) {
+        val builder = StructureBuilder(this, variant)
+        if (currentVariant == null) {
+            if (!builder.validateBase() || !builder.validateAir()) {
+                player.sendWarning("Неподходящее место, найди что-то по ровнее и просторнее")
+                return
+            }
         }
-    }
-
-    fun destroy() {
-        deconstruct()
-        structureManager.removeStructure(this)
+        builder.clearAir()
+        builder.fillBase()
+        if (!builder.placeBlueprint()) {
+            player.sendError("Ошибка строительства")
+            return
+        }
+        currentVariant = variant
+        Thread {
+            while (builder.addProgress(1)) Thread.sleep(1000)
+            val sound = Sound.sound(SoundEvent.ENTITY_PLAYER_LEVELUP, Sound.Source.PLAYER, 1f, 1f)
+            game.getPlayers().forEach { it.playSound(sound, pos) }
+            player.sendInfo("Готово")
+        }.start()
     }
 }

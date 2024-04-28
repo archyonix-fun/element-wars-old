@@ -30,9 +30,6 @@ class StructureManager {
     }
 
     fun validateRegion(region: Region): Boolean {
-        for (reg in structures.values.map { it.region }) {
-            if (reg.contains(region)) return false
-        }
         return true
     }
 

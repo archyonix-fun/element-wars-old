@@ -1,11 +1,16 @@
 package archyonix.ewars.shared.libs
 
+import archyonix.ewars.game
 import dev.hypera.scaffolding.region.Region
+import net.kyori.adventure.sound.Sound
 import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.instance.Instance
 import net.minestom.server.instance.batch.AbsoluteBlockBatch
 import net.minestom.server.instance.block.Block
+import net.minestom.server.network.packet.server.play.ParticlePacket
+import net.minestom.server.particle.Particle
+import net.minestom.server.sound.SoundEvent
 import net.minestom.server.utils.Direction
 import org.jglrxavpok.hephaistos.nbt.CompressedProcesser
 import org.jglrxavpok.hephaistos.nbt.NBTCompound
@@ -138,7 +143,8 @@ class AppSchematic(
         instance: Instance,
         position: Point,
         percent: Float = 1F,
-        fill: Block? = null
+        fill: Block? = null,
+        particles: Boolean = false
     ): CompletableFuture<Region?> {
         return if (!read) {
             throw IllegalStateException("Schematic not read")
@@ -163,6 +169,21 @@ class AppSchematic(
                         Block.fromStateId(stateId)
                     if (block != null && (fill != null || block != Block.AIR)) {
                         futures.add(instance.loadOptionalChunk(absoluteBlockPosition).thenRun {
+                            if (particles) {
+                                val sound = Sound.sound(SoundEvent.BLOCK_WOOD_PLACE, Sound.Source.BLOCK, 1f, 1f)
+                                val particlePacket = ParticlePacket(
+                                    Particle.CLOUD.id(),
+                                    false,
+                                    absoluteBlockPosition.blockX() + .5,
+                                    absoluteBlockPosition.blockY() + .5,
+                                    absoluteBlockPosition.blockZ() + .5,
+                                    .5f, .5f, .5f, 0f, 8, ByteArray(0)
+                                )
+                                for (player in game.getPlayers()) {
+                                    player.sendPacket(particlePacket)
+                                    player.playSound(sound, absoluteBlockPosition)
+                                }
+                            }
                             blockBatch.setBlock(
                                 absoluteBlockPosition,
                                 if (block != Block.AIR) fill ?: block else block

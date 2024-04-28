@@ -13,17 +13,7 @@ class BuildStructureRun() : ActionRun("BUILD_STRUCTURE") {
     override fun run(player: Player?, item: GameItem?, data: Map<String, String>) {
         val structureId = data["structureId"] ?: throw RuntimeException("Unknown action data exception")
         try {
-            val builder = StructureBuilder(player!!, structureId)
-            if (!builder.validateBase() || !builder.validateAir()) {
-                player.sendMessage("Неподходящее место, найди что-то по ровнее и просторнее")
-                return
-            }
-            builder.clearAir()
-            builder.fillBase()
-            Thread {
-                while (builder.addProgress(1)) Thread.sleep(500)
-                player.sendMessage("Готово")
-            }.start()
+            val base = MainBase(player!!)
         } catch (e: Exception) {
             player?.sendMessage(e.message ?: "Места нет!")
         }

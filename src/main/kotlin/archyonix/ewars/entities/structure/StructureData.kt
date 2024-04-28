@@ -9,7 +9,6 @@ class StructureData(
     private val config = YamlConfiguration.loadConfiguration(File("config/structures/$id/structure.yaml"))
     val area: Int = config.getInt("area")
     val variants = readVariants()
-    val defaultVariant = config.getString("defaultVariant")!!
     val controllerURI = config.getString("controller")
 
     private fun readVariants(): Map<String, StructureVariant> {

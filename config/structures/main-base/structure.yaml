@@ -1,12 +1,11 @@
 name: "main-base"
 area: 7
 controller: "archyonix.ewars.entities.structure.controllers.MainBase"
-defaultVariant: "CAMP_FILE"
 tags:
   - "BREAKABLE"
 
 variants:
-  CAMP_FILE:
+  CAMP_FIRE:
     displayName: "Костёр"
     buildPoints: 10
     schema: "schemas/campfire.schem"

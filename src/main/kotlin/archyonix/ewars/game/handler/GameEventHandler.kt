@@ -33,8 +33,6 @@ class GameEventHandler : PublicEventNode("game") {
             val max = game.maxPlayers
 
             println("$username joined to server. PlayerType=$type ($count/$max)")
-
-            event.player.inventory.addItemStack(findItemById("bmb_tool").buildItemStack())
         }
         addListener(InitGameEvent::class.java) { event ->
             events.call(ChangeGameStageEvent(event.game.stage))
