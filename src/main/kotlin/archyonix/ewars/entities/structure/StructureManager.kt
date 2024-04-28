@@ -1,6 +1,6 @@
 package archyonix.ewars.entities.structure
 
-import archyonix.ewars.entities.region.Region
+import archyonix.ewars.entities.region.Region2D
 import java.io.File
 import java.util.*
 
@@ -29,7 +29,10 @@ class StructureManager {
         structures.remove(structure.id)
     }
 
-    fun validateRegion(region: Region): Boolean {
+    fun validateRegion(structure: Structure<*>): Boolean {
+        for(it in structures.values) {
+            if(it.getRegion().contains(structure.getRegion())) return false
+        }
         return true
     }
 

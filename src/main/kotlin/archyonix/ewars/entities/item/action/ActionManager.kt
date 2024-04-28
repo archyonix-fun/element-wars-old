@@ -1,6 +1,7 @@
 package archyonix.ewars.entities.item.action
 
-import archyonix.ewars.entities.item.action.runs.BuildStructureRun
+import archyonix.ewars.entities.item.action.runs.CreateStructureRun
+import archyonix.ewars.entities.item.action.runs.RemoveItemRun
 import net.minestom.server.entity.Player
 
 class ActionManager {
@@ -9,7 +10,8 @@ class ActionManager {
     private val actions: MutableSet<Action> = HashSet()
 
     init {
-        addRun(BuildStructureRun())
+        addRun(CreateStructureRun())
+        addRun(RemoveItemRun())
     }
 
     fun addAction(action: Action) = actions.add(action)

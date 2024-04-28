@@ -7,6 +7,7 @@ import net.minestom.server.event.PublicEventNode
 import net.minestom.server.event.player.PlayerBlockBreakEvent
 import net.minestom.server.event.player.PlayerBlockInteractEvent
 import net.minestom.server.event.player.PlayerBlockPlaceEvent
+import net.minestom.server.event.player.PlayerUseItemEvent
 
 class ItemActionHandler : PublicEventNode("item-actions") {
     init {
@@ -21,6 +22,13 @@ class ItemActionHandler : PublicEventNode("item-actions") {
             if (!itemStack.hasGameItem()) return@addListener
 
             actionManager.call(GameTrigger.RIGHT_CLICK_BLOCK, event.player)
+            event.isCancelled = true
+        }
+        addListener(PlayerUseItemEvent::class.java) { event ->
+            val itemStack = event.itemStack
+            if (!itemStack.hasGameItem()) return@addListener
+
+            actionManager.call(GameTrigger.RIGHT_CLICK, event.player)
             event.isCancelled = true
         }
     }

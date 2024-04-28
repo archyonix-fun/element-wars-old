@@ -4,6 +4,7 @@ import archyonix.ewars.entities.player._getTeam
 import archyonix.ewars.entities.player.sendError
 import archyonix.ewars.entities.player.sendInfo
 import archyonix.ewars.entities.player.sendWarning
+import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.firstFromTop
 import archyonix.ewars.shared.libs.getDirection
@@ -14,6 +15,7 @@ import net.minestom.server.entity.Player
 import net.minestom.server.sound.SoundEvent
 import net.minestom.server.utils.Direction
 import java.util.*
+import kotlin.math.floor
 
 abstract class Structure<Variant : Enum<*>>(
     typeId: String,
@@ -33,10 +35,20 @@ abstract class Structure<Variant : Enum<*>>(
         buildVariant(defaultVariant)
     }
 
+    fun getRegion(): Region2D {
+        val radius = floor(config.area / 2.0).toInt()
+        return Region2D(pos, radius)
+    }
+
     fun buildVariant(variant: Variant) {
         val builder = StructureBuilder(this, variant)
         if (currentVariant == null) {
-            if (!builder.validateBase() || !builder.validateAir()) {
+            if (
+                !structureManager.validateRegion(this)
+                ||
+                !builder.validateBase()
+                ||
+                !builder.validateAir()) {
                 player.sendWarning("Неподходящее место, найди что-то по ровнее и просторнее")
                 return
             }
@@ -48,6 +60,7 @@ abstract class Structure<Variant : Enum<*>>(
             return
         }
         currentVariant = variant
+        structureManager.addStructure(this)
         Thread {
             while (builder.addProgress(1)) Thread.sleep(1000)
             val sound = Sound.sound(SoundEvent.ENTITY_PLAYER_LEVELUP, Sound.Source.PLAYER, 1f, 1f)

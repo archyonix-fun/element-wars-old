@@ -1,7 +1,7 @@
 package archyonix.ewars.entities.structure
 
 import archyonix.ewars.game
-import archyonix.ewars.shared.libs.Region
+import archyonix.ewars.entities.region.Region
 import net.minestom.server.instance.block.Block
 import kotlin.math.floor
 import kotlin.math.max

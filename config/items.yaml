@@ -1,12 +1,16 @@
 bmb_tool:
-  displayName: "Построить главное здание"
+  displayName: "◈ Построить главное здание"
   lore:
     - "ПКМ по земле создает главное здание"
     - "и дает начало поселению Вашей команды."
     - "ПРЕДМЕТ МОЖЕТ БЫТЬ ИСПОЛЬЗОВАН ЛИШЬ РАЗ!"
-  material: "minecraft:bedrock"
+  material: "minecraft:stick"
   actions:
-    BUILD_STRUCTURE:
-      trigger: "RIGHT_CLICK_BLOCK"
+    CREATE_STRUCTURE:
+      trigger: "RIGHT_CLICK"
       data:
         structureId: "main-base"
+    REMOVE_ITEM:
+      trigger: "RIGHT_CLICK"
+      data:
+        target: "THIS"
