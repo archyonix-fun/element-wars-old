@@ -1,0 +1,13 @@
+{
+  "Base": 5,
+  "Patterns": [
+    {
+      "Pattern": "gru",
+      "Color": 15
+    },
+    {
+      "Pattern": "gra",
+      "Color": 4
+    }
+  ]
+}

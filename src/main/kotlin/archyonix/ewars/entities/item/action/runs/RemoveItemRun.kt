@@ -7,8 +7,7 @@ import net.minestom.server.item.ItemStack
 
 class RemoveItemRun : ActionRun("REMOVE_ITEM") {
     override fun run(player: Player?, item: GameItem?, data: Map<String, String>) {
-        val target = Target.valueOf(data["target"]!!) ?: Target.THIS
-        when (target) {
+        when (Target.valueOf(data["target"]!!) ?: Target.THIS) {
             Target.THIS -> player!!.itemInMainHand = ItemStack.AIR
         }
     }

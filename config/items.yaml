@@ -1,4 +1,4 @@
-bmb_tool:
+bmb-tool:
   displayName: "◈ Построить главное здание"
   lore:
     - "ПКМ по земле создает главное здание"
@@ -14,3 +14,7 @@ bmb_tool:
       trigger: "RIGHT_CLICK"
       data:
         target: "THIS"
+
+construction-hammer:
+  displayName: "Строительный молот"
+  material: "minecraft:wooden_pickaxe"

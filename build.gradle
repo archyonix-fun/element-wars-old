@@ -16,6 +16,9 @@ dependencies {
     implementation 'io.github.cdimascio:dotenv-java:' + dotenvVersion
     implementation 'org.bspfsystems:yamlconfiguration:' + yamlVersion
     implementation "dev.hypera:Scaffolding:" + scaffoldingVersion
+    implementation 'com.syntaxphoenix.syntaxapi:nbt:2.0.13'
+
+
 
     // Dev
     compileOnly 'org.projectlombok:lombok:1.18.32'

@@ -5,6 +5,7 @@ import archyonix.ewars.entities.player.sendError
 import archyonix.ewars.entities.player.sendInfo
 import archyonix.ewars.entities.player.sendWarning
 import archyonix.ewars.entities.region.Region2D
+import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.firstFromTop
 import archyonix.ewars.shared.libs.getDirection
@@ -27,7 +28,7 @@ abstract class Structure<Variant : Enum<*>>(
     val pos: Point = player.position.firstFromTop()
 
     val id: UUID = UUID.randomUUID()
-    val teamId: String = player._getTeam().id
+    val team: GameTeam = player._getTeam()
     val data: MutableMap<String, String> = HashMap()
     private var currentVariant: Variant? = null
 
@@ -41,7 +42,7 @@ abstract class Structure<Variant : Enum<*>>(
     }
 
     fun buildVariant(variant: Variant) {
-        val builder = StructureBuilder(this, variant)
+        val builder = StructureBuilder(team, this, variant)
         if (currentVariant == null) {
             if (
                 !structureManager.validateRegion(this)

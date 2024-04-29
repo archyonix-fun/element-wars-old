@@ -2,12 +2,14 @@ package archyonix.ewars.entities.structure
 
 import archyonix.ewars.game
 import archyonix.ewars.entities.region.Region
+import archyonix.ewars.entities.team.GameTeam
 import net.minestom.server.instance.block.Block
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
 class StructureBuilder<Variant: Enum<*>>(
+    team: GameTeam,
     structure: Structure<Variant>,
     variant: Variant
 ) {
@@ -20,7 +22,7 @@ class StructureBuilder<Variant: Enum<*>>(
     private val radius = floor(config.area / 2.0).toInt()
     private val variant = config.variants[variant.name]
     private val direction = structure.direction
-    private val schema = this.variant!!.getSchema(direction)
+    private val schema = this.variant!!.getSchema(direction, team)
 
     init {
         val minX = pos.blockX() - radius

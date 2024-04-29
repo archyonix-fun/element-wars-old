@@ -36,6 +36,6 @@ class StructureManager {
         return true
     }
 
-    fun findStructuresByTeam(teamId: String) = structures.values.filter { it.teamId == teamId }
+    fun findStructuresByTeam(teamId: String) = structures.values.filter { it.team.id == teamId }
     fun configByTypeId(typeId: String) = structureTypes[typeId]!!
 }

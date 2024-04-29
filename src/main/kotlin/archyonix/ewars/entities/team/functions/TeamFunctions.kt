@@ -16,7 +16,9 @@ private fun loadTeams(count: Int): Set<GameTeam> {
     for (name in config.getKeys(false)) {
         val displayName = config.getString("$name.displayName")!!
         val color = config.getString("$name.color")!!
-        val teamData = GameTeam(name, displayName, color)
+        val bannerColorFirst = config.getString("$name.bannerColorFirst")!!
+        val bannerColorSecond = config.getString("$name.bannerColorSecond")!!
+        val teamData = GameTeam(name, displayName, bannerColorFirst, bannerColorSecond, color)
         teamSet.add(teamData)
         if (teamSet.size >= count) break
     }

@@ -38,7 +38,9 @@ fun loadItems(): Map<String, GameItem> {
         val lore = config.getStringList("$name.lore")
         val material = config.getString("$name.material")!!
         val item = GameItem(name, displayName, lore, material)
-        useItemActions(item, config.getConfigurationSection("$name.actions"))
+        if(config.contains("$name.actions")) {
+            useItemActions(item, config.getConfigurationSection("$name.actions"))
+        }
 
         itemMap[name] = item
     }
@@ -48,4 +50,4 @@ fun loadItems(): Map<String, GameItem> {
 val GameItemIdTag = Tag.String("itemId")
 fun ItemStack.hasGameItem() = hasTag(GameItemIdTag)
 
-fun findItemById(id: String) = game.items[id]!!
+fun findItemById(id: String) = game.items[id]

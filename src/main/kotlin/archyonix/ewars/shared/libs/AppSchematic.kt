@@ -1,5 +1,7 @@
 package archyonix.ewars.shared.libs
 
+import archyonix.ewars.entities.team.BannerRenderer
+import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.game
 import dev.hypera.scaffolding.region.Region
 import net.kyori.adventure.sound.Sound
@@ -22,7 +24,8 @@ import java.util.concurrent.CompletableFuture
 import kotlin.math.round
 
 class AppSchematic(
-    private val direction: Direction
+    private val direction: Direction,
+    team: GameTeam
 ) {
     private val regionBlocks: MutableList<Region.Block> = ArrayList()
     private var width: Short = 0
@@ -30,6 +33,7 @@ class AppSchematic(
     private var length: Short = 0
     private var palette: MutableMap<Int, String> = HashMap()
     private lateinit var blocksData: ByteArray
+    private val bannerRenderer = BannerRenderer(team)
     private var read = false
 
     @Throws(IOException::class, NBTException::class)
@@ -165,7 +169,7 @@ class AppSchematic(
                     val absoluteBlockPosition =
                         regionBlock.position().withDirection(direction, width).add(position)
                     val stateId = regionBlock.stateId()
-                    val block =
+                    var block =
                         Block.fromStateId(stateId)
                     if (block != null && (fill != null || block != Block.AIR)) {
                         futures.add(instance.loadOptionalChunk(absoluteBlockPosition).thenRun {
@@ -184,10 +188,15 @@ class AppSchematic(
                                     player.playSound(sound, absoluteBlockPosition)
                                 }
                             }
-                            blockBatch.setBlock(
-                                absoluteBlockPosition,
-                                if (block != Block.AIR) fill ?: block else block
-                            )
+                            try {
+                                val final = bannerRenderer.render(block)
+                                blockBatch.setBlock(
+                                    absoluteBlockPosition,
+                                    if (block != Block.AIR) fill ?: final else final
+                                )
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
                         })
                     }
                 }

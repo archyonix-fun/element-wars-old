@@ -1,7 +1,6 @@
 package archyonix.ewars.game.handler
 
 import archyonix.ewars.entities.item.action.handler.ItemActionHandler
-import archyonix.ewars.entities.item.functions.findItemById
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.handler.SpectatorEventHandler
 import archyonix.ewars.entities.team.functions.distributeTeams
@@ -14,7 +13,7 @@ import archyonix.ewars.game.events.InitGameEvent
 import archyonix.ewars.game.events.PlayerJoinTheGameEvent
 import archyonix.ewars.game.functions.configurePlayer
 import archyonix.ewars.game.functions.configureSpectator
-import archyonix.ewars.game.functions.giveBuildMainBaseTools
+import archyonix.ewars.game.functions.giveStartGameItems
 import archyonix.ewars.game.task.CountdownTask
 import archyonix.ewars.game.task.ExpectationTask
 import net.minestom.server.event.PublicEventNode
@@ -50,7 +49,7 @@ class GameEventHandler : PublicEventNode("game") {
                 GameStage.RUNTIME -> {
                     game.teams = useGameTeams()
                     distributeTeams()
-                    giveBuildMainBaseTools()
+                    giveStartGameItems()
                 }
 
                 else -> {}

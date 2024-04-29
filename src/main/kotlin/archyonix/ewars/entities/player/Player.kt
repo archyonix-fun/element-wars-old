@@ -1,5 +1,6 @@
 package archyonix.ewars.entities.player
 
+import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.entities.team.functions.findTeamById
 import net.kyori.adventure.text.Component
@@ -38,3 +39,7 @@ fun Player.sendError(message: String) = sendMessage(
         Component.text(message, TextColor.fromHexString("#a2a2a2"))
     )
 )
+
+fun Player.addItem(item: GameItem, amount: Int = 1) {
+    inventory.addItemStack(item.buildItemStack(amount))
+}
