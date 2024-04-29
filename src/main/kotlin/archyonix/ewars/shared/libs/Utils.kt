@@ -7,6 +7,7 @@ import net.kyori.adventure.title.Title.Times
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
 import net.minestom.server.utils.Direction
+import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.time.Duration
 import kotlin.math.abs
 
@@ -116,6 +117,10 @@ fun String.rotationWithDir(direction: Direction): String {
     return this.replace("rotation=$_rotation", "rotation=$_newRotation")
 }
 
-fun String.colorWithTeam(teamId: String) {
-
+fun ConfigurationSection.toStringMap(): Map<String, String> {
+    val data: MutableMap<String, String> = HashMap()
+    for (key in getKeys(false)) {
+        data[key] = getString(key)!!
+    }
+    return data
 }

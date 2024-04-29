@@ -6,15 +6,17 @@ bmb-tool:
     - "ПРЕДМЕТ МОЖЕТ БЫТЬ ИСПОЛЬЗОВАН ЛИШЬ РАЗ!"
   material: "minecraft:stick"
   actions:
-    CREATE_STRUCTURE:
+    build:
+      executor: "TEST"
       trigger: "RIGHT_CLICK"
-      data:
-        structureId: "main-base"
-    REMOVE_ITEM:
-      trigger: "RIGHT_CLICK"
-      data:
-        target: "THIS"
+      structureId: "main-base"
+    test:
+      executor: "TEST"
+      trigger: "ACTION_FAILED:build"
+      structureId: "main-base"
 
 construction-hammer:
   displayName: "Строительный молот"
   material: "minecraft:wooden_pickaxe"
+  data:
+    power: 1

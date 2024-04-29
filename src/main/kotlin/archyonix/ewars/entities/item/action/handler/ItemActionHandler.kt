@@ -1,7 +1,7 @@
 package archyonix.ewars.entities.item.action.handler
 
-import archyonix.ewars.actionManager
-import archyonix.ewars.entities.item.action.GameTrigger
+import archyonix.ewars.entities.item.functions.findItemById
+import archyonix.ewars.entities.item.functions.getGameItemId
 import archyonix.ewars.entities.item.functions.hasGameItem
 import net.minestom.server.event.PublicEventNode
 import net.minestom.server.event.player.PlayerBlockBreakEvent
@@ -20,15 +20,13 @@ class ItemActionHandler : PublicEventNode("item-actions") {
         addListener(PlayerBlockInteractEvent::class.java) { event ->
             val itemStack = event.player.itemInMainHand
             if (!itemStack.hasGameItem()) return@addListener
-
-            actionManager.call(GameTrigger.RIGHT_CLICK_BLOCK, event.player)
+            findItemById(itemStack.getGameItemId())?.executeAction(event.player, "RIGHT_CLICK_BLOCK")
             event.isCancelled = true
         }
         addListener(PlayerUseItemEvent::class.java) { event ->
             val itemStack = event.itemStack
             if (!itemStack.hasGameItem()) return@addListener
-
-            actionManager.call(GameTrigger.RIGHT_CLICK, event.player)
+            findItemById(itemStack.getGameItemId())?.executeAction(event.player, "RIGHT_CLICK")
             event.isCancelled = true
         }
     }

@@ -19,6 +19,6 @@ private fun giveCampBlock() {
         val index = random.nextInt(team.maxPlayers)
         val player = team.getPlayers()[index]
         val btbTool = findItemById("bmb-tool") ?: return
-        player.inventory.addItemStack(btbTool.buildItemStack())
+        player.inventory.addItemStack(btbTool.createItemStack())
     }
 }

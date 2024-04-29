@@ -41,5 +41,5 @@ fun Player.sendError(message: String) = sendMessage(
 )
 
 fun Player.addItem(item: GameItem, amount: Int = 1) {
-    inventory.addItemStack(item.buildItemStack(amount))
+    inventory.addItemStack(item.createItemStack(amount))
 }
