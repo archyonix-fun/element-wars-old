@@ -1,6 +1,8 @@
 name: "main-base"
+height: 12
 area: 7
-controller: "archyonix.ewars.entities.structure.controllers.MainBase"
+
+limit: 1
 tags:
   - "BREAKABLE"
 
@@ -11,16 +13,4 @@ variants:
     schema: "schemas/campfire.schem"
     data:
       health: 100
-      spawnPos: "0:0:0"
-  CAMP:
-    displayName: "Лагерь"
-    schema: "schemas/camp.schem"
-    data:
-      health: 250
-      spawnPos: "0:0:0"
-  FORTRESS:
-    displayName: "Крепость"
-    schema: "schemas/fortress.schem"
-    data:
-      health: 500
       spawnPos: "0:0:0"

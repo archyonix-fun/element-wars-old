@@ -1,41 +1,32 @@
 package archyonix.ewars.entities.structure
 
-import archyonix.ewars.entities.region.Region2D
+import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
-import java.util.*
 
 class StructureManager {
-    private val structureTypes: MutableMap<String, StructureData> = HashMap()
-    private val structures: MutableMap<UUID, Structure<*>> = HashMap()
+    private val structureSet: MutableSet<Structure> = HashSet()
+    private val configMap: MutableMap<String, StructureConfig> = HashMap()
 
     init {
         val structureDir = File("config/structures")
         if (structureDir.exists() && structureDir.isDirectory) {
-            for (file in structureDir.list()!!) {
-                addType(StructureData(file))
+            for (dir in structureDir.listFiles()!!) {
+                val config = YamlConfiguration.loadConfiguration(File(dir, "structure.yaml"))
+                val structureConfig = StructureConfig(config)
+                configMap[structureConfig.name] = structureConfig
             }
         }
     }
 
-    private fun addType(data: StructureData) {
-        structureTypes[data.id] = data
-    }
-
-    fun addStructure(structure: Structure<*>) {
-        structures[structure.id] = structure
-    }
-
-    fun removeStructure(structure: Structure<*>) {
-        structures.remove(structure.id)
-    }
-
-    fun validateRegion(structure: Structure<*>): Boolean {
-        for(it in structures.values) {
-            if(it.getRegion().contains(structure.getRegion())) return false
+    fun validateRegion(structure: Structure): Boolean {
+        for (it in structureSet) {
+            if(it.region.contains(structure.region)) return false
         }
         return true
     }
 
-    fun findStructuresByTeam(teamId: String) = structures.values.filter { it.team.id == teamId }
-    fun configByTypeId(typeId: String) = structureTypes[typeId]!!
+    fun getConfig(structureName: String) =
+        configMap[structureName] ?: throw RuntimeException("Unknown structure config: $structureName")
+
+    fun addStructure(structure: Structure) = structureSet.add(structure)
 }

@@ -10,10 +10,6 @@ bmb-tool:
       executor: "TEST"
       trigger: "RIGHT_CLICK"
       structureId: "main-base"
-    test:
-      executor: "TEST"
-      trigger: "ACTION_FAILED:build"
-      structureId: "main-base"
 
 construction-hammer:
   displayName: "Строительный молот"

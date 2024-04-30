@@ -1,11 +1,12 @@
 package archyonix.ewars.entities.region
 
 import archyonix.ewars.game
+import net.minestom.server.coordinate.Pos
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.instance.block.Block
 import java.util.*
 
-class Region(
+class Zone(
     private val minX: Int,
     private val minY: Int,
     private val minZ: Int,
