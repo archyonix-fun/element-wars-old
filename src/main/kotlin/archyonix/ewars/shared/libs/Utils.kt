@@ -2,6 +2,8 @@ package archyonix.ewars.shared.libs
 
 import archyonix.ewars.game
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.JoinConfiguration
+import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.title.Title.Times
 import net.minestom.server.coordinate.Pos
@@ -10,6 +12,8 @@ import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.time.Duration
 import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.floor
 
 fun String.toPos() = split(":")
     .map { it.toDouble() }
@@ -103,7 +107,7 @@ fun String.rotationWithDir(direction: Direction): String {
     if (!contains("rotation")) return this
     var rotation = 16
     while (rotation > 0) {
-        if(this.contains("rotation=${--rotation}")) break
+        if (this.contains("rotation=${--rotation}")) break
     }
     rotation += 1
     val newRotation = when (direction) {
