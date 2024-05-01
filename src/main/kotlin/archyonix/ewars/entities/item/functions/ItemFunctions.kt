@@ -31,7 +31,9 @@ fun loadItems(): Map<String, GameItem> {
 }
 
 val GameItemIdTag = Tag.String("itemId")
+val GameItemAttackSpeedTag = Tag.Float("attackSpeed")
 fun ItemStack.hasGameItem() = hasTag(GameItemIdTag)
+fun ItemStack.getGameItem() = findItemById(getGameItemId())
 fun ItemStack.getGameItemId(): String = getTag(GameItemIdTag)
 
 fun findItemById(id: String) = game.items[id]

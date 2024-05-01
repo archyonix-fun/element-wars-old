@@ -1,5 +1,6 @@
 package archyonix.ewars.entities.structure
 
+import net.minestom.server.coordinate.Pos
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
 
@@ -24,6 +25,9 @@ class StructureManager {
         }
         return true
     }
+
+    fun findStructure(pos: Pos) =
+        structureSet.find { it.region.contains(pos) }
 
     fun getConfig(structureName: String) =
         configMap[structureName] ?: throw RuntimeException("Unknown structure config: $structureName")

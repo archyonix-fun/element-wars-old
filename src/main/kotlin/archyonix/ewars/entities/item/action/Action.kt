@@ -4,7 +4,6 @@ import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.item.action.functions.executors
 import net.minestom.server.entity.Player
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
-import java.lang.RuntimeException
 
 class Action(
     val id: String,

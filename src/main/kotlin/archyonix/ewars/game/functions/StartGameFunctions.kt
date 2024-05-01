@@ -2,6 +2,7 @@ package archyonix.ewars.game.functions
 
 import archyonix.ewars.entities.item.functions.findItemById
 import archyonix.ewars.entities.player.addItem
+import archyonix.ewars.entities.player.updateAttackSpeed
 import archyonix.ewars.game
 import java.util.*
 
@@ -9,6 +10,9 @@ fun giveStartGameItems() {
     val constructionHummer = findItemById("construction-hammer") ?: return
     for (player in game.getPlayers()) {
         player.addItem(constructionHummer)
+
+        // Update attack speed
+        player.updateAttackSpeed(constructionHummer)
     }
     giveCampBlock()
 }

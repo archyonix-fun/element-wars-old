@@ -1,16 +1,17 @@
 package archyonix.ewars.game.handler
 
-import archyonix.ewars.game.events.PlayerJoinTheGameEvent
-import archyonix.ewars.game.functions.findPlayerByUsername
-import archyonix.ewars.events
-import archyonix.ewars.game
-import archyonix.ewars.gameArgs
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player._getType
 import archyonix.ewars.entities.player._setType
+import archyonix.ewars.events
+import archyonix.ewars.game
+import archyonix.ewars.game.events.PlayerJoinTheGameEvent
+import archyonix.ewars.game.functions.findPlayerByUsername
+import archyonix.ewars.gameArgs
+import net.minestom.server.attribute.Attribute
 import net.minestom.server.event.PublicEventNode
+import net.minestom.server.event.item.ItemDropEvent
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
-import net.minestom.server.event.player.AsyncPlayerPreLoginEvent
 import net.minestom.server.event.player.PlayerPacketOutEvent
 import net.minestom.server.event.player.PlayerSpawnEvent
 import net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket
@@ -22,7 +23,7 @@ class ServerEventHandler() : PublicEventNode("server") {
 
             val player = event.player
             val isAccess = gameArgs.PLAYER_LIST.contains(player.username)
-            if(game.getPlayers().size >= game.maxPlayers && isAccess) player.kick("Мест нет")
+            if (game.getPlayers().size >= game.maxPlayers && isAccess) player.kick("Мест нет")
             player._setType(if (isAccess) PlayerType.PLAYER else PlayerType.SPECTATOR)
 
             player.respawnPoint = game.map.WORLD_SPAWN
@@ -34,13 +35,18 @@ class ServerEventHandler() : PublicEventNode("server") {
             events.call(PlayerJoinTheGameEvent(player, player._getType()))
         }
 
+        addListener(ItemDropEvent::class.java) { event ->
+            event.isCancelled = true
+        }
+
         addListener(PlayerPacketOutEvent::class.java) { event ->
             val packet = event.packet
 
             if (packet is PlayerInfoUpdatePacket) {
-                if (!packet.actions().contains(PlayerInfoUpdatePacket.Action.ADD_PLAYER)) return@addListener
-                val addPlayer = findPlayerByUsername(packet.entries()[0].username)
-                event.isCancelled = addPlayer?._getType() == PlayerType.SPECTATOR
+                if (packet.actions().contains(PlayerInfoUpdatePacket.Action.ADD_PLAYER)) {
+                    val addPlayer = findPlayerByUsername(packet.entries()[0].username)
+                    event.isCancelled = addPlayer?._getType() == PlayerType.SPECTATOR
+                }
             }
         }
 

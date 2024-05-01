@@ -20,7 +20,7 @@ class Structure(
     player: Player,
 ) {
     val uuid = UUID.randomUUID()
-    private val team = player._getTeam()
+    val team = player._getTeam()
     private val position = player.position
     private val direction = player.getDirection()
     private val config = structureManager.getConfig(name)
@@ -38,6 +38,8 @@ class Structure(
             structureManager.addStructure(this)
         } else throw RuntimeException("Неподходящее место. Найди другое место для строительства!")
     }
+
+    fun getBuildProgress() = buildProgress / successProgress.toFloat()
 
     fun buildOrRepair(buildPower: Int) {
         if (hasBuilding()) {

@@ -5,6 +5,7 @@ bmb-tool:
     - "и дает начало поселению Вашей команды."
     - "ПРЕДМЕТ МОЖЕТ БЫТЬ ИСПОЛЬЗОВАН ЛИШЬ РАЗ!"
   material: "minecraft:stick"
+  attackSpeed: 0
   actions:
     build:
       executor: "TEST"
@@ -14,5 +15,10 @@ bmb-tool:
 construction-hammer:
   displayName: "Строительный молот"
   material: "minecraft:wooden_pickaxe"
+  attackSpeed: 0
+  actions:
+    build:
+      executor: "BUILD_OR_REPAIR"
+      trigger: "LEFT_CLICK_BLOCK"
   data:
     power: 1

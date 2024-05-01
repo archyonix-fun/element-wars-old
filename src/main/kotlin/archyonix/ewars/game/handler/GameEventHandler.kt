@@ -1,6 +1,7 @@
 package archyonix.ewars.game.handler
 
 import archyonix.ewars.entities.item.action.handler.ItemActionHandler
+import archyonix.ewars.entities.item.action.handler.ItemHandler
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.handler.SpectatorEventHandler
 import archyonix.ewars.entities.team.functions.distributeTeams
@@ -36,6 +37,7 @@ class GameEventHandler : PublicEventNode("game") {
         addListener(InitGameEvent::class.java) { event ->
             events.call(ChangeGameStageEvent(event.game.stage))
         }
+
         addListener(ChangeGameStageEvent::class.java) { event ->
             when (event.stage) {
                 GameStage.EXPECTATION -> {
@@ -57,6 +59,7 @@ class GameEventHandler : PublicEventNode("game") {
         }
 
         addChild(ItemActionHandler())
+        addChild(ItemHandler())
         addChild(SpectatorEventHandler())
     }
 }

@@ -14,21 +14,10 @@ class TestExecutor : IExecutor {
     override fun execute(player: Player, data: ConfigurationSection): Boolean {
         val structureId = data.getString("structureId") ?: throw RuntimeException("Structure id is null")
         try {
-            val structure = Structure(structureId, player)
-            recursive(structure)
+            Structure(structureId, player)
         } catch (e: Exception) {
             player.sendWarning(e.message ?: "Неизвестная ошибка")
         }
         return true
-    }
-
-    private fun recursive(structure: Structure) {
-        if (structure.hasBuilding()) {
-            structure.buildOrRepair(1)
-            MinecraftServer.getSchedulerManager()
-                .buildTask { recursive(structure) }
-                .delay(Duration.ofSeconds(1))
-                .schedule()
-        }
     }
 }

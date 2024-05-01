@@ -5,6 +5,7 @@ import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.entities.team.functions.findTeamById
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
+import net.minestom.server.attribute.Attribute
 import net.minestom.server.entity.Player
 import net.minestom.server.tag.Tag
 
@@ -42,4 +43,9 @@ fun Player.sendError(message: String) = sendMessage(
 
 fun Player.addItem(item: GameItem, amount: Int = 1) {
     inventory.addItemStack(item.createItemStack(amount))
+}
+
+fun Player.updateAttackSpeed(gameItem: GameItem? = null) {
+    val attackSpeed = 20f / (gameItem?.attackSpeed ?: 0f)
+    getAttribute(Attribute.ATTACK_SPEED).baseValue = attackSpeed
 }
