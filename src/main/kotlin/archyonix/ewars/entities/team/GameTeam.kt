@@ -1,7 +1,9 @@
 package archyonix.ewars.entities.team
 
 import archyonix.ewars.entities.player._getTeam
+import archyonix.ewars.entities.team.data.ResourceStorage
 import archyonix.ewars.game
+import archyonix.ewars.game.bars.TeamBar
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.minestom.server.MinecraftServer
@@ -18,6 +20,9 @@ class GameTeam(
     val color = TextColor.fromHexString(color)
     val maxPlayers = game.map.TEAM_SIZE
     val minecraftTeam = createMinecraftTeam()
+    var resources: ResourceStorage = ResourceStorage()
+    var infoBar: TeamBar = TeamBar(resources)
+
     var spawn = Pos(.0, .0, .0)
 
     fun getPlayers() = game.getPlayers().filter {
