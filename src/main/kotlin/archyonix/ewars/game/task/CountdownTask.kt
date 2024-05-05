@@ -6,7 +6,7 @@ import archyonix.ewars.shared.libs.createTitle
 import java.time.Duration
 
 class CountdownTask : Runnable {
-    private var countdown: Int = 10
+    private var countdown: Int = 0
     override fun run() {
         val count = game.getPlayers().size
         val max = game.maxPlayers

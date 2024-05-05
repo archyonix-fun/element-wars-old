@@ -17,6 +17,7 @@ class Game {
     val schedule = instance.scheduler()
     var teams: Map<String, GameTeam>? = null
     var items: Map<String, GameItem> = loadItems()
+    val isDebug: Boolean = gameArgs.IS_DEBUG.toBooleanStrictOrNull() ?: false
     var stage = GameStage.EXPECTATION
         set(value) {
             field = value

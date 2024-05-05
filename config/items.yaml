@@ -22,3 +22,75 @@ construction-hammer:
       trigger: "LEFT_CLICK_BLOCK"
   data:
     power: 1
+
+WOODEN_AXE:
+  displayName: "Примитивный топор"
+  material: "minecraft:wooden_axe"
+  attackSpeed: 0
+  data:
+    group: "AXE"
+    maxFarm: 5
+    minFarm: 3
+
+STONE_AXE:
+  displayName: "Каменный топор"
+  material: "minecraft:stone_axe"
+  attackSpeed: 0
+  data:
+    group: "AXE"
+    maxFarm: 10
+    minFarm: 7
+
+IRON_AXE:
+  displayName: "Железный топор"
+  material: "minecraft:iron_axe"
+  attackSpeed: 0
+  data:
+    group: "AXE"
+    maxFarm: 15
+    minFarm: 12
+
+ELEMENTARY_AXE:
+  displayName: "Стихийный топор"
+  material: "minecraft:diamond_axe"
+  attackSpeed: 0
+  data:
+    group: "AXE"
+    maxFarm: 20
+    minFarm: 17
+
+WOODEN_PICKAXE:
+  displayName: "Примитивная кирка"
+  material: "minecraft:wooden_pickaxe"
+  attackSpeed: 0
+  data:
+    group: "PICKAXE"
+    maxFarm: 5
+    minFarm: 3
+
+STONE_PICKAXE:
+  displayName: "Каменная кирка"
+  material: "minecraft:stone_pickaxe"
+  attackSpeed: 0
+  data:
+    group: "PICKAXE"
+    maxFarm: 10
+    minFarm: 7
+
+IRON_PICKAXE:
+  displayName: "Железная кирка"
+  material: "minecraft:iron_pickaxe"
+  attackSpeed: 0
+  data:
+    group: "PICKAXE"
+    maxFarm: 15
+    minFarm: 12
+
+ELEMENTARY_PICKAXE:
+  displayName: "Стихийная кирка"
+  material: "minecraft:diamond_pickaxe"
+  attackSpeed: 0
+  data:
+    group: "PICKAXE"
+    maxFarm: 20
+    minFarm: 17

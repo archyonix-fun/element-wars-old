@@ -1,6 +1,5 @@
 package archyonix.ewars
 
-import archyonix.ewars.entities.item.action.functions.executors
 import archyonix.ewars.entities.structure.StructureManager
 import archyonix.ewars.game.Game
 import archyonix.ewars.game.events.InitGameEvent

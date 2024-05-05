@@ -3,8 +3,8 @@ package archyonix.ewars.entities.player
 import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.entities.team.functions.findTeamById
+import archyonix.ewars.shared.libs.Colors
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.TextColor
 import net.minestom.server.attribute.Attribute
 import net.minestom.server.entity.Player
 import net.minestom.server.tag.Tag
@@ -21,24 +21,43 @@ fun Player._getTeam(): GameTeam =
 
 fun Player._setTeam(team: GameTeam) {
     team.minecraftTeam.addMember(username)
+    team.infoBar.addViewer(this)
     setTag(TeamTag, team.id)
 }
 
 fun Player.backToSpawn() = teleport(_getTeam().spawn)
 fun Player.sendInfo(message: String) = sendMessage(
-    Component.text("[I]: ", TextColor.fromHexString("#0cb2aa")).append(
-        Component.text(message, TextColor.fromHexString("#a2a2a2"))
+    Component.text("[I]: ", Colors.BLUE).append(
+        Component.text(message, Colors.TEXT)
     )
 )
+
+fun Player.sendInfo(message: Component) = sendMessage(
+    Component.text("[I]: ", Colors.BLUE).append(message)
+)
+
+fun Player.sendActionBarInfo(message: Component) = sendActionBar(
+    Component.text("[I]: ", Colors.BLUE).append(message)
+)
+
 fun Player.sendWarning(message: String) = sendMessage(
-    Component.text("[W]: ", TextColor.fromHexString("#d7a116")).append(
-        Component.text(message, TextColor.fromHexString("#a2a2a2"))
+    Component.text("[W]: ", Colors.YELLOW).append(
+        Component.text(message, Colors.TEXT)
     )
 )
+
+fun Player.sendWarning(message: Component) = sendMessage(
+    Component.text("[W]: ", Colors.YELLOW).append(message)
+)
+
 fun Player.sendError(message: String) = sendMessage(
-    Component.text("[E]: ", TextColor.fromHexString("#c51c29")).append(
-        Component.text(message, TextColor.fromHexString("#a2a2a2"))
+    Component.text("[E]: ", Colors.RED).append(
+        Component.text(message, Colors.TEXT)
     )
+)
+
+fun Player.sendError(message: Component) = sendMessage(
+    Component.text("[E]: ", Colors.RED).append(message)
 )
 
 fun Player.addItem(item: GameItem, amount: Int = 1) {

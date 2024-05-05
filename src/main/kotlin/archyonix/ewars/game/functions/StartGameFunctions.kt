@@ -4,25 +4,30 @@ import archyonix.ewars.entities.item.functions.findItemById
 import archyonix.ewars.entities.player.addItem
 import archyonix.ewars.entities.player.updateAttackSpeed
 import archyonix.ewars.game
-import java.util.*
+import net.minestom.server.entity.Player
 
 fun giveStartGameItems() {
     val constructionHummer = findItemById("construction-hammer") ?: return
     for (player in game.getPlayers()) {
         player.addItem(constructionHummer)
+        // TODO remove next line in final version
+        givePickaxes(player)
 
         // Update attack speed
         player.updateAttackSpeed(constructionHummer)
     }
-    giveCampBlock()
 }
 
-private fun giveCampBlock() {
-    val random = Random()
-    for (team in game.teams!!.values) {
-        val index = random.nextInt(team.maxPlayers)
-        val player = team.getPlayers()[index]
-        val btbTool = findItemById("bmb-tool") ?: return
-        player.inventory.addItemStack(btbTool.createItemStack())
-    }
+private fun giveAxes(player: Player) {
+    player.addItem(findItemById("WOODEN_AXE") ?: return)
+    player.addItem(findItemById("STONE_AXE") ?: return)
+    player.addItem(findItemById("IRON_AXE") ?: return)
+    player.addItem(findItemById("ELEMENTARY_AXE") ?: return)
+}
+
+private fun givePickaxes(player: Player) {
+    player.addItem(findItemById("WOODEN_PICKAXE") ?: return)
+    player.addItem(findItemById("STONE_PICKAXE") ?: return)
+    player.addItem(findItemById("IRON_PICKAXE") ?: return)
+    player.addItem(findItemById("ELEMENTARY_PICKAXE") ?: return)
 }

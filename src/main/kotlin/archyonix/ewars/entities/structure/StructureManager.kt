@@ -1,5 +1,6 @@
 package archyonix.ewars.entities.structure
 
+import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Pos
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
@@ -26,7 +27,7 @@ class StructureManager {
         return true
     }
 
-    fun findStructure(pos: Pos) =
+    fun findStructure(pos: Point) =
         structureSet.find { it.region.contains(pos) }
 
     fun getConfig(structureName: String) =

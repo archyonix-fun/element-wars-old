@@ -24,7 +24,7 @@ class Region2D(
         return region.endZ >= startZ
     }
 
-    fun contains(pos: Pos): Boolean {
+    fun contains(pos: Point): Boolean {
         if (pos.blockX() > endX) return false
         if (pos.blockX() < startX) return false
 
