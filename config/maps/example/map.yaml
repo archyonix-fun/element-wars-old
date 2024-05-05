@@ -3,7 +3,7 @@ displayName: Example Map
 teamCount: 1
 teamSize: 1
 
-worldSpawn: "5:2:5"
+worldSpawn: "-45:89:121:-120:0"
 spawnList:
-  - "1:2:1:-45"
-  - "14:2:14:135"
+  - "195:89:264:140:-2"
+  - "-64:89:-165:-35:0"
