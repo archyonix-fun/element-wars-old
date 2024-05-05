@@ -10,6 +10,7 @@ import archyonix.ewars.events
 import archyonix.ewars.features.mine_earth.MineEarthCrystalHandler
 import archyonix.ewars.features.mine_flame.MineFlameCrystalHandler
 import archyonix.ewars.features.mine_natural.MineNaturalCrystalHandler
+import archyonix.ewars.features.mine_water.MineWaterCrystalHandler
 import archyonix.ewars.game
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
@@ -20,6 +21,7 @@ import archyonix.ewars.game.functions.configureSpectator
 import archyonix.ewars.game.functions.giveStartGameItems
 import archyonix.ewars.game.task.CountdownTask
 import archyonix.ewars.game.task.ExpectationTask
+import archyonix.ewars.game.task.FishingTask
 import net.minestom.server.entity.GameMode
 import net.minestom.server.event.PublicEventNode
 
@@ -54,6 +56,8 @@ class GameEventHandler : PublicEventNode("game") {
                 }
 
                 GameStage.RUNTIME -> {
+                    game.schedule.scheduleNextTick(FishingTask())
+
                     game.teams = useGameTeams()
                     distributeTeams()
                     giveStartGameItems()
@@ -67,6 +71,7 @@ class GameEventHandler : PublicEventNode("game") {
         addChild(MineNaturalCrystalHandler())
         addChild(MineFlameCrystalHandler())
         addChild(MineEarthCrystalHandler())
+        addChild(MineWaterCrystalHandler())
 
         addChild(ItemActionHandler())
         addChild(ItemHandler())

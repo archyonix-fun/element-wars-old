@@ -31,9 +31,8 @@ private fun loadTeams(count: Int): Set<GameTeam> {
 fun useGameTeams(): Map<String, GameTeam> {
     val gameTeams: MutableMap<String, GameTeam> = HashMap()
     val spawnList: List<Pos> = game.map.SPAWN_LIST
-    var n = 0
-    for (team in loadTeams(game.map.TEAM_COUNT)) {
-        team.spawn = spawnList[n++]
+    for ((n, team) in loadTeams(game.map.TEAM_COUNT).withIndex()) {
+        team.spawn = spawnList[n]
         gameTeams[team.id] = team
     }
     return gameTeams

@@ -94,3 +94,16 @@ ELEMENTARY_PICKAXE:
     group: "PICKAXE"
     maxFarm: 20
     minFarm: 17
+
+FISHING_ROD:
+  displayName: "Удочка"
+  material: "minecraft:fishing_rod"
+  attackSpeed: 0
+  actions:
+    fishing:
+      executor: "FISHING"
+      trigger: "RIGHT_CLICK"
+  data:
+    group: "FISHING_ROD"
+    maxFarm: 20
+    minFarm: 17

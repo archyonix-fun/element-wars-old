@@ -19,7 +19,7 @@ import net.minestom.server.instance.block.Block
 import java.time.Duration
 import java.util.*
 
-class MineEarthCrystalHandler : PublicEventNode("mine-flame-crystal-handler") {
+class MineEarthCrystalHandler : PublicEventNode("mine-earth-crystal-handler") {
     private val random = Random()
 
     init {

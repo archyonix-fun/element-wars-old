@@ -22,7 +22,7 @@ fun String.toPos() = split(":")
             it[0],
             it[1],
             it[2],
-            if (it.size == 4) it[3].toFloat() else 0f,
+            if (it.size >= 4) it[3].toFloat() else 0f,
             if (it.size == 5) it[4].toFloat() else 0f,
         )
     }
