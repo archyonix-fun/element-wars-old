@@ -5,6 +5,7 @@ import archyonix.ewars.entities.team.data.ResourceStorage
 import archyonix.ewars.game
 import archyonix.ewars.game.bars.TeamBar
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.TextColor
 import net.minestom.server.MinecraftServer
 import net.minestom.server.coordinate.Pos
@@ -19,10 +20,10 @@ class GameTeam(
 ) {
     val color = TextColor.fromHexString(color)
     val maxPlayers = game.map.TEAM_SIZE
+    val prefix = Component.text("⚑").color(this.color)
     val minecraftTeam = createMinecraftTeam()
     var resources: ResourceStorage = ResourceStorage()
     var infoBar: TeamBar = TeamBar(resources)
-
     var spawn = Pos(.0, .0, .0)
 
     fun getPlayers() = game.getPlayers().filter {
@@ -34,13 +35,25 @@ class GameTeam(
         }
     }
 
+    fun sendMessage(message: String) = sendMessage(Component.text(message))
+    fun sendMessage(message: Component) {
+        getPlayers().forEach {
+            it.sendMessage(
+                Component.join(
+                    JoinConfiguration.spaces(),
+                    prefix, message
+                )
+            )
+        }
+    }
+
     private fun createMinecraftTeam(): Team {
         val manager = MinecraftServer.getTeamManager()
         var team = manager.getTeam(id)
 
         if (team == null) {
             team = manager.createTeam(id)
-            team.updatePrefix(Component.text("⚑ ").color(color))
+            team.updatePrefix(prefix)
         }
         return team!!
     }

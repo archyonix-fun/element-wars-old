@@ -6,7 +6,7 @@ import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
 
 class StructureManager {
-    private val structureSet: MutableSet<Structure> = HashSet()
+    val structureSet: MutableSet<Structure> = HashSet()
     private val configMap: MutableMap<String, StructureConfig> = HashMap()
 
     init {

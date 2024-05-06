@@ -19,14 +19,19 @@ fun breakTree(position: Point) {
                 val absoluteBlockPosition = Pos(x.toDouble(), y.toDouble(), z.toDouble())
                 val block = game.instance.getBlock(absoluteBlockPosition)
 
+                if(x == zero.blockX() && z == zero.blockZ()) {
+                    game.instance.setBlock(absoluteBlockPosition, Block.AIR)
+                    continue
+                }
+
                 when (type) {
                     Block.SPRUCE_LOG.name() -> {
-                        if (block.name() != Block.SPRUCE_LOG.name() && block.name() != Block.SPRUCE_LEAVES.name()) continue
+                        if (block.name() != Block.SPRUCE_LEAVES.name()) continue
                         game.instance.setBlock(absoluteBlockPosition, Block.AIR)
                     }
 
                     Block.BIRCH_LOG.name() -> {
-                        if (block.name() != Block.BIRCH_LOG.name() && block.name() != Block.BIRCH_LEAVES.name()) continue
+                        if (block.name() != Block.BIRCH_LEAVES.name()) continue
                         game.instance.setBlock(absoluteBlockPosition, Block.AIR)
                     }
                 }

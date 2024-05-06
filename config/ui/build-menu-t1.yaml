@@ -1,0 +1,20 @@
+colors:
+  blue: "#0cb2aa"
+  yellow: "#d7a116"
+  red: "#c51c29"
+  text: "#a2a2a2"
+components:
+  main-base:
+    component: "UIView"
+    displayName: "Костёр"
+    description:
+      - "<text>Основное здание Вашего поселения. Открывает доступ"
+      - "<text>к новым строениям, так-же может быть улучшена до Лагеря"
+      - ""
+      - "<blue>? <text>Является точкой возрождения команды"
+    order: 0
+    tags:
+      texture: "ew_campfire"
+      variant: "CAMP_FIRE"
+    icon: "minecraft:stick"
+    pos: "1:1"

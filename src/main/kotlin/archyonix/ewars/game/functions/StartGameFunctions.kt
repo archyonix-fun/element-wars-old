@@ -14,6 +14,7 @@ fun giveStartGameItems() {
         player.addItem(constructionHummer)
         // TODO remove next line in final version
         player.addItem(findItemById("FISHING_ROD") ?: return)
+        giveAxes(player)
 
         // Update attack speed
         player.updateAttackSpeed(constructionHummer)

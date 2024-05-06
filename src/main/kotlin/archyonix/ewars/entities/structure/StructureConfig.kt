@@ -1,5 +1,7 @@
 package archyonix.ewars.entities.structure
 
+import archyonix.ewars.entities.team.GameTeam
+import archyonix.ewars.structureManager
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import kotlin.math.floor
 
@@ -16,11 +18,19 @@ class StructureConfig(
         ?: throw RuntimeException("Variants is null: $name")
     val variants = loadVariants()
 
+
+    fun checkLimit(team: GameTeam): Boolean {
+        return structureManager.structureSet
+            .filter { it.team == team }
+            .filter { it.name == name }
+            .size < limit
+    }
+
     private fun loadVariants(): MutableList<StructureVariant> {
         val variants: MutableList<StructureVariant> = ArrayList()
         for (variantName in variantSection.getKeys(false)) {
             val variantConfig = variantSection.getConfigurationSection(variantName)!!
-            variants.add(StructureVariant(name, variantConfig))
+            variants.add(StructureVariant(name, variantName, variantConfig))
         }
         if (variants.isEmpty()) throw RuntimeException("Variants is empty: $name")
         return variants

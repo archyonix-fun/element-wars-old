@@ -20,6 +20,10 @@ construction-hammer:
     build:
       executor: "BUILD_OR_REPAIR"
       trigger: "LEFT_CLICK_BLOCK"
+    menu:
+      executor: "SHOW_UI"
+      trigger: "RIGHT_CLICK"
+      id: "BUILD_MENU"
   data:
     power: 1
 

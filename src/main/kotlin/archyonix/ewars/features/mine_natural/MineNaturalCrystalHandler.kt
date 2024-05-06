@@ -48,7 +48,7 @@ class MineNaturalCrystalHandler : PublicEventNode("mine-natural-crystal-handler"
                     val itemStack = event.player.itemInMainHand
                     if (!itemStack.hasGameItem()) return@addListener
                     val gameItem = itemStack.getGameItem()!!
-                    if (gameItem.data?.getString("group", "none") != "PICKAXE") return@addListener
+                    if (gameItem.data?.getString("group", "none") != "AXE") return@addListener
 
                     event.isCancelled = true
                     breakTree(event.blockPosition)

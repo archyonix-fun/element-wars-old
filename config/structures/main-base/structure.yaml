@@ -11,6 +11,8 @@ variants:
     displayName: "Костёр"
     buildPoints: 10
     schema: "schemas/campfire.schem"
+    cost:
+      NATURAL_CRYSTAL: 25
     data:
       health: 100
       spawnPos: "0:0:0"
