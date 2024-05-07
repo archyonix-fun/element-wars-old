@@ -1,6 +1,6 @@
 package archyonix.ewars.entities.structure
 
-import archyonix.ewars.entities.player._getTeam
+import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.getDirection
@@ -20,7 +20,7 @@ class Structure(
     player: Player,
 ) {
     val uuid = UUID.randomUUID()
-    val team = player._getTeam()
+    val team = player.gameTeam()
     private val position = player.position
     private val direction = player.getDirection()
     private val config = structureManager.getConfig(name)
@@ -33,6 +33,7 @@ class Structure(
     private val validator = ZoneValidator(region, position.blockY(), position.blockY() + config.height)
 
     init {
+        if(!config.checkLimit(team)) throw RuntimeException("Превышен лимит на это здание!")
         if (structureManager.validateRegion(this) && validator.validateAndPrepare()) {
             startBuildVariant(variant)
             structureManager.addStructure(this)

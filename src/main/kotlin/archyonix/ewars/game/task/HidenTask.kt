@@ -1,6 +1,6 @@
 package archyonix.ewars.game.task
 
-import archyonix.ewars.entities.player.sendActionBarInfo
+import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.Colors
 import net.kyori.adventure.text.Component
@@ -18,7 +18,7 @@ class HiddenTask : Runnable {
         for (player in game.getPlayers()) {
             if (player.isSneaking && validBlocks.contains(player.instance.getBlock(player.position).name())) {
                 player.isInvisible = true
-                player.sendActionBarInfo(Component.text("Вы затаились", Colors.TEXT))
+                player.showActionBar(Component.text("Вы затаились", Colors.TEXT))
                 continue
             }
             player.isInvisible = false

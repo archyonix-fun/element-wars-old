@@ -2,8 +2,8 @@ package archyonix.ewars.features.mine_natural
 
 import archyonix.ewars.entities.item.functions.getGameItem
 import archyonix.ewars.entities.item.functions.hasGameItem
-import archyonix.ewars.entities.player._getTeam
-import archyonix.ewars.entities.player.sendActionBarInfo
+import archyonix.ewars.entities.player.gameTeam
+import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.game
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.shared.libs.Colors
@@ -23,7 +23,7 @@ class MineNaturalCrystalHandler : PublicEventNode("mine-natural-crystal-handler"
         addListener(PlayerBlockBreakEvent::class.java) { event ->
             if (game.stage != GameStage.RUNTIME) return@addListener
             if (structureManager.findStructure(event.blockPosition) != null) return@addListener
-            val storage = event.player._getTeam().resources
+            val storage = event.player.gameTeam().resources
 
             when (event.block.name()) {
                 Block.BIRCH_LEAVES.name(),
@@ -33,7 +33,7 @@ class MineNaturalCrystalHandler : PublicEventNode("mine-natural-crystal-handler"
                     val count = if (random.nextFloat() > .8f) random.nextInt(3) else 0
                     if (count > 0) {
                         storage.NATURAL_CRYSTAL += count
-                        event.player.sendActionBarInfo(
+                        event.player.showActionBar(
                             Component.join(
                                 JoinConfiguration.spaces(),
                                 Component.text("Получен природный кристалл x$count", Colors.TEXT),
@@ -58,7 +58,7 @@ class MineNaturalCrystalHandler : PublicEventNode("mine-natural-crystal-handler"
                     val count = min + random.nextInt(max - min) + 1
                     if (count > 0) {
                         storage.NATURAL_CRYSTAL += count
-                        event.player.sendActionBarInfo(
+                        event.player.showActionBar(
                             Component.join(
                                 JoinConfiguration.spaces(),
                                 Component.text("Получен природный кристалл x$count", Colors.TEXT),

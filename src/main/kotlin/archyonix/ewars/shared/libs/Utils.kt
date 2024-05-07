@@ -1,19 +1,20 @@
 package archyonix.ewars.shared.libs
 
 import archyonix.ewars.game
+import archyonix.uikit.components.UIView
+import archyonix.uikit.components.withColors
+import archyonix.uikit.components.withProperties
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.title.Title.Times
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
+import net.minestom.server.item.ItemStack
 import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.time.Duration
 import kotlin.math.abs
-import kotlin.math.ceil
-import kotlin.math.floor
 
 fun String.toPos() = split(":")
     .map { it.toDouble() }

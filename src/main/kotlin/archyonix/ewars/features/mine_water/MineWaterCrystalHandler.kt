@@ -2,8 +2,8 @@ package archyonix.ewars.features.mine_water
 
 import archyonix.ewars.entities.item.functions.getGameItem
 import archyonix.ewars.entities.item.functions.hasGameItem
-import archyonix.ewars.entities.player._getTeam
-import archyonix.ewars.entities.player.sendActionBarInfo
+import archyonix.ewars.entities.player.gameTeam
+import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.features.mine_water.events.SuccessFishingEvent
 import archyonix.ewars.game
 import archyonix.ewars.game.enums.GameStage
@@ -41,7 +41,7 @@ class MineWaterCrystalHandler : PublicEventNode("mine-water-crystal-handler") {
         }
         addListener(SuccessFishingEvent::class.java) { event ->
             if (game.stage != GameStage.RUNTIME) return@addListener
-            val storage = event.player._getTeam().resources
+            val storage = event.player.gameTeam().resources
 
             val itemStack = event.player.itemInMainHand
             if (!itemStack.hasGameItem()) return@addListener
@@ -53,7 +53,7 @@ class MineWaterCrystalHandler : PublicEventNode("mine-water-crystal-handler") {
             val count = min + random.nextInt(max - min) + 1
             if (count > 0) {
                 storage.WATER_CRYSTAL += count
-                event.player.sendActionBarInfo(
+                event.player.showActionBar(
                     Component.join(
                         JoinConfiguration.spaces(),
                         Component.text("Получен кристалл воды x$count", Colors.TEXT),

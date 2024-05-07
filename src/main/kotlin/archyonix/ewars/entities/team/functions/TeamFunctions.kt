@@ -1,6 +1,6 @@
 package archyonix.ewars.entities.team.functions
 
-import archyonix.ewars.entities.player._setTeam
+import archyonix.ewars.entities.player.setGameTeam
 import archyonix.ewars.entities.player.backToSpawn
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.game
@@ -52,7 +52,7 @@ private fun pickRandomFreeTeam(): GameTeam {
 fun distributeTeams() {
     for (player in game.getPlayers()) {
         val team = pickRandomFreeTeam()
-        player._setTeam(team)
+        player.setGameTeam(team)
         player.backToSpawn()
     }
 }

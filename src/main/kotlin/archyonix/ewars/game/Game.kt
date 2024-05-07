@@ -4,7 +4,7 @@ import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.item.functions.loadItems
 import archyonix.ewars.entities.map.GameMap
 import archyonix.ewars.entities.player.PlayerType
-import archyonix.ewars.entities.player._getType
+import archyonix.ewars.entities.player.getRole
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
@@ -25,5 +25,5 @@ class Game {
         }
 
     val maxPlayers = map.TEAM_COUNT * map.TEAM_SIZE
-    fun getPlayers() = instance.players.filter { it._getType() == PlayerType.PLAYER }
+    fun getPlayers() = instance.players.filter { it.getRole() == PlayerType.PLAYER }
 }

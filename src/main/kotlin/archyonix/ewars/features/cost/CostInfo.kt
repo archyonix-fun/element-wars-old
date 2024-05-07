@@ -1,6 +1,6 @@
 package archyonix.ewars.features.cost
 
-import archyonix.ewars.entities.player._getTeam
+import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.resource.Resource
 import net.minestom.server.entity.Player
 import java.util.*
@@ -16,7 +16,7 @@ class CostInfo(
     }
 
     fun pay(player: Player): Boolean {
-        val resources = player._getTeam().resources
+        val resources = player.gameTeam().resources
 
         for (resource in this.resources.keys) {
             when(resource) {

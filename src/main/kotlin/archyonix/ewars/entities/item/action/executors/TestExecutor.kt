@@ -2,12 +2,11 @@ package archyonix.ewars.entities.item.action.executors
 
 import archyonix.ewars.entities.item.action.Executor
 import archyonix.ewars.entities.item.action.IExecutor
-import archyonix.ewars.entities.player.sendWarning
+import archyonix.ewars.entities.player.enums.MessageType
+import archyonix.ewars.entities.player.showMessage
 import archyonix.ewars.entities.structure.Structure
-import net.minestom.server.MinecraftServer
 import net.minestom.server.entity.Player
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
-import java.time.Duration
 
 @Executor("TEST")
 class TestExecutor : IExecutor {
@@ -16,7 +15,7 @@ class TestExecutor : IExecutor {
         try {
             Structure(structureId, player)
         } catch (e: Exception) {
-            player.sendWarning(e.message ?: "Неизвестная ошибка")
+            player.showMessage(e.message ?: "Неизвестная ошибка", MessageType.WARNING)
         }
         return true
     }

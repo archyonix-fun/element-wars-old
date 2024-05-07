@@ -13,7 +13,6 @@ fun giveStartGameItems() {
     for (player in game.getPlayers()) {
         player.addItem(constructionHummer)
         // TODO remove next line in final version
-        player.addItem(findItemById("FISHING_ROD") ?: return)
         giveAxes(player)
 
         // Update attack speed

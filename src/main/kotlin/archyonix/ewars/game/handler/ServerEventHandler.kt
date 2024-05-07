@@ -1,14 +1,13 @@
 package archyonix.ewars.game.handler
 
 import archyonix.ewars.entities.player.PlayerType
-import archyonix.ewars.entities.player._getType
-import archyonix.ewars.entities.player._setType
+import archyonix.ewars.entities.player.getRole
+import archyonix.ewars.entities.player.setRole
 import archyonix.ewars.events
 import archyonix.ewars.game
 import archyonix.ewars.game.events.PlayerJoinTheGameEvent
 import archyonix.ewars.game.functions.findPlayerByUsername
 import archyonix.ewars.gameArgs
-import net.minestom.server.attribute.Attribute
 import net.minestom.server.event.PublicEventNode
 import net.minestom.server.event.item.ItemDropEvent
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
@@ -24,7 +23,7 @@ class ServerEventHandler() : PublicEventNode("server") {
             val player = event.player
             val isAccess = gameArgs.PLAYER_LIST.contains(player.username)
             if (game.getPlayers().size >= game.maxPlayers && isAccess) player.kick("Мест нет")
-            player._setType(if (isAccess) PlayerType.PLAYER else PlayerType.SPECTATOR)
+            player.setRole(if (isAccess) PlayerType.PLAYER else PlayerType.SPECTATOR)
 
             player.respawnPoint = game.map.WORLD_SPAWN
         }
@@ -32,7 +31,7 @@ class ServerEventHandler() : PublicEventNode("server") {
         addListener(PlayerSpawnEvent::class.java) { event ->
             val player = event.player
 
-            events.call(PlayerJoinTheGameEvent(player, player._getType()))
+            events.call(PlayerJoinTheGameEvent(player, player.getRole()))
         }
 
         addListener(ItemDropEvent::class.java) { event ->
@@ -45,7 +44,7 @@ class ServerEventHandler() : PublicEventNode("server") {
             if (packet is PlayerInfoUpdatePacket) {
                 if (packet.actions().contains(PlayerInfoUpdatePacket.Action.ADD_PLAYER)) {
                     val addPlayer = findPlayerByUsername(packet.entries()[0].username)
-                    event.isCancelled = addPlayer?._getType() == PlayerType.SPECTATOR
+                    event.isCancelled = addPlayer?.getRole() == PlayerType.SPECTATOR
                 }
             }
         }

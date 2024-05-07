@@ -4,6 +4,7 @@ import archyonix.ewars.entities.item.action.handler.ItemActionHandler
 import archyonix.ewars.entities.item.action.handler.ItemHandler
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.handler.SpectatorEventHandler
+import archyonix.ewars.entities.structure.handler.StructureBuildHandler
 import archyonix.ewars.entities.team.functions.distributeTeams
 import archyonix.ewars.entities.team.functions.useGameTeams
 import archyonix.ewars.events
@@ -19,10 +20,7 @@ import archyonix.ewars.game.events.PlayerJoinTheGameEvent
 import archyonix.ewars.game.functions.configurePlayer
 import archyonix.ewars.game.functions.configureSpectator
 import archyonix.ewars.game.functions.giveStartGameItems
-import archyonix.ewars.game.task.CountdownTask
-import archyonix.ewars.game.task.ExpectationTask
-import archyonix.ewars.game.task.FishingTask
-import archyonix.ewars.game.task.HiddenTask
+import archyonix.ewars.game.task.*
 import net.minestom.server.entity.GameMode
 import net.minestom.server.event.PublicEventNode
 
@@ -59,6 +57,7 @@ class GameEventHandler : PublicEventNode("game") {
                 GameStage.RUNTIME -> {
                     game.schedule.scheduleNextTick(FishingTask())
                     game.schedule.scheduleNextTick(HiddenTask())
+                    game.schedule.scheduleNextTick(StructureAreaTask())
 
                     game.teams = useGameTeams()
                     distributeTeams()
@@ -75,6 +74,7 @@ class GameEventHandler : PublicEventNode("game") {
         addChild(MineEarthCrystalHandler())
         addChild(MineWaterCrystalHandler())
 
+        addChild(StructureBuildHandler())
         addChild(ItemActionHandler())
         addChild(ItemHandler())
         addChild(SpectatorEventHandler())

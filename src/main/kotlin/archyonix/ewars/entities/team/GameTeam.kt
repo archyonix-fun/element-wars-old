@@ -1,6 +1,6 @@
 package archyonix.ewars.entities.team
 
-import archyonix.ewars.entities.player._getTeam
+import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.team.data.ResourceStorage
 import archyonix.ewars.game
 import archyonix.ewars.game.bars.TeamBar
@@ -28,7 +28,7 @@ class GameTeam(
 
     fun getPlayers() = game.getPlayers().filter {
         try {
-            val team = it._getTeam()
+            val team = it.gameTeam()
             team.id == id
         } catch (_: Error) {
             false

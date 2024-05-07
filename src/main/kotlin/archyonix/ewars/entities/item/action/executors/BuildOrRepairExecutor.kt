@@ -4,7 +4,7 @@ import archyonix.ewars.entities.item.action.Executor
 import archyonix.ewars.entities.item.action.IExecutor
 import archyonix.ewars.entities.item.functions.getGameItem
 import archyonix.ewars.entities.item.getChargeValue
-import archyonix.ewars.entities.player._getTeam
+import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.structureManager
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.entity.Player
@@ -36,7 +36,7 @@ class BuildOrRepairExecutor : IExecutor {
         val itemStack = player.itemInMainHand
         if (itemStack.getChargeValue() < 1f) return false
 
-        return if (structure.team.id == player._getTeam().id) {
+        return if (structure.team.id == player.gameTeam().id) {
             structure.buildOrRepair(power)
             true
         } else false

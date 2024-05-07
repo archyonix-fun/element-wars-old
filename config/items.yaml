@@ -1,16 +1,8 @@
-bmb-tool:
-  displayName: "◈ Построить главное здание"
-  lore:
-    - "ПКМ по земле создает главное здание"
-    - "и дает начало поселению Вашей команды."
-    - "ПРЕДМЕТ МОЖЕТ БЫТЬ ИСПОЛЬЗОВАН ЛИШЬ РАЗ!"
+BUILD_STRUCTURE:
+  displayName: "Построить здание"
   material: "minecraft:stick"
-  attackSpeed: 0
-  actions:
-    build:
-      executor: "TEST"
-      trigger: "RIGHT_CLICK"
-      structureId: "main-base"
+  data:
+    group: "BUILD_STRUCTURE"
 
 construction-hammer:
   displayName: "Строительный молот"

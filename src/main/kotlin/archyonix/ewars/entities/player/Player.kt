@@ -1,6 +1,7 @@
 package archyonix.ewars.entities.player
 
 import archyonix.ewars.entities.item.GameItem
+import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.entities.team.functions.findTeamById
 import archyonix.ewars.shared.libs.Colors
@@ -14,50 +15,32 @@ enum class PlayerType { PLAYER, SPECTATOR }
 val TypeTag = Tag.String("playerType")
 val TeamTag = Tag.String("gameTeam")
 
-fun Player._getType(): PlayerType = if (hasTag(TypeTag)) PlayerType.valueOf(getTag(TypeTag)) else PlayerType.SPECTATOR
-fun Player._setType(type: PlayerType) = setTag(TypeTag, type.name)
-fun Player._getTeam(): GameTeam =
+fun Player.getRole(): PlayerType = if (hasTag(TypeTag)) PlayerType.valueOf(getTag(TypeTag)) else PlayerType.SPECTATOR
+fun Player.setRole(type: PlayerType) = setTag(TypeTag, type.name)
+fun Player.gameTeam(): GameTeam =
     if (hasTag(TeamTag)) findTeamById(getTag(TeamTag))!! else throw Error("Player team is null")
 
-fun Player._setTeam(team: GameTeam) {
+fun Player.setGameTeam(team: GameTeam) {
     team.minecraftTeam.addMember(username)
     team.infoBar.addViewer(this)
     setTag(TeamTag, team.id)
 }
 
-fun Player.backToSpawn() = teleport(_getTeam().spawn)
-fun Player.sendInfo(message: String) = sendMessage(
-    Component.text("[I]: ", Colors.BLUE).append(
-        Component.text(message, Colors.TEXT)
-    )
+fun Player.backToSpawn() = teleport(gameTeam().spawn)
+fun Player.showMessage(message: String, type: MessageType = MessageType.INFO) = sendMessage(
+    type.prefix.append(Component.text(message, Colors.TEXT))
 )
 
-fun Player.sendInfo(message: Component) = sendMessage(
-    Component.text("[I]: ", Colors.BLUE).append(message)
+fun Player.showMessage(message: Component, type: MessageType = MessageType.INFO) = sendMessage(
+    type.prefix.append(message)
 )
 
-fun Player.sendActionBarInfo(message: Component) = sendActionBar(
-    Component.text("[I]: ", Colors.BLUE).append(message)
+fun Player.showActionBar(message: String, type: MessageType = MessageType.INFO) = sendActionBar(
+    type.prefix.append(Component.text(message, Colors.TEXT))
 )
 
-fun Player.sendWarning(message: String) = sendMessage(
-    Component.text("[W]: ", Colors.YELLOW).append(
-        Component.text(message, Colors.TEXT)
-    )
-)
-
-fun Player.sendWarning(message: Component) = sendMessage(
-    Component.text("[W]: ", Colors.YELLOW).append(message)
-)
-
-fun Player.sendError(message: String) = sendMessage(
-    Component.text("[E]: ", Colors.RED).append(
-        Component.text(message, Colors.TEXT)
-    )
-)
-
-fun Player.sendError(message: Component) = sendMessage(
-    Component.text("[E]: ", Colors.RED).append(message)
+fun Player.showActionBar(message: Component, type: MessageType = MessageType.INFO) = sendActionBar(
+    type.prefix.append(message)
 )
 
 fun Player.addItem(item: GameItem, amount: Int = 1) {
