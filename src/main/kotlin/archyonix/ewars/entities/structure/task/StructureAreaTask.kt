@@ -1,30 +1,22 @@
-package archyonix.ewars.game.task
+package archyonix.ewars.entities.structure.task
 
+import archyonix.ewars.entities.item.asStructureBuildItem
+import archyonix.ewars.entities.item.hasStructureBuildItem
 import archyonix.ewars.game
-import archyonix.ewars.structureManager
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
-import net.minestom.server.instance.block.Block
 import net.minestom.server.network.packet.server.play.ParticlePacket
 import net.minestom.server.particle.Particle
-import net.minestom.server.tag.Tag
 import java.time.Duration
 
 class StructureAreaTask : Runnable {
-    private val validBlocks = setOf(
-        Block.BROWN_MUSHROOM.name(),
-        Block.SUGAR_CANE.name(),
-        Block.SHORT_GRASS.name()
-    )
-
     override fun run() {
         game.getPlayers()
             .filter { it.isOnGround }
-            .filter { it.itemInMainHand.hasTag(Tag.String("structureId")) }
+            .filter { it.itemInMainHand.hasStructureBuildItem() }
             .forEach {
-                val itemStack = it.itemInMainHand
-                val structureId = itemStack.getTag(Tag.String("structureId"))
-                val structureConfig = structureManager.getConfig(structureId)
+                val buildItem = it.itemInMainHand.asStructureBuildItem()!!
+                val structureConfig = buildItem.config
                 val zeroPosition = it.position.asVec()
 
                 val minX = zeroPosition.blockX() - structureConfig.radius
