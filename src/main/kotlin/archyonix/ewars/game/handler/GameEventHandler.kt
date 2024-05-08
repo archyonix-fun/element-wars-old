@@ -20,7 +20,9 @@ import archyonix.ewars.game.events.PlayerJoinTheGameEvent
 import archyonix.ewars.game.functions.configurePlayer
 import archyonix.ewars.game.functions.configureSpectator
 import archyonix.ewars.game.functions.giveStartGameItems
-import archyonix.ewars.game.task.*
+import archyonix.ewars.game.task.CountdownTask
+import archyonix.ewars.game.task.ExpectationTask
+import archyonix.ewars.game.task.HiddenTask
 import net.minestom.server.entity.GameMode
 import net.minestom.server.event.PublicEventNode
 
@@ -55,9 +57,7 @@ class GameEventHandler : PublicEventNode("game") {
                 }
 
                 GameStage.RUNTIME -> {
-                    game.schedule.scheduleNextTick(FishingTask())
                     game.schedule.scheduleNextTick(HiddenTask())
-                    game.schedule.scheduleNextTick(StructureAreaTask())
 
                     game.teams = useGameTeams()
                     distributeTeams()

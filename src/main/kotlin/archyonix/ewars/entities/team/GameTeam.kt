@@ -4,6 +4,7 @@ import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.team.data.ResourceStorage
 import archyonix.ewars.game
 import archyonix.ewars.game.bars.TeamBar
+import archyonix.ewars.shared.libs.withColors
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.TextColor
@@ -35,8 +36,8 @@ class GameTeam(
         }
     }
 
-    fun sendMessage(message: String) = sendMessage(Component.text(message))
-    fun sendMessage(message: Component) {
+    fun showMessage(message: String) = showMessage(message.withColors())
+    fun showMessage(message: Component) {
         getPlayers().forEach {
             it.sendMessage(
                 Component.join(

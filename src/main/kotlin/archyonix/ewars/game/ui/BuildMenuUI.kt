@@ -1,19 +1,15 @@
 package archyonix.ewars.game.ui
 
+import archyonix.ewars.entities.item.addStructureBuildTags
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.player.gameTeam
-import archyonix.ewars.entities.player.showMessage
-import archyonix.ewars.shared.libs.Colors
+import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.shared.libs.UIs
+import archyonix.ewars.shared.libs.withColors
 import archyonix.ewars.structureManager
 import archyonix.uikit.UI
 import archyonix.uikit.annotations.UIPreset
 import archyonix.uikit.components.UIView
-import archyonix.uikit.components.withColors
-import archyonix.uikit.components.withProperties
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.JoinConfiguration
-import net.kyori.adventure.text.format.TextDecoration
 import net.minestom.server.entity.Player
 import net.minestom.server.inventory.InventoryType
 import net.minestom.server.item.ItemStack
@@ -27,10 +23,8 @@ class BuildMenuUI(viewer: Player) : UI(viewer, InventoryType.CHEST_6_ROW) {
         for (component in components) {
             val view = component as UIView
 
-            val structure = structureManager.getConfig(view.id)
-            val variantName = view.tags["variant"] ?: continue
-            val variant = structure.variants.find { it.name == variantName } ?: continue
-            val team = viewer.gameTeam()
+            val config = structureManager.getConfig(view.id)
+            val variant = config.variants[0]
 
             val description = view.description as MutableList<String>
             description.addAll(variant.buildLore())
@@ -38,40 +32,37 @@ class BuildMenuUI(viewer: Player) : UI(viewer, InventoryType.CHEST_6_ROW) {
             view
                 .withDescription(description)
                 .onAction {
-                    if (structure.checkLimit(viewer.gameTeam())) {
+                    if (config.checkLimit(viewer.gameTeam())) {
                         if (variant.costInfo.pay(viewer)) {
-                            viewer.inventory.addItemStack(getBuildItem(it))
-                            team.sendMessage(
-                                Component.join(
-                                    JoinConfiguration.spaces(),
-                                    Component.text("Игрок", Colors.TEXT),
-                                    Component.text(viewer.username, Colors.BLUE),
-                                    Component.text("приобрел -", Colors.TEXT),
-                                    Component.text(variant.displayName, Colors.YELLOW),
-                                )
-                            )
-                        } else viewer.showMessage("У команды недостаточно кристаллов для покупки", MessageType.WARNING)
-                    } else viewer.showMessage("Превышен лимит на здание", MessageType.WARNING)
+                            viewer.inventory.addItemStack(getBuildItem(view.id))
+                            showByMessage(viewer, variant.displayName)
+                        } else viewer.showActionBar(
+                            "У команды недостаточно кристаллов для покупки",
+                            MessageType.WARNING
+                        )
+                    } else viewer.showActionBar("Превышен лимит на здание", MessageType.WARNING)
                 }
         }
     }
 
-    private fun getBuildItem(view: UIView): ItemStack {
-        var stack = ItemStack.of(Material.STICK)
-            .withDisplayName(
-                view.displayName
-                    .withProperties(view.properties)
-                    .withColors(colors)
-            )
+    private fun showByMessage(player: Player, structureName: String) {
+        player.gameTeam()
+            .showMessage("<text>Игрок <blue>${player.username} <text>приобрел чертёж - <yellow>$structureName")
+    }
+
+    private fun getBuildItem(structureId: String): ItemStack {
+        val config = structureManager.getConfig(structureId)
+        val variant = config.variants[0]
+
+        return ItemStack.of(Material.STICK)
+            .withDisplayName(variant.displayName.withColors())
             .withLore(
                 listOf(
-                    Component
-                        .text("<Используй ПКМ для размещения>", Colors.BLUE)
-                        .decoration(TextDecoration.ITALIC, false)
+                    "<blue>Используй ПКМ для размещения".withColors(),
+                    "<yellow>Используй <red>Q <yellow>чтобы продать за половину стоимости".withColors()
                 )
             )
-            .withTag(Tag.String("structureId"), view.id)
-        view.tags.map { stack = stack.withTag(Tag.String(it.key), it.value) }
-        return stack
+            .addStructureBuildTags(structureId)
+            .withTag(Tag.String("texture"), variant.name)
     }
 }

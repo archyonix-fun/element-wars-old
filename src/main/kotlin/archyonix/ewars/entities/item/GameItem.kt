@@ -16,7 +16,7 @@ import java.util.*
 import kotlin.collections.HashMap
 
 
-class GameItem(
+open class GameItem(
     val id: String,
     config: ConfigurationSection
 ) {

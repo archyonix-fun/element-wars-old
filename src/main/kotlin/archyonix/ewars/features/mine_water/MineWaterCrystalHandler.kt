@@ -5,6 +5,7 @@ import archyonix.ewars.entities.item.functions.hasGameItem
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.features.mine_water.events.SuccessFishingEvent
+import archyonix.ewars.features.mine_water.task.FishingTask
 import archyonix.ewars.game
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.shared.libs.Colors
@@ -22,6 +23,8 @@ class MineWaterCrystalHandler : PublicEventNode("mine-water-crystal-handler") {
     private val random = Random()
 
     init {
+        game.schedule.scheduleNextTick(FishingTask())
+
         addListener(PlayerChangeHeldSlotEvent::class.java) { event ->
             if (game.stage != GameStage.RUNTIME) return@addListener
             game.instance.entities
