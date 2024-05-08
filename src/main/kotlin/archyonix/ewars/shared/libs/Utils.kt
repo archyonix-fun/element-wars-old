@@ -1,16 +1,14 @@
 package archyonix.ewars.shared.libs
 
 import archyonix.ewars.game
-import archyonix.uikit.components.UIView
-import archyonix.uikit.components.withColors
-import archyonix.uikit.components.withProperties
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.title.Title.Times
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
-import net.minestom.server.item.ItemStack
 import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.time.Duration
@@ -128,4 +126,24 @@ fun ConfigurationSection.toStringMap(): Map<String, String> {
         data[key] = getString(key)!!
     }
     return data
+}
+
+fun String.withColors(): Component {
+    val components: MutableList<Component> = mutableListOf()
+    for (line in split("<")) {
+        var resultLine = line
+        var color: TextColor? = null
+        for (colorName in Colors.colors()) {
+            if (line.startsWith("$colorName>")) {
+                resultLine = line.replace("$colorName>", "")
+                color = Colors.fromName(colorName)
+                break
+            }
+        }
+        if (color == null) components.add(Component.text(resultLine))
+        else components.add(Component.text(resultLine, color))
+    }
+    return Component
+        .join(JoinConfiguration.noSeparators(), components)
+        .decoration(TextDecoration.ITALIC, false)
 }
