@@ -1,13 +1,14 @@
 package archyonix.ewars.game.ui
 
 import archyonix.ewars.entities.item.addStructureBuildTags
+import archyonix.ewars.entities.message.Message
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.shared.libs.UIs
 import archyonix.ewars.shared.libs.withColors
+import archyonix.ewars.shared.libs.withProperties
 import archyonix.ewars.structureManager
-import archyonix.uikit.UI
 import archyonix.uikit.annotations.UIPreset
 import archyonix.uikit.components.UIView
 import net.minestom.server.entity.Player
@@ -17,7 +18,7 @@ import net.minestom.server.item.Material
 import net.minestom.server.tag.Tag
 
 @UIPreset(path = "config/ui/build-menu-t1.yaml", isResource = false)
-class BuildMenuUI(viewer: Player) : UI(viewer, InventoryType.CHEST_6_ROW) {
+class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
     init {
         withDisplayName(UIs.BUILD_MENU)
         for (component in components) {
@@ -36,18 +37,20 @@ class BuildMenuUI(viewer: Player) : UI(viewer, InventoryType.CHEST_6_ROW) {
                         if (variant.costInfo.pay(viewer)) {
                             viewer.inventory.addItemStack(getBuildItem(view.id))
                             showByMessage(viewer, variant.displayName)
-                        } else viewer.showActionBar(
-                            "У команды недостаточно кристаллов для покупки",
-                            MessageType.WARNING
-                        )
-                    } else viewer.showActionBar("Превышен лимит на здание", MessageType.WARNING)
+                        } else viewer.showActionBar(Message.NOT_ENOUGH_MONEY, MessageType.WARNING)
+                    } else viewer.showActionBar(Message.BUILDING_LIMIT_EXCEEDED, MessageType.WARNING)
                 }
         }
     }
 
     private fun showByMessage(player: Player, structureName: String) {
-        player.gameTeam()
-            .showMessage("<text>Игрок <blue>${player.username} <text>приобрел чертёж - <yellow>$structureName")
+        player.gameTeam().showMessage(
+            Message.PLAYER_BOUGHT_THE_BUILDING
+                .withProperties(
+                    Pair("username", player.username),
+                    Pair("structureName", structureName)
+                )
+        )
     }
 
     private fun getBuildItem(structureId: String): ItemStack {
@@ -58,9 +61,9 @@ class BuildMenuUI(viewer: Player) : UI(viewer, InventoryType.CHEST_6_ROW) {
             .withDisplayName(variant.displayName.withColors())
             .withLore(
                 listOf(
-                    "<blue>Используй ПКМ для размещения".withColors(),
-                    "<yellow>Используй <red>Q <yellow>чтобы продать за половину стоимости".withColors()
-                )
+                    "<blue>Используй ПКМ для размещения",
+                    "<yellow>Используй <red>Q <yellow>чтобы продать за половину стоимости"
+                ).map { it.withColors() }
             )
             .addStructureBuildTags(structureId)
             .withTag(Tag.String("texture"), variant.name)

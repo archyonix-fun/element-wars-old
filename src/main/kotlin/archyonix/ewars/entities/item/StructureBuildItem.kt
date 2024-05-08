@@ -17,7 +17,7 @@ private val GroupTag = Tag.String("group")
 private val StructureIdTag = Tag.String("#structureId")
 
 fun ItemStack.hasStructureBuildItem(): Boolean {
-    if (hasTag(GroupTag)) return false
+    if (!hasTag(GroupTag)) return false
     return getTag(GroupTag) == groupName
 }
 

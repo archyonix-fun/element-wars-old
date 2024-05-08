@@ -132,6 +132,7 @@ fun String.withColors(): Component {
     val components: MutableList<Component> = mutableListOf()
     for (line in split("<")) {
         var resultLine = line
+        val cc = Colors.colors()
         var color: TextColor? = null
         for (colorName in Colors.colors()) {
             if (line.startsWith("$colorName>")) {
@@ -146,4 +147,12 @@ fun String.withColors(): Component {
     return Component
         .join(JoinConfiguration.noSeparators(), components)
         .decoration(TextDecoration.ITALIC, false)
+}
+
+fun String.withProperties(vararg properties: Pair<String, Any>): String {
+    var result = this
+    for (property in properties) {
+        result = result.replace("%${property.first}%", property.second.toString())
+    }
+    return result
 }

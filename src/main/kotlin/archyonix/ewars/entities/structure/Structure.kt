@@ -1,9 +1,11 @@
 package archyonix.ewars.entities.structure
 
+import archyonix.ewars.entities.message.Message
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.getDirection
+import archyonix.ewars.shared.libs.withProperties
 import archyonix.ewars.structureManager
 import net.kyori.adventure.sound.Sound
 import net.minestom.server.entity.Player
@@ -33,7 +35,7 @@ class Structure(
     private val validator = ZoneValidator(region, position.blockY(), position.blockY() + config.height)
 
     init {
-        if(!config.checkLimit(team)) throw RuntimeException("Превышен лимит на это здание!")
+        if (!config.checkLimit(team)) throw RuntimeException("Превышен лимит на это здание!")
         if (structureManager.validateRegion(this) && validator.validateAndPrepare()) {
             startBuildVariant(variant)
             structureManager.addStructure(this)
@@ -57,6 +59,11 @@ class Structure(
 
             this.buildProgress = newBuildProgress
             if (!hasBuilding()) {
+                team.showMessage(
+                    Message.COMPLETE_BUILDING.withProperties(
+                        Pair("structureName", variant.displayName)
+                    )
+                )
                 val sound = Sound.sound(SoundEvent.ENTITY_PLAYER_LEVELUP, Sound.Source.PLAYER, 1f, 1f)
                 game.instance.playSound(sound, this.position)
             }

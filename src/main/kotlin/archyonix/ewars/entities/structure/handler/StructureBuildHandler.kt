@@ -2,12 +2,14 @@ package archyonix.ewars.entities.structure.handler
 
 import archyonix.ewars.entities.item.asStructureBuildItem
 import archyonix.ewars.entities.item.hasStructureBuildItem
+import archyonix.ewars.entities.message.Message
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.structure.task.StructureAreaTask
 import archyonix.ewars.game
+import archyonix.ewars.shared.libs.withProperties
 import net.minestom.server.entity.Player
 import net.minestom.server.event.PublicEventNode
 import net.minestom.server.event.player.PlayerUseItemEvent
@@ -25,7 +27,7 @@ class StructureBuildHandler : PublicEventNode("structure-build-handler") {
             val buildItem = itemStack.asStructureBuildItem()!!
 
             if (!player.isOnGround) {
-                player.showActionBar("Вы должны стоять на земле", MessageType.WARNING)
+                player.showActionBar(Message.STAND_ON_GROUND, MessageType.WARNING)
                 return@addListener
             }
             try {
@@ -41,7 +43,11 @@ class StructureBuildHandler : PublicEventNode("structure-build-handler") {
     }
 
     private fun showStartBuildMessage(player: Player, structureName: String) {
-        player.gameTeam()
-            .showMessage("<text>Игрок <blue>${player.username}<text> начал строительство - <yellow>$structureName")
+        player.gameTeam().showMessage(
+            Message.START_BUILDING.withProperties(
+                Pair("username", player.username),
+                Pair("structureName", structureName)
+            )
+        )
     }
 }

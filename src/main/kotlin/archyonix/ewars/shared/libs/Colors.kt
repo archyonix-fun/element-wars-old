@@ -1,6 +1,7 @@
 package archyonix.ewars.shared.libs
 
 import net.kyori.adventure.text.format.TextColor
+import java.lang.reflect.Modifier
 
 class Colors {
     companion object {
@@ -11,17 +12,18 @@ class Colors {
 
         fun colors(): Set<String> =
             Colors::class.java
-                .fields.map { it.name.lowercase() }
+                .declaredFields
+                .filter { Modifier.isStatic(it.modifiers) }
+                .filter { it.name != "Companion" }
+                .map { it.name.lowercase() }
                 .toSet()
 
-        fun fromName(name: String): TextColor? {
-            return try {
-                Colors::class.java
-                    .getField(name.uppercase())
-                    .get(null) as TextColor
-            } catch (_: Exception) {
-                null
-            }
+        fun fromName(name: String): TextColor {
+            val field = Colors::class.java.getDeclaredField(name.uppercase())
+            field.isAccessible = true
+            val result = field.get(null) as TextColor
+            field.isAccessible = false
+            return result
         }
     }
 }
