@@ -4,7 +4,7 @@ import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.entities.team.functions.findTeamById
-import archyonix.ewars.shared.libs.Colors
+import archyonix.ewars.shared.libs.withColors
 import net.kyori.adventure.text.Component
 import net.minestom.server.attribute.Attribute
 import net.minestom.server.entity.Player
@@ -28,7 +28,7 @@ fun Player.setGameTeam(team: GameTeam) {
 
 fun Player.backToSpawn() = teleport(gameTeam().spawn)
 fun Player.showMessage(message: String, type: MessageType = MessageType.INFO) = sendMessage(
-    type.prefix.append(Component.text(message, Colors.TEXT))
+    type.prefix.append(message.withColors())
 )
 
 fun Player.showMessage(message: Component, type: MessageType = MessageType.INFO) = sendMessage(
@@ -36,7 +36,7 @@ fun Player.showMessage(message: Component, type: MessageType = MessageType.INFO)
 )
 
 fun Player.showActionBar(message: String, type: MessageType = MessageType.INFO) = sendActionBar(
-    type.prefix.append(Component.text(message, Colors.TEXT))
+    type.prefix.append(message.withColors())
 )
 
 fun Player.showActionBar(message: Component, type: MessageType = MessageType.INFO) = sendActionBar(
