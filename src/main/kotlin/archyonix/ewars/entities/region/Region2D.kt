@@ -9,11 +9,11 @@ class Region2D(
     val endX: Int,
     val endZ: Int,
 ) {
-    constructor(pos: Point, radius: Int) : this(
+    constructor(pos: Point, radius: Int, isEven: Boolean = false) : this(
         pos.blockX() - radius,
         pos.blockZ() - radius,
-        pos.blockX() + radius,
-        pos.blockZ() + radius,
+        pos.blockX() + radius - if(isEven) 1 else 0,
+        pos.blockZ() + radius - if(isEven) 1 else 0,
     )
 
     fun contains(region: Region2D): Boolean {

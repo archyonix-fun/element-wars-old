@@ -1,0 +1,15 @@
+name: "wall"
+height: 12
+area: 12
+tags:
+  - "BREAKABLE"
+
+variants:
+  WALL:
+    displayName: "Стена"
+    buildPoints: 10
+    schema: "schemas/wall.schem"
+    cost:
+      NATURAL_CRYSTAL: 1
+    data:
+      health: 100

@@ -5,6 +5,7 @@ import archyonix.ewars.entities.item.action.IExecutor
 import archyonix.ewars.entities.item.functions.getGameItem
 import archyonix.ewars.entities.item.getChargeValue
 import archyonix.ewars.entities.player.gameTeam
+import archyonix.ewars.game.functions.ActionBar
 import archyonix.ewars.structureManager
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.entity.Player
@@ -38,6 +39,9 @@ class BuildOrRepairExecutor : IExecutor {
 
         return if (structure.team.id == player.gameTeam().id) {
             structure.buildOrRepair(power)
+            ActionBar(
+                ActionBar.Progress(structure.getBuildProgress())
+            ).show(player)
             true
         } else false
     }

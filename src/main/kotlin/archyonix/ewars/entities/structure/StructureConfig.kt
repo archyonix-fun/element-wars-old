@@ -20,6 +20,7 @@ class StructureConfig(
 
 
     fun checkLimit(team: GameTeam): Boolean {
+        if(limit == 0) return true
         return structureManager.structureSet
             .filter { it.team == team }
             .filter { it.name == name }

@@ -2,8 +2,10 @@ package archyonix.ewars.entities.structure.task
 
 import archyonix.ewars.entities.item.asStructureBuildItem
 import archyonix.ewars.entities.item.hasStructureBuildItem
+import archyonix.ewars.entities.structure.functions.withWallGrid
 import archyonix.ewars.game
 import net.minestom.server.coordinate.Pos
+import net.minestom.server.coordinate.Vec
 import net.minestom.server.entity.Player
 import net.minestom.server.network.packet.server.play.ParticlePacket
 import net.minestom.server.particle.Particle
@@ -17,13 +19,15 @@ class StructureAreaTask : Runnable {
             .forEach {
                 val buildItem = it.itemInMainHand.asStructureBuildItem()!!
                 val structureConfig = buildItem.config
-                val zeroPosition = it.position.asVec()
+                var zeroPosition = it.position.asVec()
+                if(structureConfig.name == "wall") zeroPosition = zeroPosition.withWallGrid() as Vec
+                val isEven = structureConfig.area % 2 == 0
 
                 val minX = zeroPosition.blockX() - structureConfig.radius
-                val maxX = zeroPosition.blockX() + structureConfig.radius
+                val maxX = zeroPosition.blockX() + structureConfig.radius - if(isEven) 1 else 0
 
                 val minZ = zeroPosition.blockZ() - structureConfig.radius
-                val maxZ = zeroPosition.blockZ() + structureConfig.radius
+                val maxZ = zeroPosition.blockZ() + structureConfig.radius - if(isEven) 1 else 0
 
                 for (x in minX..maxX) {
                     for (z in minZ..maxZ) {

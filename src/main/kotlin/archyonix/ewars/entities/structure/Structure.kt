@@ -3,11 +3,13 @@ package archyonix.ewars.entities.structure
 import archyonix.ewars.entities.message.Message
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region2D
+import archyonix.ewars.entities.structure.functions.withWallGrid
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.getDirection
 import archyonix.ewars.shared.libs.withProperties
 import archyonix.ewars.structureManager
 import net.kyori.adventure.sound.Sound
+import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
 import net.minestom.server.instance.block.Block
 import net.minestom.server.sound.SoundEvent
@@ -23,7 +25,7 @@ class Structure(
 ) {
     val uuid = UUID.randomUUID()
     val team = player.gameTeam()
-    private val position = player.position
+    private val position = if(name != "wall") player.position else player.position.withWallGrid() as Pos
     private val direction = player.getDirection()
     private val config = structureManager.getConfig(name)
     private val data: MutableMap<String, Any> = HashMap()
@@ -31,7 +33,7 @@ class Structure(
     private var buildProgress by Delegates.notNull<Int>()
     private var successProgress by Delegates.notNull<Int>()
 
-    val region = Region2D(position, floor(config.area / 2.0).toInt())
+    val region = Region2D(position, floor(config.area / 2.0).toInt(), config.area % 2 == 0)
     private val validator = ZoneValidator(region, position.blockY(), position.blockY() + config.height)
 
     init {
