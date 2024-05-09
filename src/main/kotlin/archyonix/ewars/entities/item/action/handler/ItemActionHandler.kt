@@ -1,8 +1,6 @@
 package archyonix.ewars.entities.item.action.handler
 
-import archyonix.ewars.entities.item.functions.findItemById
 import archyonix.ewars.entities.item.functions.getGameItem
-import archyonix.ewars.entities.item.functions.getGameItemId
 import archyonix.ewars.entities.item.functions.hasGameItem
 import archyonix.ewars.game
 import net.minestom.server.event.PublicEventNode
@@ -11,6 +9,7 @@ import net.minestom.server.instance.block.Block
 
 class ItemActionHandler : PublicEventNode("item-actions") {
     init {
+        priority = 1
         addListener(PlayerBlockPlaceEvent::class.java) { event ->
             event.isCancelled = true
         }

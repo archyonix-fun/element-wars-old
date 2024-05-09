@@ -1,7 +1,6 @@
 package archyonix.ewars.entities.region
 
 import net.minestom.server.coordinate.Point
-import net.minestom.server.coordinate.Pos
 
 class Region2D(
     val startX: Int,
@@ -12,8 +11,8 @@ class Region2D(
     constructor(pos: Point, radius: Int, isEven: Boolean = false) : this(
         pos.blockX() - radius,
         pos.blockZ() - radius,
-        pos.blockX() + radius - if(isEven) 1 else 0,
-        pos.blockZ() + radius - if(isEven) 1 else 0,
+        pos.blockX() + radius + if(isEven) -1 else 0,
+        pos.blockZ() + radius + if(isEven) -1 else 0,
     )
 
     fun contains(region: Region2D): Boolean {
@@ -30,5 +29,15 @@ class Region2D(
 
         if (pos.blockZ() > endZ) return false
         return pos.blockZ() >= startZ
+    }
+
+    fun merge(region: Region2D): Region2D {
+        val minX = if(startX < region.startX) startX else region.startX
+        val minZ = if(startZ < region.startZ) startZ else region.startZ
+
+        val maxX = if(endX > region.endX) endX else region.endX
+        val maxZ = if(endZ > region.endZ) endZ else region.endZ
+
+        return Region2D(minX, minZ, maxX, maxZ)
     }
 }

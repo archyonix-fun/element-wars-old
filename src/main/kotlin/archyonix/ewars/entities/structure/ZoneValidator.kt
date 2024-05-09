@@ -23,7 +23,7 @@ class ZoneValidator(
         return solidBlockCount < maxAnother
     }
 
-    private fun fillBase() = baseZone.fill(Block.GRASS_BLOCK, Block.COARSE_DIRT, Block.ROOTED_DIRT, Block.DIRT)
+    private fun fillBase() = baseZone.fill(Block.GRASS_BLOCK, Block.GRASS_BLOCK, Block.COARSE_DIRT, Block.ROOTED_DIRT, Block.DIRT)
     fun clear() = airZone.fill(Block.AIR)
 
     fun validateAndPrepare(): Boolean {

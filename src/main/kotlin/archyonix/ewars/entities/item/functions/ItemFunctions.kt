@@ -2,6 +2,7 @@ package archyonix.ewars.entities.item.functions
 
 import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.game
+import archyonix.ewars.game.Game
 import archyonix.ewars.shared.libs.toStringMap
 import net.minestom.server.item.ItemStack
 import net.minestom.server.tag.Tag
@@ -33,6 +34,10 @@ fun loadItems(): Map<String, GameItem> {
 val GameItemIdTag = Tag.String("itemId")
 val GameItemAttackSpeedTag = Tag.Float("attackSpeed")
 fun ItemStack.hasGameItem() = hasTag(GameItemIdTag)
+fun ItemStack.hasGameItem(itemId: String): Boolean {
+    if(!hasTag(GameItemIdTag)) return false
+    return getTag(GameItemIdTag) == itemId
+}
 fun ItemStack.getGameItem() = findItemById(getGameItemId())
 fun ItemStack.getGameItemId(): String = getTag(GameItemIdTag)
 

@@ -12,16 +12,16 @@ components:
       texture: "CAMP_FIRE"
     icon: "minecraft:stick"
     pos: "1:1"
-  wall:
+  TOWER:
     component: "UIView"
-    displayName: "Стена"
+    displayName: "Деревянная Башня"
     description:
       - "<text>Базовое оборонительное сооружение. Мешает"
       - "<text>противнику передвигаться по Вашей территории"
       - ""
-      - "<blue>? <text>Объединяется со стенами по соседству"
+      - "<blue>? <text>Объединяется стенами с соседними башнями"
     order: 0
     tags:
-      texture: "WALL"
+      texture: "TOWER"
     icon: "minecraft:stick"
     pos: "2:1"

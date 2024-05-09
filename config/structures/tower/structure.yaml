@@ -1,0 +1,16 @@
+name: "TOWER"
+height: 12
+area: 12
+tags:
+  - "BREAKABLE"
+
+variants:
+  WOOD_TOWER:
+    displayName: "Стена"
+    buildPoints: 1
+    schema: "schemas/wood_tower.schem"
+    cost:
+    data:
+      wallSchema-straight: "schemas/wood_wall-straight.schem"
+      wallSchema-slope: "schemas/wood_wall-slope.schem"
+      health: 100

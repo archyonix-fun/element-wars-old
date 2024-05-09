@@ -3,7 +3,7 @@ package archyonix.ewars.entities.structure
 import archyonix.ewars.entities.message.Message
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region2D
-import archyonix.ewars.entities.structure.functions.withWallGrid
+import archyonix.ewars.entities.structure.functions.withGrid
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.getDirection
 import archyonix.ewars.shared.libs.withProperties
@@ -13,6 +13,7 @@ import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
 import net.minestom.server.instance.block.Block
 import net.minestom.server.sound.SoundEvent
+import net.minestom.server.utils.Direction
 import java.util.*
 import kotlin.math.floor
 import kotlin.math.max
@@ -25,11 +26,11 @@ class Structure(
 ) {
     val uuid = UUID.randomUUID()
     val team = player.gameTeam()
-    private val position = if(name != "wall") player.position else player.position.withWallGrid() as Pos
-    private val direction = player.getDirection()
-    private val config = structureManager.getConfig(name)
+    val position = if (!isTower()) player.position else player.position.withGrid() as Pos
+    val config = structureManager.getConfig(name)
+    val direction = if (!isTower()) player.getDirection() else Direction.SOUTH
     private val data: MutableMap<String, Any> = HashMap()
-    private var variant: StructureVariant = config.variants[0]
+    var variant: StructureVariant = config.variants[0]
     private var buildProgress by Delegates.notNull<Int>()
     private var successProgress by Delegates.notNull<Int>()
 
