@@ -9,11 +9,13 @@ import net.minestom.server.item.ItemStack
 import net.minestom.server.item.Material
 
 fun giveStartGameItems() {
-    val constructionHummer = findItemById("construction-hammer") ?: return
+    val constructionHummer = findItemById("CONSTRUCTION_HAMMER") ?: return
     for (player in game.getPlayers()) {
         player.addItem(constructionHummer)
         // TODO remove next line in final version
-        giveAxes(player)
+        //giveAxes(player)
+        //givePickaxes(player)
+        //player.addItem(findItemById("FISHING_ROD") ?: return)
 
         // Update attack speed
         player.updateAttackSpeed(constructionHummer)

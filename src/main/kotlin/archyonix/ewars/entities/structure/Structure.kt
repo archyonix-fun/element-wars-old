@@ -3,6 +3,7 @@ package archyonix.ewars.entities.structure
 import archyonix.ewars.entities.message.Message
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region2D
+import archyonix.ewars.entities.structure.controllers.StructureTower
 import archyonix.ewars.entities.structure.functions.withGrid
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.getDirection
@@ -20,17 +21,17 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
 
-class Structure(
+open class Structure(
     val name: String,
     player: Player,
 ) {
-    val uuid = UUID.randomUUID()
+    val uuid = UUID.randomUUID()!!
     val team = player.gameTeam()
-    val position = if (!isTower()) player.position else player.position.withGrid() as Pos
     val config = structureManager.getConfig(name)
-    val direction = if (!isTower()) player.getDirection() else Direction.SOUTH
-    private val data: MutableMap<String, Any> = HashMap()
+    val position = if (hasTower()) player.position.withGrid(config.area) as Pos else player.position
     var variant: StructureVariant = config.variants[0]
+    private val direction = if (hasTower()) Direction.SOUTH else player.getDirection()
+    private val data: MutableMap<String, Any> = HashMap()
     private var buildProgress by Delegates.notNull<Int>()
     private var successProgress by Delegates.notNull<Int>()
 
@@ -41,9 +42,10 @@ class Structure(
         if (!config.checkLimit(team)) throw RuntimeException("Превышен лимит на это здание!")
         if (structureManager.validateRegion(this) && validator.validateAndPrepare()) {
             startBuildVariant(variant)
-            structureManager.addStructure(this)
         } else throw RuntimeException("Неподходящее место. Найди другое место для строительства!")
     }
+
+    open fun registerStructure() = structureManager.addStructure(this)
 
     fun getBuildProgress() = buildProgress / successProgress.toFloat()
 
@@ -90,6 +92,8 @@ class Structure(
 
     private fun getPlayersFromRadius(radius: Double) =
         game.getPlayers().filter { it.position.distance(position) <= radius }
+
+    fun hasTower() = name == "TOWER"
 
     fun hasBuilding() = buildProgress < successProgress
 }

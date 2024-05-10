@@ -7,6 +7,7 @@ import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.entities.structure.Structure
+import archyonix.ewars.entities.structure.controllers.StructureTower
 import archyonix.ewars.entities.structure.task.StructureAreaTask
 import archyonix.ewars.entities.structure.task.WallAreaTask
 import archyonix.ewars.game
@@ -33,7 +34,10 @@ class StructureBuildHandler : PublicEventNode("structure-build-handler") {
                 return@addListener
             }
             try {
-                Structure(buildItem.config.name, player)
+                val structureName = buildItem.config.name
+                (if (structureName == "TOWER") StructureTower(structureName, player)
+                else Structure(structureName, player)).registerStructure()
+
                 showStartBuildMessage(player, buildItem.variant.displayName)
                 if (player.itemInMainHand.amount() > 1) {
                     player.itemInMainHand = itemStack.withAmount(itemStack.amount() - 1)

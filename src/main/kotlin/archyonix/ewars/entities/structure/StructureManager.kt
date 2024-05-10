@@ -1,12 +1,12 @@
 package archyonix.ewars.entities.structure
 
+import archyonix.ewars.entities.structure.controllers.StructureTower
 import net.minestom.server.coordinate.Point
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
 
 class StructureManager {
     val structureSet: MutableSet<Structure> = HashSet()
-    val towerSet: MutableSet<StructureTower> = HashSet()
     private val configMap: MutableMap<String, StructureConfig> = HashMap()
 
     init {
@@ -27,19 +27,12 @@ class StructureManager {
         return true
     }
 
-    fun findStructure(pos: Point): Structure? {
-        return structureSet.find { it.region.contains(pos) }
-            ?: towerSet.map { it.structure }.find { it.region.contains(pos) }
+    fun <T: Structure>findStructure(pos: Point): T? {
+        return structureSet.find { it.region.contains(pos) } as T?
     }
-
-    fun findTower(pos: Point) = towerSet
-        .find { it.structure.region.contains(pos) }
 
     fun getConfig(structureName: String) =
         configMap[structureName] ?: throw RuntimeException("Unknown structure config: $structureName")
 
-    fun addStructure(structure: Structure) {
-        if (structure.isTower()) towerSet.add(StructureTower(structure))
-        else structureSet.add(structure)
-    }
+    fun addStructure(structure: Structure) = structureSet.add(structure)
 }

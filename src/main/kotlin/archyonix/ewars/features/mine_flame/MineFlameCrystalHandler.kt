@@ -4,6 +4,7 @@ import archyonix.ewars.entities.item.functions.getGameItem
 import archyonix.ewars.entities.item.functions.hasGameItem
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
+import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.game
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.shared.libs.Colors
@@ -25,7 +26,7 @@ class MineFlameCrystalHandler : PublicEventNode("mine-flame-crystal-handler") {
     init {
         addListener(PlayerBlockBreakEvent::class.java) { event ->
             if (game.stage != GameStage.RUNTIME) return@addListener
-            if (structureManager.findStructure(event.blockPosition) != null) return@addListener
+            if (structureManager.findStructure<Structure>(event.blockPosition) != null) return@addListener
             val storage = event.player.gameTeam().resources
 
             val block = event.block

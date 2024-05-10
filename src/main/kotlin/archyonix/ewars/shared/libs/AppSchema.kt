@@ -95,7 +95,10 @@ class AppSchema(path: String) {
                         val key = var5.next() as String
                         val value = nbtPalette.getInt(key)
                             ?: throw NBTException("Invalid Schematic: Palette contains invalid value")
-                        palette[value] = key.facingWithDir(direction).rotationWithDir(direction)
+                        palette[value] = key
+                            .facingWithDir(direction)
+                            .rotationWithDir(direction)
+                            .withDirection(direction)
                     }
                     val blocksData = nbtTag.getByteArray("BlockData")
                     if (blocksData != null && blocksData.size != 0) {

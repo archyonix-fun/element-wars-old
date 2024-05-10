@@ -13,4 +13,5 @@ variants:
     data:
       wallSchema-straight: "schemas/wood_wall-straight.schem"
       wallSchema-slope: "schemas/wood_wall-slope.schem"
+      gateSchema: "schemas/wood_gate-slope.schem"
       health: 100

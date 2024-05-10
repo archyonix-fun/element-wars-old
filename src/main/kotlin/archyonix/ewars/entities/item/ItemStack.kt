@@ -1,8 +1,6 @@
 package archyonix.ewars.entities.item
 
-import archyonix.ewars.entities.item.functions.findItemById
 import archyonix.ewars.entities.item.functions.getGameItem
-import archyonix.ewars.entities.item.functions.getGameItemId
 import archyonix.ewars.entities.item.functions.hasGameItem
 import net.minestom.server.item.ItemStack
 import java.util.*
@@ -24,6 +22,8 @@ fun ItemStack.getChargeValue(): Float {
     }
     return 1f
 }
+
+fun ItemStack.hasCharged(): Boolean = !(getChargeValue() < 1)
 
 fun ItemStack.resetCharge() {
     weaponCharge[this] = Date().time

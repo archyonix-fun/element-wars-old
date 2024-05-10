@@ -4,7 +4,7 @@ BUILD_STRUCTURE:
   data:
     group: "BUILD_STRUCTURE"
 
-construction-hammer:
+CONSTRUCTION_HAMMER:
   displayName: "Строительный молот"
   material: "minecraft:wooden_pickaxe"
   attackSpeed: 0

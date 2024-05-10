@@ -102,6 +102,47 @@ fun String.facingWithDir(direction: Direction): String {
     }
 }
 
+fun String.withDirection(direction: Direction): String {
+    if(direction == Direction.SOUTH) return this
+
+    var dir = ""
+    dir += getDirection(Direction.SOUTH) ?: return this
+    dir += getDirection(Direction.WEST) ?: return this
+    dir += getDirection(Direction.NORTH) ?: return this
+    dir += getDirection(Direction.EAST) ?: return this
+
+    val newDir = when (direction) {
+        Direction.WEST -> dir.moveChars(1)
+        Direction.NORTH -> dir.moveChars(2)
+        Direction.EAST -> dir.moveChars(3)
+        else -> dir
+    }
+
+    var result = this
+    result = result.replace("south=${dir[0] == '1'}", "south=${newDir[0] == '1'}")
+    result = result.replace("west=${dir[1] == '1'}", "west=${newDir[1] == '1'}")
+    result = result.replace("north=${dir[2] == '1'}", "north=${newDir[2] == '1'}")
+    result = result.replace("east=${dir[3] == '1'}", "east=${newDir[3] == '1'}")
+    return result
+}
+
+private fun String.moveChars(steps: Int): String {
+    var result = this
+    for (i in 1..steps) {
+        val end = result.substring(result.length - 1, result.length)
+        val other = result.substring(0, result.length - 1)
+        result = end + other
+    }
+    return result
+}
+
+private fun String.getDirection(direction: Direction): String? {
+    val name = direction.name.lowercase()
+    return if (contains("$name=true")) "1"
+    else if (contains("$name=false")) "0"
+    else null
+}
+
 fun String.rotationWithDir(direction: Direction): String {
     if (!contains("rotation")) return this
     var rotation = 16
