@@ -1,6 +1,7 @@
 name: "TOWER"
 height: 12
 area: 12
+ui: "TOWER_MENU"
 tags:
   - "BREAKABLE"
 
@@ -9,6 +10,8 @@ variants:
     displayName: "Деревянная башня"
     buildPoints: 5
     schema: "schemas/wood_tower.schem"
+    dependencies:
+      - "STRUCTURE:BUILDER_HUT"
     cost:
     data:
       wallSchema-straight: "schemas/wood_wall-straight.schem"

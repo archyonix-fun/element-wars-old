@@ -10,7 +10,7 @@ import archyonix.ewars.entities.structure.enums.WallType
 import archyonix.ewars.entities.structure.findGateByParents
 import archyonix.ewars.entities.structure.functions.showRegion
 import archyonix.ewars.entities.structure.functions.withGrid
-import archyonix.ewars.entities.structure.ui.WallUI
+import archyonix.ewars.entities.structure.ui.WallMenuUI
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.AppSchema
 import archyonix.ewars.structureManager
@@ -55,6 +55,21 @@ class StructureTower(name: String, player: Player) : Structure(name, player) {
     fun getGateSchema(): AppSchema {
         val schemaPath = variant.data!!.getString("gateSchema")
         return AppSchema("config/structures/${name}/$schemaPath")
+    }
+
+    override fun deconstruct() {
+        for (direction in 0..7) {
+            when (walls[direction]) {
+                Wall.WALL -> deconstructWall(direction, true)
+                Wall.GATE -> {
+                    val neighbor = findNeighbor(direction) ?: continue
+                    findGateByParents(this, neighbor)?.deconstruct()
+                }
+
+                else -> continue
+            }
+        }
+        super.deconstruct()
     }
 
     private fun findNeighbor(direction: Int): StructureTower? {
@@ -156,7 +171,7 @@ class StructureTower(name: String, player: Player) : Structure(name, player) {
 
         val direction = findDirection(point) ?: return false
         if (walls[direction] == Wall.NONE) return false
-        WallUI(player, this, direction).show()
+        WallMenuUI(player, this, direction).show()
         return true
     }
 

@@ -1,6 +1,8 @@
 package archyonix.ewars.entities.structure
 
 import archyonix.ewars.entities.resource.Resource
+import archyonix.ewars.entities.structure.enums.DependenceType
+import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.features.cost.CostInfo
 import archyonix.ewars.shared.libs.AppSchema
 import archyonix.ewars.shared.libs.Icons
@@ -19,9 +21,10 @@ class StructureVariant(
     val schema = AppSchema("config/structures/$structureId/$schemaURI")
     val buildPoints = config.getInt("buildPoints")
     val data = config.getConfigurationSection("data")
+    val dependencies = loadDependencies()
     val costInfo = getCost()
 
-    fun buildLore(): List<String> {
+    fun buildLore(team: GameTeam): List<String> {
         val structure = structureManager.getConfig(structureId)
         val lore = mutableListOf<String>()
 
@@ -29,12 +32,31 @@ class StructureVariant(
         lore.add("<text>[<yellow>Ресурсы<text>]:")
         lore.addAll(costInfo.buildLore())
         lore.add("")
+        if (dependencies.isNotEmpty()) {
+            val lines = mutableListOf<String>()
+            dependencies.forEach {
+                val line = it.generateLore(team)
+                if (line != null) lines.add(line)
+            }
+            if (lines.isNotEmpty()) {
+                lore.add("<text>[<blue>Требования<text>]:")
+                lore.addAll(lines)
+                lore.add("")
+            }
+        }
         lore.add("<text>[<blue>Прочие затраты<text>]:")
         lore.add("§f${Icons.HAMMER.content()}<text> - $buildPoints")
         lore.add("")
         lore.add("<yellow>ЛИМИТ: <text>${structure.limit}")
 
         return lore
+    }
+
+    fun checkDependencies(team: GameTeam): Boolean {
+        for (dep in dependencies) {
+            if(!dep.check(team)) return false
+        }
+        return true
     }
 
     private fun getCost(): CostInfo {
@@ -45,5 +67,17 @@ class StructureVariant(
             resources[resource] = section.getInt(key)
         }
         return CostInfo(resources)
+    }
+
+
+    private fun loadDependencies(): List<Dependence> {
+        return config.getStringList("dependencies")
+            .map {
+                val split = it.split(":")
+                val depType = DependenceType.valueOf(split[0])
+                val targets = split.subList(1, split.size).toSet()
+
+                Dependence(depType, targets)
+            }
     }
 }

@@ -3,6 +3,7 @@ height: 12
 area: 17
 
 limit: 1
+ui: "CRAFTSMAN_HOUSE_SHOP"
 tags:
   - "BREAKABLE"
 

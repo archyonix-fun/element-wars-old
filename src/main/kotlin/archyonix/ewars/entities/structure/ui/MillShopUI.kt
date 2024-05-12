@@ -8,13 +8,13 @@ import archyonix.uikit.components.UIView
 import net.minestom.server.entity.Player
 import net.minestom.server.inventory.InventoryType
 
-@UIPreset(path = "config/ui/camp_fire-menu.yaml", isResource = false)
-class CampFireUI(
+@UIPreset(path = "config/ui/structures/shop/mill-shop.yaml", isResource = false)
+class MillShopUI(
     viewer: Player,
     structure: Structure
 ) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
     init {
-        withDisplayName(UIs.CAMP_FIRE_MENU)
+        withDisplayName(UIs.MILL_SHOP)
 
         findComponent<UIView>("deconstruct")
             ?.onAction {

@@ -11,8 +11,8 @@ import archyonix.uikit.components.UIView
 import net.minestom.server.entity.Player
 import net.minestom.server.inventory.InventoryType
 
-@UIPreset(path = "config/ui/wall-menu.yaml", isResource = false)
-class WallUI(
+@UIPreset(path = "config/ui/structures/menu/wall-menu.yaml", isResource = false)
+class WallMenuUI(
     viewer: Player,
     private val structureTower: StructureTower,
     private val direction: Int,
@@ -38,7 +38,7 @@ class WallUI(
 
         gate.onAction {
             structureTower.makeGate(direction)
-            WallUI(viewer, structureTower, direction).show()
+            WallMenuUI(viewer, structureTower, direction).show()
         }
 
         deconstruct.onAction {

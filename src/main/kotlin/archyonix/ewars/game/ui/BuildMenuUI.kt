@@ -19,6 +19,8 @@ import net.minestom.server.tag.Tag
 
 @UIPreset(path = "config/ui/build-menu-t1.yaml", isResource = false)
 class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
+    private val team = viewer.gameTeam()
+
     init {
         withDisplayName(UIs.BUILD_MENU)
         for (component in components) {
@@ -28,10 +30,14 @@ class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
             val variant = config.variants[0]
 
             val description = view.description as MutableList<String>
-            description.addAll(variant.buildLore())
+            description.addAll(variant.buildLore(team))
 
             view
                 .withDescription(description)
+                .onRender {
+                    if (!variant.checkDependencies(team)) it.tags["texture"] = "HIDDEN"
+                    it
+                }
                 .onAction {
                     if (config.checkLimit(viewer.gameTeam())) {
                         if (variant.costInfo.pay(viewer)) {

@@ -3,6 +3,7 @@ height: 12
 area: 11
 
 limit: 1
+ui: "BUILDER_HUT_SHOP"
 tags:
   - "BREAKABLE"
 

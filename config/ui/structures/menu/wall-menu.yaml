@@ -9,7 +9,7 @@ components:
     pos: "1:1"
   deconstruct:
     component: "UIView"
-    displayName: "Разрушить"
+    displayName: "<red>Разрушить"
     order: 0
     icon: "minecraft:barrier"
     pos: "7:4"

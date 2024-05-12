@@ -1,6 +1,7 @@
 package archyonix.ewars.entities.structure
 
-import archyonix.ewars.entities.structure.ui.CampFireUI
+import archyonix.ewars.entities.structure.ui.*
+import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.game.ui.GameUI
 import net.minestom.server.coordinate.Point
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
@@ -8,9 +9,13 @@ import java.io.File
 
 class StructureManager {
     val structureSet: MutableSet<Structure> = HashSet()
-    private val configMap: MutableMap<String, StructureConfig> = HashMap()
+    val configMap: MutableMap<String, StructureConfig> = HashMap()
     private val uiMap: Map<String, Class<out GameUI>> = mapOf(
-        Pair("CAMP_FIRE", CampFireUI::class.java)
+        Pair("CAMP_FIRE_MENU", CampFireMenuUI::class.java),
+        Pair("TOWER_MENU", TowerMenuUI::class.java),
+        Pair("BUILDER_HUT_SHOP", BuilderHutShopUI::class.java),
+        Pair("CRAFTSMAN_HOUSE_SHOP", CraftsmanHouseShopUI::class.java),
+        Pair("MILL_SHOP", MillShopUI::class.java),
     )
 
     init {
@@ -36,6 +41,9 @@ class StructureManager {
     fun <T : Structure> findStructure(pos: Point): T? {
         return structureSet.find { it.region.contains(pos) } as T?
     }
+
+    fun findStructures(team: GameTeam) =
+        structureSet.filter { it.team == team }
 
     fun getConfig(structureName: String) =
         configMap[structureName] ?: throw RuntimeException("Unknown structure config: $structureName")

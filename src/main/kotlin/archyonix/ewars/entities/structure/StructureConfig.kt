@@ -1,12 +1,13 @@
 package archyonix.ewars.entities.structure
 
+import archyonix.ewars.entities.structure.enums.DependenceType
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.structureManager
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import kotlin.math.floor
 
 class StructureConfig(
-    config: ConfigurationSection
+    private val config: ConfigurationSection
 ) {
     val name = config.getString("name") ?: throw RuntimeException("Name is null")
     val limit = config.getInt("limit")
@@ -21,7 +22,7 @@ class StructureConfig(
 
 
     fun checkLimit(team: GameTeam): Boolean {
-        if(limit == 0) return true
+        if (limit == 0) return true
         return structureManager.structureSet
             .filter { it.team == team }
             .filter { it.name == name }
@@ -39,4 +40,5 @@ class StructureConfig(
         if (variants.isEmpty()) throw RuntimeException("Variants is empty: $name")
         return variants
     }
+
 }

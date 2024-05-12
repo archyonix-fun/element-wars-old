@@ -3,7 +3,7 @@ height: 12
 area: 7
 
 limit: 1
-ui: "CAMP_FIRE"
+ui: "CAMP_FIRE_MENU"
 tags:
   - "BREAKABLE"
 

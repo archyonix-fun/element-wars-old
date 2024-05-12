@@ -3,6 +3,7 @@ height: 15
 area: 13
 
 limit: 1
+ui: "MILL_SHOP"
 tags:
   - "BREAKABLE"
 

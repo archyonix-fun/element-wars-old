@@ -2,7 +2,7 @@ CONSTRUCTION_HAMMER:
   displayName: "Строительный молот"
   material: "minecraft:wooden_pickaxe"
   texture: "CONSTRUCTION_HAMMER"
-  attackSpeed: 20
+  attackSpeed: 0
   actions:
     build:
       executor: "BUILD_OR_REPAIR"
