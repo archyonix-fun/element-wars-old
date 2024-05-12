@@ -1,0 +1,18 @@
+name: "MILL"
+height: 15
+area: 13
+
+limit: 1
+tags:
+  - "BREAKABLE"
+
+variants:
+  MILL:
+    displayName: "Мельница"
+    buildPoints: 25
+    schema: "schemas/mill.schem"
+    cost:
+      NATURAL_CRYSTAL: 75
+      WATER_CRYSTAL: 50
+    data:
+      health: 100

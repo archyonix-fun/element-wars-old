@@ -1,13 +1,8 @@
-BUILD_STRUCTURE:
-  displayName: "Построить здание"
-  material: "minecraft:stick"
-  data:
-    group: "BUILD_STRUCTURE"
-
 CONSTRUCTION_HAMMER:
   displayName: "Строительный молот"
   material: "minecraft:wooden_pickaxe"
-  attackSpeed: 0
+  texture: "CONSTRUCTION_HAMMER"
+  attackSpeed: 20
   actions:
     build:
       executor: "BUILD_OR_REPAIR"

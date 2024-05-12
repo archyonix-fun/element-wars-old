@@ -1,8 +1,9 @@
-name: "main-base"
+name: "CAMP_FIRE"
 height: 12
 area: 7
 
 limit: 1
+ui: "CAMP_FIRE"
 tags:
   - "BREAKABLE"
 

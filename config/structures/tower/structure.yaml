@@ -6,12 +6,13 @@ tags:
 
 variants:
   WOOD_TOWER:
-    displayName: "Стена"
-    buildPoints: 1
+    displayName: "Деревянная башня"
+    buildPoints: 5
     schema: "schemas/wood_tower.schem"
     cost:
     data:
       wallSchema-straight: "schemas/wood_wall-straight.schem"
       wallSchema-slope: "schemas/wood_wall-slope.schem"
-      gateSchema: "schemas/wood_gate-slope.schem"
+      gateSchema: "schemas/wood_gate.schem"
+      gatePattern: 1
       health: 100

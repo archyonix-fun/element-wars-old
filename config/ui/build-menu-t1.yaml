@@ -1,17 +1,56 @@
 components:
-  main-base:
+  CAMP_FIRE:
     component: "UIView"
-    displayName: "Костёр"
+    displayName: "<blue>Костёр"
     description:
-      - "<text>Основное здание Вашего поселения. Открывает доступ"
-      - "<text>к новым строениям, может быть улучшен до Лагеря"
+      - "<text>Основное здание Вашего поселения. Является"
+      - "<text>точкой возрождения команды"
       - ""
-      - "<blue>? <text>Является точкой возрождения команды"
+      - "<blue>? Является точкой возрождения команды"
     order: 0
     tags:
       texture: "CAMP_FIRE"
     icon: "minecraft:stick"
     pos: "1:1"
+  BUILDER_HUT:
+    component: "UIView"
+    displayName: "Хижина строителя"
+    description:
+      - "<text>Необходимо для возведения иных зданий <yellow>Т1"
+      - "<text>Может быть улучшено до <blue>Дом строителей"
+      - ""
+      - "<blue>? Разблокирует здания <yellow>Т1"
+    order: 0
+    tags:
+      texture: "BUILDER_HUT"
+    icon: "minecraft:stick"
+    pos: "2:1"
+  CRAFTSMAN_HOUSE:
+    component: "UIView"
+    displayName: "Дом ремесленника (Дерево)"
+    description:
+      - "<text>Открывает доступ к инструментам, что"
+      - "<text>значительно упрощает добычу ресурсов"
+      - ""
+      - "<blue>? Базовые нструменты"
+    order: 0
+    tags:
+      texture: "WOOD_CRAFTSMAN_HOUSE"
+    icon: "minecraft:stick"
+    pos: "3:1"
+  MILL:
+    component: "UIView"
+    displayName: "Мельница"
+    description:
+      - "<text>Вас замучал голод? Тогда данное здание"
+      - "<text>именно то, что вам нужно."
+      - ""
+      - "<blue>? Можно преобрести еду"
+    order: 0
+    tags:
+      texture: "MILL"
+    icon: "minecraft:stick"
+    pos: "4:1"
   TOWER:
     component: "UIView"
     displayName: "Деревянная Башня"
@@ -22,6 +61,6 @@ components:
       - "<blue>? <text>Объединяется стенами с соседними башнями"
     order: 0
     tags:
-      texture: "TOWER"
+      texture: "WOOD_TOWER"
     icon: "minecraft:stick"
-    pos: "2:1"
+    pos: "5:1"
