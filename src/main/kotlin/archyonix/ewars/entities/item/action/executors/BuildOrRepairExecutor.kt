@@ -3,15 +3,15 @@ package archyonix.ewars.entities.item.action.executors
 import archyonix.ewars.entities.item.action.Executor
 import archyonix.ewars.entities.item.action.IExecutor
 import archyonix.ewars.entities.item.functions.getGameItem
+import archyonix.ewars.entities.item.getChargeValue
 import archyonix.ewars.entities.item.hasCharged
+import archyonix.ewars.entities.item.resetCharge
 import archyonix.ewars.entities.player.gameTeam
-import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.structure.controllers.StructureTower
 import archyonix.ewars.entities.structure.functions.withGrid
 import archyonix.ewars.game.functions.ActionBar
 import archyonix.ewars.structureManager
-import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.entity.Player
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
@@ -37,7 +37,10 @@ class BuildOrRepairExecutor : IExecutor {
         if (!itemStack.hasCharged()) return false
 
         if (structure.hasTower() && !structure.hasBuilding()) {
-            (structure as StructureTower).buildWall(blockPos.withGrid(4))
+            val tower = structure as StructureTower
+            if (!tower.openWallMenu(player, blockPos)) {
+                tower.buildWall(blockPos.withGrid(4))
+            }
         } else {
             structure.buildOrRepair(power)
             ActionBar(ActionBar.Progress(structure.getBuildProgress()))

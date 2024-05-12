@@ -3,7 +3,7 @@ package archyonix.ewars.entities.structure
 import archyonix.ewars.entities.message.Message
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region2D
-import archyonix.ewars.entities.structure.controllers.StructureTower
+import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.entities.structure.functions.withGrid
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.getDirection
@@ -88,6 +88,25 @@ open class Structure(
         val radius = config.radius
         val position = position.add((-radius).toDouble(), .0, (-radius).toDouble())
         variant.schema.fillWithOutAir(game.instance, position, direction, Block.SCAFFOLDING)
+    }
+
+    open fun deconstruct() {
+        structureManager.removeStructure(this)
+        Zone(
+            region.startX,
+            position.blockY(),
+            region.startZ,
+            region.endX,
+            position.blockY() + config.height,
+            region.endZ
+        ).fill(Block.AIR)
+    }
+
+    open fun openUI(player: Player) {
+        val ui = config.getUIClass()
+            ?.getDeclaredConstructor(Player::class.java, Structure::class.java)
+            ?.newInstance(player, this) ?: return
+        ui.show()
     }
 
     private fun getPlayersFromRadius(radius: Double) =

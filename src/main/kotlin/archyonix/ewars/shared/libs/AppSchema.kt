@@ -266,6 +266,10 @@ class AppSchema(path: String) {
         return Block.fromNamespaceId(namespaceId)
     }
 
+    fun getBlockFromPalette(id: Int, direction: Direction): Block {
+        return Block.fromStateId(getStateId(readBlockPalette(direction)[id]!!))!!
+    }
+
     private fun getStateId(input: String): Short {
         val block = getBlock(input)
         return if (block == null) {

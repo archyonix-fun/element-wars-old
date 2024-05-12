@@ -12,6 +12,7 @@ import net.minestom.server.item.ItemStack
 
 class ItemHandler: PublicEventNode("item-handler") {
     init {
+        priority = 2
         addListener(PlayerChangeHeldSlotEvent::class.java) { event ->
             val player = event.player
             val itemStack = player.inventory.getItemStack(event.slot.toInt())

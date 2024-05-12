@@ -8,6 +8,8 @@ class Region2D(
     val endX: Int,
     val endZ: Int,
 ) {
+    val width = endX - startX
+    val length = endZ - startZ
     constructor(pos: Point, radius: Int, isEven: Boolean = false) : this(
         pos.blockX() - radius,
         pos.blockZ() - radius,

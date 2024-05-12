@@ -3,6 +3,7 @@ package archyonix.ewars.entities.item
 import archyonix.ewars.entities.item.action.functions.loadActions
 import archyonix.ewars.entities.item.functions.GameItemAttackSpeedTag
 import archyonix.ewars.entities.item.functions.GameItemIdTag
+import archyonix.ewars.entities.item.functions.GameItemTextureTag
 import net.kyori.adventure.text.Component
 import net.minestom.server.attribute.Attribute
 import net.minestom.server.attribute.AttributeOperation
@@ -24,6 +25,7 @@ open class GameItem(
     val lore = config.getStringList("lore")
     private val namespaceID = config.getString("material") ?: throw RuntimeException("Material is null")
     val attackSpeed = config.getFloat("attackSpeed")
+    val texture = config.getString("texture") ?: ""
     val material = Material.fromNamespaceId(namespaceID) ?: throw RuntimeException("Invalid material")
     private val actions = loadActions(config.getConfigurationSection("actions"))
     val data = config.getConfigurationSection("data")
@@ -32,6 +34,7 @@ open class GameItem(
         return ItemStack.of(material, amount)
             .withDisplayName(Component.text(displayName))
             .withLore(lore.map { Component.text(it) })
+            .withTag(GameItemTextureTag, texture)
             .withTag(GameItemIdTag, id)
             .withTag(GameItemAttackSpeedTag, attackSpeed)
             .withMeta {

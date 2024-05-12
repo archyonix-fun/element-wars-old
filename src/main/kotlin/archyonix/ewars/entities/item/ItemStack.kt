@@ -23,7 +23,13 @@ fun ItemStack.getChargeValue(): Float {
     return 1f
 }
 
-fun ItemStack.hasCharged(): Boolean = !(getChargeValue() < 1)
+fun ItemStack.hasCharged(): Boolean {
+    if(!weaponCharge.contains(this)) {
+        resetCharge()
+        return true
+    }
+    return !(getChargeValue() < 1)
+}
 
 fun ItemStack.resetCharge() {
     weaponCharge[this] = Date().time

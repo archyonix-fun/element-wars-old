@@ -5,6 +5,7 @@ import archyonix.ewars.entities.item.action.handler.ItemHandler
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.handler.SpectatorEventHandler
 import archyonix.ewars.entities.structure.handler.StructureBuildHandler
+import archyonix.ewars.entities.structure.handler.StructureHandler
 import archyonix.ewars.entities.team.functions.distributeTeams
 import archyonix.ewars.entities.team.functions.useGameTeams
 import archyonix.ewars.events
@@ -75,6 +76,7 @@ class GameEventHandler : PublicEventNode("game") {
         addChild(MineWaterCrystalHandler())
 
         addChild(StructureBuildHandler())
+        addChild(StructureHandler())
         addChild(ItemActionHandler())
         addChild(ItemHandler())
         addChild(SpectatorEventHandler())

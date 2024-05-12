@@ -1,6 +1,7 @@
 package archyonix.ewars.entities.structure
 
-import archyonix.ewars.entities.structure.controllers.StructureTower
+import archyonix.ewars.entities.structure.ui.CampFireUI
+import archyonix.ewars.game.ui.GameUI
 import net.minestom.server.coordinate.Point
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
@@ -8,6 +9,9 @@ import java.io.File
 class StructureManager {
     val structureSet: MutableSet<Structure> = HashSet()
     private val configMap: MutableMap<String, StructureConfig> = HashMap()
+    private val uiMap: Map<String, Class<out GameUI>> = mapOf(
+        Pair("CAMP_FIRE", CampFireUI::class.java)
+    )
 
     init {
         val structureDir = File("config/structures")
@@ -20,6 +24,8 @@ class StructureManager {
         }
     }
 
+    fun findUI(id: String?): Class<out GameUI>? = uiMap.getOrDefault(id, null)
+
     fun validateRegion(structure: Structure): Boolean {
         for (it in structureSet) {
             if (it.region.contains(structure.region)) return false
@@ -27,7 +33,7 @@ class StructureManager {
         return true
     }
 
-    fun <T: Structure>findStructure(pos: Point): T? {
+    fun <T : Structure> findStructure(pos: Point): T? {
         return structureSet.find { it.region.contains(pos) } as T?
     }
 
@@ -35,4 +41,5 @@ class StructureManager {
         configMap[structureName] ?: throw RuntimeException("Unknown structure config: $structureName")
 
     fun addStructure(structure: Structure) = structureSet.add(structure)
+    fun removeStructure(structure: Structure) = structureSet.remove(structure)
 }

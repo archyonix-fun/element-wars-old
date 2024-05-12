@@ -8,6 +8,7 @@ import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.structure.controllers.StructureTower
+import archyonix.ewars.entities.structure.task.GateTask
 import archyonix.ewars.entities.structure.task.StructureAreaTask
 import archyonix.ewars.entities.structure.task.WallAreaTask
 import archyonix.ewars.game
@@ -21,6 +22,7 @@ class StructureBuildHandler : PublicEventNode("structure-build-handler") {
     init {
         game.schedule.scheduleNextTick(StructureAreaTask())
         game.schedule.scheduleNextTick(WallAreaTask())
+        game.schedule.scheduleNextTick(GateTask())
 
         addListener(PlayerUseItemEvent::class.java) { event ->
             val player = event.player

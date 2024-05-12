@@ -32,6 +32,7 @@ fun loadItems(): Map<String, GameItem> {
 }
 
 val GameItemIdTag = Tag.String("itemId")
+val GameItemTextureTag = Tag.String("texture")
 val GameItemAttackSpeedTag = Tag.Float("attackSpeed")
 fun ItemStack.hasGameItem() = hasTag(GameItemIdTag)
 fun ItemStack.hasGameItem(itemId: String): Boolean {

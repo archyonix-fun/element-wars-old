@@ -44,7 +44,7 @@ class Zone(
                     instance.loadChunk(absoluteBlockPosition).thenRun {
                         val block = instance.getBlock(absoluteBlockPosition)
 
-                        if (block.isSolid) count++
+                        if (block.isSolid || block.isLiquid) count++
                     }
                 }
             }
@@ -66,5 +66,9 @@ class Zone(
                 }
             }
         }
+    }
+
+    override fun toString(): String {
+        return "Zone(minX: $minX, minY: $minY, minZ: $minZ, maxX: $maxX, maxY: $maxY, maxZ: $maxZ)"
     }
 }

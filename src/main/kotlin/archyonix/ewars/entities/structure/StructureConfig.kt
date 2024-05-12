@@ -14,6 +14,7 @@ class StructureConfig(
     val area = config.getInt("area")
     val radius = floor(area / 2.0).toInt()
     val tagList = config.getStringList("tags")
+    private val uiClass = config.getString("ui")
     private val variantSection = config.getConfigurationSection("variants")
         ?: throw RuntimeException("Variants is null: $name")
     val variants = loadVariants()
@@ -26,6 +27,8 @@ class StructureConfig(
             .filter { it.name == name }
             .size < limit
     }
+
+    fun getUIClass() = structureManager.findUI(uiClass)
 
     private fun loadVariants(): MutableList<StructureVariant> {
         val variants: MutableList<StructureVariant> = ArrayList()
