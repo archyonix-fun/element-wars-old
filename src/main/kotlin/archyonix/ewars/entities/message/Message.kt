@@ -10,5 +10,6 @@ class Message {
         val START_BUILDING = game.messages["START_BUILDING"] ?: ""
         val COMPLETE_BUILDING = game.messages["COMPLETE_BUILDING"] ?: ""
         val STAND_ON_GROUND = game.messages["STAND_ON_GROUND"] ?: ""
+        val NO_DEPENDENCIES = game.messages["NO_DEPENDENCIES"] ?: ""
     }
 }

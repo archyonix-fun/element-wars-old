@@ -10,6 +10,7 @@ class Icons {
         val EARTH_CRYSTAL = Component.text("\uE002", TextColor.fromHexString("#ffffff"))
         val WATER_CRYSTAL = Component.text("\uE003", TextColor.fromHexString("#ffffff"))
         val ENERGY = Component.text("\uE004", TextColor.fromHexString("#ffffff"))
+        val SAND_CLOCK = Component.text("\uE005", TextColor.fromHexString("#ffffff"))
 
         val HAMMER = Component.text("\uE008", TextColor.fromHexString("#ffffff"))
         val HEART = Component.text("\uE009", TextColor.fromHexString("#ffffff"))

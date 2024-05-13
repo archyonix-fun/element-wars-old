@@ -6,6 +6,7 @@ import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.features.cost.CostInfo
 import archyonix.ewars.shared.libs.AppSchema
 import archyonix.ewars.shared.libs.Icons
+import archyonix.ewars.shared.libs.LoreUtils
 import archyonix.ewars.structureManager
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.util.*
@@ -28,33 +29,22 @@ class StructureVariant(
         val structure = structureManager.getConfig(structureId)
         val lore = mutableListOf<String>()
 
+        lore.addAll(LoreUtils.buildCostLore(costInfo))
+        lore.addAll(LoreUtils.buildDependenciesLore(dependencies, team))
         lore.add("")
-        lore.add("<text>[<yellow>Ресурсы<text>]:")
-        lore.addAll(costInfo.buildLore())
-        lore.add("")
-        if (dependencies.isNotEmpty()) {
-            val lines = mutableListOf<String>()
-            dependencies.forEach {
-                val line = it.generateLore(team)
-                if (line != null) lines.add(line)
-            }
-            if (lines.isNotEmpty()) {
-                lore.add("<text>[<blue>Требования<text>]:")
-                lore.addAll(lines)
-                lore.add("")
-            }
-        }
         lore.add("<text>[<blue>Прочие затраты<text>]:")
         lore.add("§f${Icons.HAMMER.content()}<text> - $buildPoints")
-        lore.add("")
-        lore.add("<yellow>ЛИМИТ: <text>${structure.limit}")
+        if (structure.limit > 0) {
+            lore.add("")
+            lore.add("<yellow>ЛИМИТ: <text>${structure.limit}")
+        }
 
         return lore
     }
 
     fun checkDependencies(team: GameTeam): Boolean {
         for (dep in dependencies) {
-            if(!dep.check(team)) return false
+            if (!dep.check(team)) return false
         }
         return true
     }

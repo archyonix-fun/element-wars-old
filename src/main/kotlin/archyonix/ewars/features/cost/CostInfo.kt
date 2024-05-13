@@ -8,6 +8,8 @@ import java.util.*
 class CostInfo(
     private val resources: Map<Resource, Int> = EnumMap(Resource::class.java)
 ) {
+    fun isEmpty() = resources.isEmpty()
+
     fun buildLore(): List<String> {
         val lore: MutableList<String> = ArrayList()
         for (resource in resources.keys)

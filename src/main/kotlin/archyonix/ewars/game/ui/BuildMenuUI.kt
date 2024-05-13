@@ -39,12 +39,14 @@ class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
                     it
                 }
                 .onAction {
-                    if (config.checkLimit(viewer.gameTeam())) {
-                        if (variant.costInfo.pay(viewer)) {
-                            viewer.inventory.addItemStack(getBuildItem(view.id))
-                            showByMessage(viewer, variant.displayName)
-                        } else viewer.showActionBar(Message.NOT_ENOUGH_MONEY, MessageType.WARNING)
-                    } else viewer.showActionBar(Message.BUILDING_LIMIT_EXCEEDED, MessageType.WARNING)
+                    if (variant.checkDependencies(team)) {
+                        if (config.checkLimit(viewer.gameTeam())) {
+                            if (variant.costInfo.pay(viewer)) {
+                                viewer.inventory.addItemStack(getBuildItem(view.id))
+                                showByMessage(viewer, variant.displayName)
+                            } else viewer.showActionBar(Message.NOT_ENOUGH_MONEY, MessageType.WARNING)
+                        } else viewer.showActionBar(Message.BUILDING_LIMIT_EXCEEDED, MessageType.WARNING)
+                    } else viewer.showActionBar(Message.NO_DEPENDENCIES, MessageType.WARNING)
                 }
         }
     }
