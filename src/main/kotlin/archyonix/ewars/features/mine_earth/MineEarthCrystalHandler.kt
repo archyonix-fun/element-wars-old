@@ -35,6 +35,21 @@ class MineEarthCrystalHandler : PublicEventNode("mine-earth-crystal-handler") {
             val itemStack = event.player.itemInMainHand
             if (!itemStack.hasGameItem()) return@addListener
             val gameItem = itemStack.getGameItem()!!
+            if (gameItem.data?.getString("group", "none") == "CONSTRUCTION_HAMMER") {
+                event.isCancelled = true
+                restoreIronOre(event.blockPosition)
+                val count = random.nextInt(2) + 1
+                storage.EARTH_CRYSTAL += count
+                event.player.showActionBar(
+                    Component.join(
+                        JoinConfiguration.spaces(),
+                        Component.text("Получен кристалл земли x$count", Colors.TEXT),
+                        Icons.EARTH_CRYSTAL
+                    )
+                )
+                return@addListener
+            }
+
             if (gameItem.data?.getString("group", "none") != "PICKAXE") return@addListener
 
             event.isCancelled = true
