@@ -12,6 +12,8 @@ variants:
     displayName: "Мельница"
     buildPoints: 25
     schema: "schemas/mill.schem"
+    dependencies:
+      - "STRUCTURE:BUILDER_HUT"
     cost:
       NATURAL_CRYSTAL: 75
       WATER_CRYSTAL: 50

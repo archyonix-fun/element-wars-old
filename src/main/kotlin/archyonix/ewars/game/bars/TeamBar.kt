@@ -1,29 +1,33 @@
 package archyonix.ewars.game.bars
 
 import archyonix.ewars.entities.team.data.ResourceStorage
+import archyonix.ewars.game
 import archyonix.ewars.shared.libs.Icons
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.TextColor
+import java.text.SimpleDateFormat
 import java.time.Duration
+import java.util.*
 
 class TeamBar(private val resources: ResourceStorage) : GameBossBar(Duration.ofSeconds(1)) {
+    private val format = SimpleDateFormat("HH:mm:ss")
     override fun onRender(): Component {
         return Component.join(
             JoinConfiguration.separator(Component.text("   ")),
-            InfoBlock(
+            IntInfoBlock(
                 Icons.NATURAL_CRYSTAL,
                 resources.NATURAL_CRYSTAL
             ).buildComponent(),
-            InfoBlock(
+            IntInfoBlock(
                 Icons.FLAME_CRYSTAL,
                 resources.FLAME_CRYSTAL
             ).buildComponent(),
-            InfoBlock(
+            IntInfoBlock(
                 Icons.EARTH_CRYSTAL,
                 resources.EARTH_CRYSTAL
             ).buildComponent(),
-            InfoBlock(
+            IntInfoBlock(
                 Icons.WATER_CRYSTAL,
                 resources.WATER_CRYSTAL
             ).buildComponent(),
@@ -32,10 +36,19 @@ class TeamBar(private val resources: ResourceStorage) : GameBossBar(Duration.ofS
                 resources.ENERGY_USED,
                 resources.ENERGY_LIMIT
             ).buildComponent(),
+            InfoBlock(
+                Icons.SAND_CLOCK,
+                calcTime()
+            ).buildComponent(),
         )
     }
 
-    class InfoBlock(
+    private fun calcTime(): String {
+        val current = Date(Date().time - game.startTime)
+        return format.format(current)
+    }
+
+    class IntInfoBlock(
         private val icon: Component,
         private val value: Int
     ) {
@@ -46,6 +59,19 @@ class TeamBar(private val resources: ResourceStorage) : GameBossBar(Duration.ofS
                 icon,
                 Component.text(" $prefix", TextColor.fromHexString("#a5a5a5")),
                 Component.text(value, TextColor.fromHexString("#ffffff"))
+            )
+        }
+    }
+
+    class InfoBlock(
+        private val icon: Component,
+        private val value: String
+    ) {
+        fun buildComponent(): Component {
+            return Component.join(
+                JoinConfiguration.spaces(),
+                icon,
+                Component.text(value, TextColor.fromHexString("#ffffff")),
             )
         }
     }

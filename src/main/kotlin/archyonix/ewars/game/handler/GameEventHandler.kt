@@ -26,6 +26,8 @@ import archyonix.ewars.game.task.ExpectationTask
 import archyonix.ewars.game.task.HiddenTask
 import net.minestom.server.entity.GameMode
 import net.minestom.server.event.PublicEventNode
+import java.time.LocalDateTime
+import java.util.Date
 
 class GameEventHandler : PublicEventNode("game") {
     init {
@@ -59,6 +61,7 @@ class GameEventHandler : PublicEventNode("game") {
 
                 GameStage.RUNTIME -> {
                     game.schedule.scheduleNextTick(HiddenTask())
+                    game.startTime = Date().time + (3600000 * 3)
 
                     game.teams = useGameTeams()
                     distributeTeams()

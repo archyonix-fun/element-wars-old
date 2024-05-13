@@ -5,8 +5,6 @@ import archyonix.ewars.entities.player.addItem
 import archyonix.ewars.entities.player.updateAttackSpeed
 import archyonix.ewars.game
 import net.minestom.server.entity.Player
-import net.minestom.server.item.ItemStack
-import net.minestom.server.item.Material
 
 fun giveStartGameItems() {
     val constructionHummer = findItemById("CONSTRUCTION_HAMMER") ?: return

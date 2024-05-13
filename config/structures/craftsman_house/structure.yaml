@@ -12,6 +12,8 @@ variants:
     displayName: "Дом ремесленника (Дерево)"
     buildPoints: 20
     schema: "schemas/craftsman_house-wood.schem"
+    dependencies:
+      - "STRUCTURE:BUILDER_HUT"
     cost:
       NATURAL_CRYSTAL: 20
       EARTH_CRYSTAL: 20

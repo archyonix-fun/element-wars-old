@@ -12,6 +12,8 @@ import archyonix.ewars.game.events.ChangeGameStageEvent
 import archyonix.ewars.gameArgs
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
+import java.util.Date
+import kotlin.properties.Delegates
 
 class Game {
     val map = GameMap(gameArgs.MAP_NAME)
@@ -20,6 +22,7 @@ class Game {
     var teams: Map<String, GameTeam>? = null
     var items: Map<String, GameItem> = loadItems()
     val messages: Map<String, String> = loadMessages()
+    var startTime by Delegates.notNull<Long>()
 
     val isDebug: Boolean = gameArgs.IS_DEBUG.toBooleanStrictOrNull() ?: false
 

@@ -13,6 +13,7 @@ variants:
     dependencies:
       - "STRUCTURE:BUILDER_HUT"
     cost:
+      NATURAL_CRYSTAL: 50
     data:
       wallSchema-straight: "schemas/wood_wall-straight.schem"
       wallSchema-slope: "schemas/wood_wall-slope.schem"

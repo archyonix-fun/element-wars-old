@@ -4,3 +4,4 @@ PLAYER_BOUGHT_THE_BUILDING: "<text>Игрок <blue>%username% <text>приоб�
 START_BUILDING: "<text>Игрок <blue>%username%<text> начал строительство - <yellow>%structureName%"
 COMPLETE_BUILDING: "<text>Завершено строительство - <yellow>%structureName%"
 STAND_ON_GROUND: "<text>Вы должны стоять на земле"
+NO_DEPENDENCIES: "<text>Не выполнены требования для этого действия"

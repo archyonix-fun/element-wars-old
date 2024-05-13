@@ -12,6 +12,7 @@ CONSTRUCTION_HAMMER:
       trigger: "RIGHT_CLICK"
       id: "BUILD_MENU"
   data:
+    group: "CONSTRUCTION_HAMMER"
     power: 1
 
 WOODEN_AXE:
