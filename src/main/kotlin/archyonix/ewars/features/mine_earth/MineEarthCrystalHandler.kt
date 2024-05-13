@@ -14,6 +14,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.minestom.server.MinecraftServer
 import net.minestom.server.coordinate.Point
+import net.minestom.server.entity.Player
 import net.minestom.server.event.PublicEventNode
 import net.minestom.server.event.player.PlayerBlockBreakEvent
 import net.minestom.server.instance.block.Block
@@ -27,7 +28,6 @@ class MineEarthCrystalHandler : PublicEventNode("mine-earth-crystal-handler") {
         addListener(PlayerBlockBreakEvent::class.java) { event ->
             if (game.stage != GameStage.RUNTIME) return@addListener
             if (structureManager.findStructure<Structure>(event.blockPosition) != null) return@addListener
-            val storage = event.player.gameTeam().resources
 
             val block = event.block
             if (block.name() != Block.IRON_ORE.name()) return@addListener
@@ -35,39 +35,40 @@ class MineEarthCrystalHandler : PublicEventNode("mine-earth-crystal-handler") {
             val itemStack = event.player.itemInMainHand
             if (!itemStack.hasGameItem()) return@addListener
             val gameItem = itemStack.getGameItem()!!
-            if (gameItem.data?.getString("group", "none") == "CONSTRUCTION_HAMMER") {
-                event.isCancelled = true
-                restoreIronOre(event.blockPosition)
-                val count = random.nextInt(2) + 1
-                storage.EARTH_CRYSTAL += count
-                event.player.showActionBar(
-                    Component.join(
-                        JoinConfiguration.spaces(),
-                        Component.text("Получен кристалл земли x$count", Colors.TEXT),
-                        Icons.EARTH_CRYSTAL
-                    )
-                )
-                return@addListener
-            }
-
-            if (gameItem.data?.getString("group", "none") != "PICKAXE") return@addListener
+            val groupName = gameItem.data?.getString("group", "none")
 
             event.isCancelled = true
-            restoreIronOre(event.blockPosition)
+            when (groupName) {
+                "CONSTRUCTION_HAMMER" -> {
+                    restoreIronOre(event.blockPosition)
+                    giveResource(1, 2, event.player)
+                }
 
-            val max = gameItem.data.getInt("maxFarm")
-            val min = gameItem.data.getInt("minFarm")
-            val count = min + random.nextInt(max - min) + 1
-            if (count > 0) {
-                storage.EARTH_CRYSTAL += count
-                event.player.showActionBar(
-                    Component.join(
-                        JoinConfiguration.spaces(),
-                        Component.text("Получен кристалл земли x$count", Colors.TEXT),
-                        Icons.EARTH_CRYSTAL
-                    )
-                )
+                "PICKAXE" -> {
+                    val max = gameItem.data.getInt("maxFarm")
+                    val min = gameItem.data.getInt("minFarm")
+                    restoreIronOre(event.blockPosition)
+                    giveResource(min, max, event.player)
+                }
+
+                else -> event.isCancelled = false
             }
+        }
+    }
+
+    private fun giveResource(min: Int, max: Int, player: Player) {
+        val storage = player.gameTeam().resources
+
+        val count = min + random.nextInt(max - min) + 1
+        if (count > 0) {
+            storage.EARTH_CRYSTAL += count
+            player.showActionBar(
+                Component.join(
+                    JoinConfiguration.spaces(),
+                    Component.text("Получен кристалл земли x$count", Colors.TEXT),
+                    Icons.EARTH_CRYSTAL
+                )
+            )
         }
     }
 }

@@ -10,6 +10,7 @@ import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 class ShowUI : IExecutor {
     override fun execute(player: Player, data: ConfigurationSection): Boolean {
         val uiId = data.getString("id") ?: throw RuntimeException("UI id is null")
+        if(player.openInventory != null) return false
         when (uiId) {
             "BUILD_MENU" -> BuildMenuUI(player).show()
             else -> return true

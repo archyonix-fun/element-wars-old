@@ -2,7 +2,7 @@ package archyonix.ewars.shared.libs
 
 import archyonix.ewars.entities.structure.Dependence
 import archyonix.ewars.entities.team.GameTeam
-import archyonix.ewars.features.cost.CostInfo
+import archyonix.ewars.features.shop.CostInfo
 
 class LoreUtils {
     companion object {

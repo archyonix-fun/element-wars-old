@@ -1,7 +1,10 @@
 package archyonix.ewars.entities.structure
 
-import archyonix.ewars.entities.structure.enums.DependenceType
+import archyonix.ewars.entities.item.functions.findItemById
 import archyonix.ewars.entities.team.GameTeam
+import archyonix.ewars.features.shop.ShopItem
+import archyonix.ewars.shared.libs.loadCost
+import archyonix.ewars.shared.libs.loadDependencies
 import archyonix.ewars.structureManager
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import kotlin.math.floor
@@ -19,6 +22,14 @@ class StructureConfig(
     private val variantSection = config.getConfigurationSection("variants")
         ?: throw RuntimeException("Variants is null: $name")
     val variants = loadVariants()
+    private var shopItems: List<ShopItem>? = null
+
+    fun shopItems(): List<ShopItem> {
+        if(shopItems == null) {
+            shopItems = loadShopItems()
+        }
+        return shopItems!!
+    }
 
 
     fun checkLimit(team: GameTeam): Boolean {
@@ -41,4 +52,17 @@ class StructureConfig(
         return variants
     }
 
+    private fun loadShopItems(): MutableList<ShopItem> {
+        val shopItems = mutableListOf<ShopItem>()
+        val section = config.getConfigurationSection("shopItems") ?: return shopItems
+        for (itemId in section.getKeys(false)) {
+            val itemConfig = section.getConfigurationSection(itemId) ?: continue
+            val gameItem = findItemById(itemId) ?: continue
+            val amount = itemConfig.getInt("amount", 1)
+            val dependencies = itemConfig.loadDependencies()
+            val costInfo = itemConfig.loadCost()
+            shopItems.add(ShopItem(gameItem, amount, dependencies, costInfo))
+        }
+        return shopItems
+    }
 }

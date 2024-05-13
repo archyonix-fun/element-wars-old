@@ -1,4 +1,9 @@
 components:
+  shopList:
+    component: "UIList"
+    startPos: "1:1"
+    endPos: "3:4"
+    format: "STRICT"
   deconstruct:
     component: "UIView"
     displayName: "<red>Разрушить"

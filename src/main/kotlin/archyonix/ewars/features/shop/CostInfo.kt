@@ -1,4 +1,4 @@
-package archyonix.ewars.features.cost
+package archyonix.ewars.features.shop
 
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.resource.Resource

@@ -1,6 +1,7 @@
 NOT_ENOUGH_MONEY: "<text>У команды недостаточно кристаллов для покупки"
 BUILDING_LIMIT_EXCEEDED: "<text>Превышен лимит на здание"
 PLAYER_BOUGHT_THE_BUILDING: "<text>Игрок <blue>%username% <text>приобрел чертёж - <yellow>%structureName%"
+PLAYER_BY_ITEM: "<text>Вы только что купили <blue>%itemName% <text>x%amount%"
 START_BUILDING: "<text>Игрок <blue>%username%<text> начал строительство - <yellow>%structureName%"
 COMPLETE_BUILDING: "<text>Завершено строительство - <yellow>%structureName%"
 STAND_ON_GROUND: "<text>Вы должны стоять на земле"

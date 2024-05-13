@@ -1,5 +1,9 @@
 package archyonix.ewars.shared.libs
 
+import archyonix.ewars.entities.resource.Resource
+import archyonix.ewars.entities.structure.Dependence
+import archyonix.ewars.entities.structure.enums.DependenceType
+import archyonix.ewars.features.shop.CostInfo
 import archyonix.ewars.game
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
@@ -12,6 +16,8 @@ import net.minestom.server.entity.Player
 import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.time.Duration
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.abs
 
 fun String.toPos() = split(":")
@@ -103,7 +109,7 @@ fun String.facingWithDir(direction: Direction): String {
 }
 
 fun String.withDirection(direction: Direction): String {
-    if(direction == Direction.SOUTH) return this
+    if (direction == Direction.SOUTH) return this
 
     var dir = ""
     dir += getDirection(Direction.SOUTH) ?: return this
@@ -196,4 +202,25 @@ fun String.withProperties(vararg properties: Pair<String, Any>): String {
         result = result.replace("%${property.first}%", property.second.toString())
     }
     return result
+}
+
+fun ConfigurationSection.loadDependencies(): List<Dependence> {
+    return getStringList("dependencies")
+        .map {
+            val split = it.split(":")
+            val depType = DependenceType.valueOf(split[0])
+            val targets = split.subList(1, split.size).toSet()
+
+            Dependence(depType, targets)
+        }
+}
+
+fun ConfigurationSection.loadCost(): CostInfo {
+    val section = getConfigurationSection("cost") ?: return CostInfo()
+    val resources: MutableMap<Resource, Int> = EnumMap(Resource::class.java)
+    for (key in section.getKeys(false)) {
+        val resource = Resource.values().find { it.name == key } ?: continue
+        resources[resource] = section.getInt(key)
+    }
+    return CostInfo(resources)
 }
