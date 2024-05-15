@@ -1,4 +1,4 @@
-package archyonix.ewars.features.mine_water.task
+package archyonix.ewars.entities.resource.task
 
 import archyonix.ewars.game
 import archyonix.ewars.game.functions.ActionBar
