@@ -1,5 +1,6 @@
 package archyonix.ewars.entities.structure.task
 
+import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.item.functions.hasGameItem
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.structure.Structure
@@ -14,7 +15,7 @@ class WallAreaTask : Runnable {
         try {
             for (player in game.getPlayers()) {
                 if (!player.isOnGround) continue
-                if (!player.itemInMainHand.hasGameItem("CONSTRUCTION_HAMMER")) continue
+                if (!player.itemInMainHand.hasGameItem(GameItem.CONSTRUCTION_HAMMER)) continue
                 val targetPoint = player.getTargetBlockPosition(5) ?: continue
                 val zeroPosition = targetPoint.add(.0, 1.0, .0).withGrid(4)
                 val structure = structureManager.findStructure<Structure>(zeroPosition) ?: continue

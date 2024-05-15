@@ -8,18 +8,12 @@ import archyonix.uikit.components.UIView
 import net.minestom.server.entity.Player
 import net.minestom.server.inventory.InventoryType
 
-@UIPreset(path = "config/ui/structures/shop/craftsman_house-shop.yaml", isResource = false)
+@UIPreset(path = "config/ui/structures/shop.yaml", isResource = false)
 class CraftsmanHouseShopUI(
     viewer: Player,
     structure: Structure
-) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
+) : ShopUI(viewer, structure) {
     init {
         withDisplayName(UIs.CRAFTSMAN_HOUSE_SHOP)
-
-        findComponent<UIView>("deconstruct")
-            ?.onAction {
-                structure.deconstruct()
-                close()
-            }
     }
 }

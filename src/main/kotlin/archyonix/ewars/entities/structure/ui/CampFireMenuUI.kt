@@ -8,7 +8,7 @@ import archyonix.uikit.components.UIView
 import net.minestom.server.entity.Player
 import net.minestom.server.inventory.InventoryType
 
-@UIPreset(path = "config/ui/structures/menu/camp_fire-menu.yaml", isResource = false)
+@UIPreset(path = "config/ui/structures/menu.yaml", isResource = false)
 class CampFireMenuUI(
     viewer: Player,
     structure: Structure

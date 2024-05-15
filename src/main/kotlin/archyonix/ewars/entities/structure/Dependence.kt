@@ -37,6 +37,7 @@ class Dependence(
             DependenceType.STRUCTURE -> {
                 val structure = structureManager
                     .findStructures(team)
+                    .filter { !it.hasBuilding() }
                     .find { targets.contains(it.variant.name) }
                 structure != null
             }

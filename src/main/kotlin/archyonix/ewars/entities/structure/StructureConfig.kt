@@ -1,6 +1,6 @@
 package archyonix.ewars.entities.structure
 
-import archyonix.ewars.entities.item.functions.findItemById
+import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.features.shop.ShopItem
 import archyonix.ewars.shared.libs.loadCost
@@ -25,7 +25,7 @@ class StructureConfig(
     private var shopItems: List<ShopItem>? = null
 
     fun shopItems(): List<ShopItem> {
-        if(shopItems == null) {
+        if (shopItems == null) {
             shopItems = loadShopItems()
         }
         return shopItems!!
@@ -57,11 +57,14 @@ class StructureConfig(
         val section = config.getConfigurationSection("shopItems") ?: return shopItems
         for (itemId in section.getKeys(false)) {
             val itemConfig = section.getConfigurationSection(itemId) ?: continue
-            val gameItem = findItemById(itemId) ?: continue
+            val gameItem = GameItem.items().find { it.id == itemId } ?: continue
             val amount = itemConfig.getInt("amount", 1)
+            val variantId = itemConfig.getString("variant") ?: "DEFAULT"
+
+            val itemVariant = gameItem.getVariant(variantId) ?: continue
             val dependencies = itemConfig.loadDependencies()
             val costInfo = itemConfig.loadCost()
-            shopItems.add(ShopItem(gameItem, amount, dependencies, costInfo))
+            shopItems.add(ShopItem(itemVariant, amount, dependencies, costInfo))
         }
         return shopItems
     }
