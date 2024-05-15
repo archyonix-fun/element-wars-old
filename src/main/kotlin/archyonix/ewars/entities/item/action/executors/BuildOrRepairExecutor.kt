@@ -2,10 +2,8 @@ package archyonix.ewars.entities.item.action.executors
 
 import archyonix.ewars.entities.item.action.Executor
 import archyonix.ewars.entities.item.action.IExecutor
-import archyonix.ewars.entities.item.functions.getGameItem
-import archyonix.ewars.entities.item.getChargeValue
+import archyonix.ewars.entities.item.functions.asItemVariant
 import archyonix.ewars.entities.item.hasCharged
-import archyonix.ewars.entities.item.resetCharge
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.structure.controllers.StructureTower
@@ -23,10 +21,10 @@ private val buildCD: MutableMap<UUID, Long> = HashMap()
 @Executor("BUILD_OR_REPAIR")
 class BuildOrRepairExecutor : IExecutor {
     override fun execute(player: Player, data: ConfigurationSection): Boolean {
-        val item = player.itemInMainHand.getGameItem() ?: return false
-        val itemData = item.data ?: return false
+        val item = player.itemInMainHand.asItemVariant() ?: return false
+        val properties = item.properties
+        val power = properties["power"] as Int
 
-        val power = itemData.getInt("power")
         val blockPos = (player.getTargetBlockPosition(5) ?: return false) as Vec
         val structure = structureManager.findStructure<Structure>(blockPos.asPosition()) ?: return false
         if (structure.team != player.gameTeam()) return false

@@ -1,6 +1,8 @@
 package archyonix.ewars.entities.player
 
 import archyonix.ewars.entities.item.GameItem
+import archyonix.ewars.entities.item.functions.asItemVariant
+import archyonix.ewars.entities.item.functions.hasGameItem
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.entities.team.functions.findTeamById
@@ -43,11 +45,12 @@ fun Player.showActionBar(message: Component, type: MessageType = MessageType.INF
     type.prefix.append(message)
 )
 
-fun Player.addItem(item: GameItem, amount: Int = 1) {
+fun Player.addItem(item: GameItem.Variant, amount: Int = 1) {
     inventory.addItemStack(item.createItemStack(amount))
 }
 
-fun Player.updateAttackSpeed(gameItem: GameItem? = null) {
-    val attackSpeed = 20f / (gameItem?.attackSpeed ?: 0f)
-    getAttribute(Attribute.ATTACK_SPEED).baseValue = attackSpeed
+fun Player.updateRecharge() {
+    val item = itemInMainHand.run { if (hasGameItem()) asItemVariant() else null }
+    val recharge = 20f / (item?.recharge ?: 0)
+    getAttribute(Attribute.ATTACK_SPEED).baseValue = recharge
 }

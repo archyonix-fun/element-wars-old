@@ -4,15 +4,13 @@ import archyonix.ewars.entities.item.action.handler.ItemActionHandler
 import archyonix.ewars.entities.item.action.handler.ItemHandler
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.handler.SpectatorEventHandler
+import archyonix.ewars.entities.resource.handler.ResourceHandler
+import archyonix.ewars.entities.resource.handler.ResourceWaterHandler
 import archyonix.ewars.entities.structure.handler.StructureBuildHandler
 import archyonix.ewars.entities.structure.handler.StructureHandler
 import archyonix.ewars.entities.team.functions.distributeTeams
 import archyonix.ewars.entities.team.functions.useGameTeams
 import archyonix.ewars.events
-import archyonix.ewars.features.mine_earth.MineEarthCrystalHandler
-import archyonix.ewars.features.mine_flame.MineFlameCrystalHandler
-import archyonix.ewars.features.mine_natural.MineNaturalCrystalHandler
-import archyonix.ewars.features.mine_water.MineWaterCrystalHandler
 import archyonix.ewars.game
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
@@ -26,8 +24,7 @@ import archyonix.ewars.game.task.ExpectationTask
 import archyonix.ewars.game.task.HiddenTask
 import net.minestom.server.entity.GameMode
 import net.minestom.server.event.PublicEventNode
-import java.time.LocalDateTime
-import java.util.Date
+import java.util.*
 
 class GameEventHandler : PublicEventNode("game") {
     init {
@@ -73,10 +70,8 @@ class GameEventHandler : PublicEventNode("game") {
         }
 
         // Features
-        addChild(MineNaturalCrystalHandler())
-        addChild(MineFlameCrystalHandler())
-        addChild(MineEarthCrystalHandler())
-        addChild(MineWaterCrystalHandler())
+        addChild(ResourceHandler())
+        addChild(ResourceWaterHandler())
 
         addChild(StructureBuildHandler())
         addChild(StructureHandler())

@@ -1,10 +1,9 @@
 package archyonix.ewars.game
 
-import archyonix.ewars.entities.item.GameItem
-import archyonix.ewars.entities.item.functions.loadItems
 import archyonix.ewars.entities.map.GameMap
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.getRole
+import archyonix.ewars.entities.resource.ResourceManager
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.events
 import archyonix.ewars.game.enums.GameStage
@@ -12,7 +11,6 @@ import archyonix.ewars.game.events.ChangeGameStageEvent
 import archyonix.ewars.gameArgs
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
-import java.util.Date
 import kotlin.properties.Delegates
 
 class Game {
@@ -20,9 +18,9 @@ class Game {
     val instance = GameInstance(map)
     val schedule = instance.scheduler()
     var teams: Map<String, GameTeam>? = null
-    var items: Map<String, GameItem> = loadItems()
     val messages: Map<String, String> = loadMessages()
     var startTime by Delegates.notNull<Long>()
+    val resourceManager = ResourceManager()
 
     val isDebug: Boolean = gameArgs.IS_DEBUG.toBooleanStrictOrNull() ?: false
 

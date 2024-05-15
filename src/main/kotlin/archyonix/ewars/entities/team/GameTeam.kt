@@ -1,7 +1,7 @@
 package archyonix.ewars.entities.team
 
 import archyonix.ewars.entities.player.gameTeam
-import archyonix.ewars.entities.team.data.ResourceStorage
+import archyonix.ewars.entities.resource.ResourceStorage
 import archyonix.ewars.game
 import archyonix.ewars.game.bars.TeamBar
 import archyonix.ewars.shared.libs.withColors

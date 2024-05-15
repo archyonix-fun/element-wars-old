@@ -12,5 +12,6 @@ class Message {
         val COMPLETE_BUILDING = game.messages["COMPLETE_BUILDING"] ?: ""
         val STAND_ON_GROUND = game.messages["STAND_ON_GROUND"] ?: ""
         val NO_DEPENDENCIES = game.messages["NO_DEPENDENCIES"] ?: ""
+        val ALREADY_PURCHASED = game.messages["ALREADY_PURCHASED"] ?: ""
     }
 }

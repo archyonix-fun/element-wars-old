@@ -6,7 +6,7 @@ import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.shared.libs.LoreUtils
 
 class ShopItem(
-    val gameItem: GameItem,
+    val gameItem: GameItem.Variant,
     val amount: Int,
     val dependencies: List<Dependence>,
     val costInfo: CostInfo

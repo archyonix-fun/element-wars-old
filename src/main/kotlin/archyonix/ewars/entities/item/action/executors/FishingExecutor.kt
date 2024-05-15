@@ -2,7 +2,7 @@ package archyonix.ewars.entities.item.action.executors
 
 import archyonix.ewars.entities.item.action.Executor
 import archyonix.ewars.entities.item.action.IExecutor
-import archyonix.ewars.features.mine_water.events.SuccessFishingEvent
+import archyonix.ewars.entities.resource.events.SuccessFishingEvent
 import archyonix.ewars.game
 import net.minestom.server.MinecraftServer
 import net.minestom.server.entity.Entity

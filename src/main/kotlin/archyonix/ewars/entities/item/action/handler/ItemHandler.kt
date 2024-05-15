@@ -1,9 +1,9 @@
 package archyonix.ewars.entities.item.action.handler
 
-import archyonix.ewars.entities.item.functions.getGameItem
+import archyonix.ewars.entities.item.functions.asItemVariant
 import archyonix.ewars.entities.item.functions.hasGameItem
 import archyonix.ewars.entities.item.resetCharge
-import archyonix.ewars.entities.player.updateAttackSpeed
+import archyonix.ewars.entities.player.updateRecharge
 import net.minestom.server.event.PublicEventNode
 import net.minestom.server.event.player.PlayerChangeHeldSlotEvent
 import net.minestom.server.event.player.PlayerHandAnimationEvent
@@ -18,8 +18,8 @@ class ItemHandler: PublicEventNode("item-handler") {
             val itemStack = player.inventory.getItemStack(event.slot.toInt())
             if(itemStack.hasGameItem()) {
                 itemStack.resetCharge()
-                player.updateAttackSpeed(itemStack.getGameItem())
-            } else player.updateAttackSpeed()
+                player.updateRecharge()
+            } else player.updateRecharge()
         }
 
         addListener(PlayerHandAnimationEvent::class.java) { event ->

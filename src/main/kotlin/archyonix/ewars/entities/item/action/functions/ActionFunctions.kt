@@ -9,9 +9,9 @@ import org.reflections.Reflections
 val executors = loadExecutors()
 private fun loadExecutors(): Map<String, IExecutor> {
     val reflections = Reflections("archyonix.ewars.entities.item.action.executors")
-    val executorClassSet: Set<Class<IExecutor>> =
+    val executorClassSet: Set<Class<out IExecutor>> =
         reflections.getTypesAnnotatedWith(Executor::class.java)
-            .map { it as Class<IExecutor> }.toSet()
+            .map { it as Class<out IExecutor> }.toSet()
 
     val map: MutableMap<String, IExecutor> = HashMap()
     for (executorClass in executorClassSet) {

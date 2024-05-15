@@ -17,7 +17,7 @@ import net.minestom.server.item.ItemStack
 import net.minestom.server.item.Material
 import net.minestom.server.tag.Tag
 
-@UIPreset(path = "config/ui/build-menu-t1.yaml", isResource = false)
+@UIPreset(path = "config/ui/build-menu.yaml", isResource = false)
 class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
     private val team = viewer.gameTeam()
 

@@ -1,6 +1,6 @@
 package archyonix.ewars.game.bars
 
-import archyonix.ewars.entities.team.data.ResourceStorage
+import archyonix.ewars.entities.resource.ResourceStorage
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.Icons
 import net.kyori.adventure.text.Component

@@ -1,29 +1,16 @@
 package archyonix.ewars.game.functions
 
-import archyonix.ewars.entities.item.functions.findItemById
+import archyonix.ewars.entities.item.GameItem
+import archyonix.ewars.entities.item.enums.ItemVariant
 import archyonix.ewars.entities.player.addItem
-import archyonix.ewars.entities.player.updateAttackSpeed
+import archyonix.ewars.entities.player.updateRecharge
 import archyonix.ewars.game
-import net.minestom.server.entity.Player
 
 fun giveStartGameItems() {
-    val constructionHummer = findItemById("CONSTRUCTION_HAMMER") ?: return
     for (player in game.getPlayers()) {
-        player.addItem(constructionHummer)
-        player.updateAttackSpeed(constructionHummer)
+        player.addItem(GameItem.AXE.getVariant(ItemVariant.T1)!!)
+        player.addItem(GameItem.PICKAXE.getVariant(ItemVariant.T1)!!)
+        player.addItem(GameItem.FISHING_ROD.getVariant(ItemVariant.T1)!!)
+        player.updateRecharge()
     }
-}
-
-private fun giveAxes(player: Player) {
-    player.addItem(findItemById("WOODEN_AXE") ?: return)
-    player.addItem(findItemById("STONE_AXE") ?: return)
-    player.addItem(findItemById("IRON_AXE") ?: return)
-    player.addItem(findItemById("ELEMENTARY_AXE") ?: return)
-}
-
-private fun givePickaxes(player: Player) {
-    player.addItem(findItemById("WOODEN_PICKAXE") ?: return)
-    player.addItem(findItemById("STONE_PICKAXE") ?: return)
-    player.addItem(findItemById("IRON_PICKAXE") ?: return)
-    player.addItem(findItemById("ELEMENTARY_PICKAXE") ?: return)
 }
