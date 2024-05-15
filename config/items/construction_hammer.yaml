@@ -1,0 +1,52 @@
+id: "CONSTRUCTION_HAMMER"
+union: "build_tool"
+default:
+  material: "minecraft:wooden_pickaxe"
+  texture: "CONSTRUCTION_HAMMER"
+  recharge: 0
+  flags:
+    - "TOOL"
+  properties:
+    minFarm: 1
+    maxFarm: 1
+variants:
+  T0:
+    name: "<t0>Примитивный строительный молот"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Способен возвести"
+      - "<text>все здания и даже добыть некоторые ресурсы."
+      - "<blue>Скорость строительства: <text>1"
+    properties:
+      power: 1
+  T1:
+    name: "<t1>Каменный молот строителя"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Способен возвести"
+      - "<text>все здания и даже добыть некоторые ресурсы."
+      - "<blue>Скорость строительства: <text>2"
+    properties:
+      power: 2
+  T2:
+    name: "<t2>Железный молот строителя"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Способен возвести"
+      - "<text>все здания и даже добыть некоторые ресурсы."
+      - "<blue>Скорость строительства: <text>3"
+    properties:
+      power: 3
+  T3:
+    name: "<t3>Стихийный молот строителя"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Способен возвести"
+      - "<text>все здания и даже добыть некоторые ресурсы."
+      - "<blue>Скорость строительства: <text>5"
+    properties:
+      power: 5
+actions:
+  build:
+    executor: "BUILD_OR_REPAIR"
+    trigger: "LEFT_CLICK_BLOCK"
+  menu:
+    executor: "SHOW_UI"
+    trigger: "RIGHT_CLICK"
+    id: "BUILD_MENU"

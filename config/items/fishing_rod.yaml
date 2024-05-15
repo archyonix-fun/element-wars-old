@@ -1,0 +1,51 @@
+id: "FISHING_ROD"
+union: "fishing_rod"
+default:
+  material: "minecraft:fishing_rod"
+  flags:
+    - "TOOL"
+variants:
+  T1:
+    name: "<t1>Примитивная удочка"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Позволяет"
+      - "<text>добывать ресурс из воды"
+      - ""
+      - "<blue>? Добывает водный кристалл из воды 3-5шт."
+    properties:
+      minFarm: 3
+      maxFarm: 5
+  T2:
+    name: "<t2>Простая удочка"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Позволяет"
+      - "<text>добывать ресурс из воды"
+      - ""
+      - "<blue>? Добывает водный кристалл из воды 7-10шт."
+    properties:
+      minFarm: 7
+      maxFarm: 10
+  T3:
+    name: "<t3>Прочная удочка"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Позволяет"
+      - "<text>добывать ресурс из воды"
+      - ""
+      - "<blue>? Добывает водный кристалл из воды 12-15шт."
+    properties:
+      minFarm: 12
+      maxFarm: 15
+  T4:
+    name: "<t4>Стихийная удочка"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Позволяет"
+      - "<text>добывать ресурс из воды"
+      - ""
+      - "<blue>? Добывает водный кристалл из воды 17-20шт."
+    properties:
+      minFarm: 17
+      maxFarm: 20
+actions:
+  fishing:
+    executor: "FISHING"
+    trigger: "RIGHT_CLICK"

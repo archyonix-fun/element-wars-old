@@ -6,3 +6,4 @@ START_BUILDING: "<text>Игрок <blue>%username%<text> начал строит
 COMPLETE_BUILDING: "<text>Завершено строительство - <yellow>%structureName%"
 STAND_ON_GROUND: "<text>Вы должны стоять на земле"
 NO_DEPENDENCIES: "<text>Не выполнены требования для этого действия"
+ALREADY_PURCHASED: "<text>Предмет уже куплен"

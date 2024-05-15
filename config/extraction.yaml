@@ -1,0 +1,36 @@
+LEAVES:
+  blocks: "minecraft:birch_leaves,minecraft:spruce_leaves"
+  resource: "NATURAL_CRYSTAL"
+  swap: "minecraft:air"
+  unions: "build_tool"
+  extractor: "DEFAULT"
+  recovery:
+    enabled: false
+    seconds: 0
+LOG:
+  blocks: "minecraft:birch_log,minecraft:spruce_log"
+  resource: "NATURAL_CRYSTAL"
+  swap: "minecraft:air"
+  unions: "axe"
+  extractor: "TREE"
+  recovery:
+    enabled: false
+    seconds: 0
+MAGMA:
+  blocks: "minecraft:magma_block"
+  resource: "FLAME_CRYSTAL"
+  swap: "minecraft:obsidian"
+  unions: "pickaxe"
+  extractor: "DEFAULT"
+  recovery:
+    enabled: true
+    seconds: 600
+ORE:
+  blocks: "minecraft:iron_ore"
+  resource: "EARTH_CRYSTAL"
+  swap: "minecraft:cobblestone"
+  unions: "pickaxe,build_tool"
+  extractor: "DEFAULT"
+  recovery:
+    enabled: true
+    seconds: 600

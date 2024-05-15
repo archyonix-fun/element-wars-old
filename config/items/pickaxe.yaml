@@ -1,0 +1,54 @@
+id: "PICKAXE"
+union: "pickaxe"
+default:
+  flags:
+    - "TOOL"
+variants:
+  T1:
+    name: "<t1>Примитивная кирка"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Позволяет"
+      - "<text>добывать ресурс из руды и магмы"
+      - ""
+      - "<blue>? Добывает земляной кристалл из руды 7-10шт."
+      - "<blue>? Добывает огненный кристалл из магмы 7-10шт."
+    material: "minecraft:wooden_pickaxe"
+    properties:
+      minFarm: 7
+      maxFarm: 10
+  T2:
+    name: "<t2>Каменная кирка"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Позволяет"
+      - "<text>добывать ресурс из руды и магмы"
+      - ""
+      - "<blue>? Добывает земляной кристалл из руды 10-12шт."
+      - "<blue>? Добывает огненный кристалл из магмы 10-12шт."
+    material: "minecraft:stone_pickaxe"
+    properties:
+      minFarm: 10
+      maxFarm: 12
+  T3:
+    name: "<t3>Железная кирка"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Позволяет"
+      - "<text>добывать ресурс из руды и магмы"
+      - ""
+      - "<blue>? Добывает земляной кристалл из руды 12-15шт."
+      - "<blue>? Добывает огненный кристалл из магмы 12-15шт."
+    material: "minecraft:iron_pickaxe"
+    properties:
+      minFarm: 12
+      maxFarm: 15
+  T4:
+    name: "<t4>Стихийная кирка"
+    description:
+      - "<text>Важнейший инструмент для любой колонии. Позволяет"
+      - "<text>добывать ресурс из руды и магмы"
+      - ""
+      - "<blue>? Добывает земляной кристалл из руды 17-20шт."
+      - "<blue>? Добывает огненный кристалл из магмы 17-20шт."
+    material: "minecraft:diamond_pickaxe"
+    properties:
+      minFarm: 17
+      maxFarm: 20

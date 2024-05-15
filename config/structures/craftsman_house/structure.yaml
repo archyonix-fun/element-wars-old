@@ -4,6 +4,16 @@ area: 17
 
 limit: 1
 ui: "CRAFTSMAN_HOUSE_SHOP"
+shopItems:
+  AXE:
+    variant: "T1"
+    amount: 1
+  PICKAXE:
+    variant: "T1"
+    amount: 1
+  FISHING_ROD:
+    variant: "T1"
+    amount: 1
 tags:
   - "BREAKABLE"
 
