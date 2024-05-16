@@ -4,7 +4,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class ResourceStorage {
-    var NATURAL_CRYSTAL: Int = 1111
+    var NATURAL_CRYSTAL: Int = 0
         set(value) {
             field = max(0, min(value, 9999))
         }
@@ -12,7 +12,7 @@ class ResourceStorage {
         set(value) {
             field = max(0, min(value, 9999))
         }
-    var EARTH_CRYSTAL: Int = 1111
+    var EARTH_CRYSTAL: Int = 0
         set(value) {
             field = max(0, min(value, 9999))
         }

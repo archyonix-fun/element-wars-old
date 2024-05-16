@@ -3,6 +3,7 @@ package archyonix.ewars.entities.item.action.functions
 import archyonix.ewars.entities.item.action.Action
 import archyonix.ewars.entities.item.action.Executor
 import archyonix.ewars.entities.item.action.IExecutor
+import archyonix.ewars.features.shop.CostInfo
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import org.reflections.Reflections
 
@@ -22,10 +23,9 @@ private fun loadExecutors(): Map<String, IExecutor> {
     return map
 }
 
-fun loadActions(section: ConfigurationSection?): Set<Action> {
+fun ConfigurationSection.loadActions(): Set<Action> {
     val actionSet: MutableSet<Action> = HashSet()
-    if(section == null) return actionSet
-
+    val section = getConfigurationSection("actions") ?: return actionSet
     for (actionId in section.getKeys(false)) {
         val config = section.getConfigurationSection(actionId)!!
         actionSet.add(Action(actionId, config))

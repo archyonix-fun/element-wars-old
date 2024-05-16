@@ -5,6 +5,7 @@ import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.entities.structure.functions.withGrid
+import archyonix.ewars.features.shop.ShopUI
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.getDirection
 import archyonix.ewars.shared.libs.withProperties
@@ -103,10 +104,14 @@ open class Structure(
     }
 
     open fun openUI(player: Player) {
-        val ui = config.getUIClass()
-            ?.getDeclaredConstructor(Player::class.java, Structure::class.java)
-            ?.newInstance(player, this) ?: return
-        ui.show()
+        if (config.hasShop()) {
+            ShopUI(player, this).show()
+        } else {
+            val ui = config.getUIClass()
+                ?.getDeclaredConstructor(Player::class.java, Structure::class.java)
+                ?.newInstance(player, this) ?: return
+            ui.show()
+        }
     }
 
     private fun getPlayersFromRadius(radius: Double) =

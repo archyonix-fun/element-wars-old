@@ -8,9 +8,7 @@ import archyonix.ewars.game
 
 fun giveStartGameItems() {
     for (player in game.getPlayers()) {
-        player.addItem(GameItem.AXE.getVariant(ItemVariant.T1)!!)
-        player.addItem(GameItem.PICKAXE.getVariant(ItemVariant.T1)!!)
-        player.addItem(GameItem.FISHING_ROD.getVariant(ItemVariant.T1)!!)
+        player.addItem(GameItem.CONSTRUCTION_HAMMER.getVariant(ItemVariant.T0)!!)
         player.updateRecharge()
     }
 }

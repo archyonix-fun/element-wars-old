@@ -13,9 +13,6 @@ class StructureManager {
     private val uiMap: Map<String, Class<out GameUI>> = mapOf(
         Pair("CAMP_FIRE_MENU", CampFireMenuUI::class.java),
         Pair("TOWER_MENU", TowerMenuUI::class.java),
-        Pair("BUILDER_HUT_SHOP", BuilderHutShopUI::class.java),
-        Pair("CRAFTSMAN_HOUSE_SHOP", CraftsmanHouseShopUI::class.java),
-        Pair("MILL_SHOP", MillShopUI::class.java),
     )
 
     init {

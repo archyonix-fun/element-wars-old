@@ -1,16 +1,15 @@
 package archyonix.ewars.entities.structure
 
-import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.features.shop.ShopItem
-import archyonix.ewars.shared.libs.loadCost
-import archyonix.ewars.shared.libs.loadDependencies
 import archyonix.ewars.structureManager
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
+import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
+import java.io.File
 import kotlin.math.floor
 
 class StructureConfig(
-    private val config: ConfigurationSection
+    config: ConfigurationSection
 ) {
     val name = config.getString("name") ?: throw RuntimeException("Name is null")
     val limit = config.getInt("limit")
@@ -22,14 +21,14 @@ class StructureConfig(
     private val variantSection = config.getConfigurationSection("variants")
         ?: throw RuntimeException("Variants is null: $name")
     val variants = loadVariants()
+    var uiName: String = "NaN"
     private var shopItems: List<ShopItem>? = null
-
     fun shopItems(): List<ShopItem> {
-        if (shopItems == null) {
-            shopItems = loadShopItems()
-        }
+        if (shopItems == null) shopItems = loadShop()
         return shopItems!!
     }
+
+    fun hasShop() = shopItems().isNotEmpty()
 
 
     fun checkLimit(team: GameTeam): Boolean {
@@ -52,20 +51,21 @@ class StructureConfig(
         return variants
     }
 
-    private fun loadShopItems(): MutableList<ShopItem> {
-        val shopItems = mutableListOf<ShopItem>()
-        val section = config.getConfigurationSection("shopItems") ?: return shopItems
-        for (itemId in section.getKeys(false)) {
-            val itemConfig = section.getConfigurationSection(itemId) ?: continue
-            val gameItem = GameItem.items().find { it.id == itemId } ?: continue
-            val amount = itemConfig.getInt("amount", 1)
-            val variantId = itemConfig.getString("variant") ?: "DEFAULT"
+    private fun loadShop(): MutableList<ShopItem> {
+        val configPath = "config/structures/$name/shop.yaml"
+        val items: MutableList<ShopItem> = ArrayList()
 
-            val itemVariant = gameItem.getVariant(variantId) ?: continue
-            val dependencies = itemConfig.loadDependencies()
-            val costInfo = itemConfig.loadCost()
-            shopItems.add(ShopItem(itemVariant, amount, dependencies, costInfo))
+        val file = File(configPath)
+        if (!file.exists()) return items
+        val config = YamlConfiguration.loadConfiguration(file)
+
+        this.uiName = config.getString("name") ?: uiName
+        val itemSection = config.getConfigurationSection("items") ?: return items
+        for (id in itemSection.getKeys(false)) {
+            val section = itemSection.getConfigurationSection(id) ?: continue
+            items.add(ShopItem(section))
         }
-        return shopItems
+
+        return items
     }
 }
