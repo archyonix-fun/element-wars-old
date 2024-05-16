@@ -49,5 +49,6 @@ actions:
   menu:
     executor: "SHOW_UI"
     trigger: "RIGHT_CLICK"
+    id: "BUILD_MENU"
     properties:
       id: "BUILD_MENU"

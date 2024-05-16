@@ -2,60 +2,74 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Shop",
   "type": "object",
-  "patternProperties": {
-    ".*": {
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "items": {
       "type": "object",
-      "properties": {
-        "type": {
-          "enum": [
-            "item",
-            "icon"
-          ]
-        },
-        "item": {
+      "patternProperties": {
+        ".*": {
           "type": "object",
           "properties": {
-            "id": {
-              "type": "string"
-            },
-            "variant": {
+            "type": {
               "enum": [
-                "DEFAULT",
-                "T0",
-                "T1",
-                "T2",
-                "T3",
-                "T4"
+                "item",
+                "icon"
               ]
+            },
+            "item": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "variant": {
+                  "$ref": "enums/variants.json"
+                }
+              },
+              "required": [
+                "id",
+                "variant"
+              ],
+              "additionalProperties": false
+            },
+            "cost": {
+              "$ref": "cost.json"
+            },
+            "icon": {
+              "type": "object",
+              "properties": {
+                "texture": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false
+            },
+            "dependencies": {
+              "type": "array"
+            },
+            "actions": {
+              "patternProperties": {
+                ".*": {
+                  "$ref": "action.json"
+                }
+              }
             }
           },
+          "additionalProperties": false,
           "required": [
-            "id",
-            "variant"
-          ],
-          "additionalProperties": false
-        },
-        "cost": {
-          "$ref": "cost.json"
-        },
-        "icon": {
-          "type": "string"
-        },
-        "dependencies": {
-          "type": "array"
-        },
-        "actions": {
-          "patternProperties": {
-            ".*": {
-              "$ref": "action.json"
-            }
-          }
+            "type"
+          ]
         }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
+      }
     }
-  }
+  },
+  "additionalProperties": false
 }

@@ -1,24 +1,19 @@
-slot[0]:
-  type: "item"
-  item:
-    id: "CONSTRUCTION_HAMMER"
-    variant: "T1"
-  cost:
-    NATURAL_CRYSTAL: 50
-    EARTH_CRYSTAL: 50
-  dependencies:
-    - "STRUCTURE:BUILDER_HUT"
-slot[1]:
-  type: "icon"
-  icon: "HAMMER_REPAIR"
-  actions:
-    render:
-      executor: "CALC_REPAIR_COST"
-      trigger: "RENDER"
-      properties:
-        target: "CONSTRUCTION_HAMMER"
-    repair:
-      executor: "REPAIR_ITEM"
-      trigger: "CLICK"
-      properties:
-        target: "CONSTRUCTION_HAMMER"
+name: "BUILDER_HUT"
+items:
+  slot[0]:
+    type: "item"
+    item:
+      id: "CONSTRUCTION_HAMMER"
+      variant: "T1"
+    cost:
+      NATURAL_CRYSTAL: 50
+      EARTH_CRYSTAL: 50
+    dependencies:
+      - "STRUCTURE:BUILDER_HUT"
+  slot[1]:
+    type: "icon"
+    icon:
+      texture: "HAMMER_REPAIR"
+      name: "Починка молоточка"
+      description:
+        - "Чинит твой молоточек"
