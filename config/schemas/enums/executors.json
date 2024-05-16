@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Executors",
+  "enum": [
+    "CALC_REPAIR_COST",
+    "REPAIR_ITEM",
+    "BUILD_OR_REPAIR",
+    "FISHING",
+    "SHOW_UI"
+  ]
+}

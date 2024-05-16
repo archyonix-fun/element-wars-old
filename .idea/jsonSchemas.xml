@@ -21,6 +21,22 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="Shop">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="Shop" />
+              <option name="relativePathToSchema" value="config/schemas/shop.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="config/structures/builder_hut/shop.yaml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
       </map>
     </state>
   </component>

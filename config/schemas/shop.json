@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Shop",
+  "type": "object",
+  "patternProperties": {
+    ".*": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "item",
+            "icon"
+          ]
+        },
+        "item": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "variant": {
+              "enum": [
+                "DEFAULT",
+                "T0",
+                "T1",
+                "T2",
+                "T3",
+                "T4"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "variant"
+          ],
+          "additionalProperties": false
+        },
+        "cost": {
+          "$ref": "cost.json"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "dependencies": {
+          "type": "array"
+        },
+        "actions": {
+          "patternProperties": {
+            ".*": {
+              "$ref": "action.json"
+            }
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ]
+    }
+  }
+}

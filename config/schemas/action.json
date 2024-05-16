@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Action",
+  "type": "object",
+  "properties": {
+    "executor": {
+      "$ref": "enums/executors.json"
+    },
+    "trigger": {
+      "$ref": "enums/triggers.json"
+    },
+    "properties": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "executor",
+    "trigger"
+  ]
+}

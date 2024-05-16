@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Triggers",
+  "enum": [
+    "RIGHT_CLICK_BLOCK",
+    "RENDER",
+    "CLICK",
+    "LEFT_CLICK_BLOCK",
+    "RIGHT_CLICK"
+  ]
+}

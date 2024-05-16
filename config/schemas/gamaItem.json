@@ -78,31 +78,9 @@
       "additionalProperties": false
     },
     "actions": {
-      "type": "object",
       "patternProperties": {
         ".*": {
-          "type": "object",
-          "properties": {
-            "executor": {
-              "enum": [
-                "BUILD_OR_REPAIR",
-                "FISHING",
-                "SHOW_UI"
-              ]
-            },
-            "trigger": {
-              "enum": [
-                "RIGHT_CLICK_BLOCK",
-                "LEFT_CLICK_BLOCK",
-                "RIGHT_CLICK"
-              ]
-            }
-          },
-          "additionalProperties": true,
-          "required": [
-            "executor",
-            "trigger"
-          ]
+          "$ref": "action.json"
         }
       }
     }

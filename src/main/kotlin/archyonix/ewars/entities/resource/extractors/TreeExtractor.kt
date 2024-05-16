@@ -34,6 +34,7 @@ class TreeExtractor(
     private fun breakTree(zero: Point) {
         val min = zero.sub(3.0, .0, 3.0)
         val max = zero.add(3.0, 12.0, 3.0)
+        val log = instance().getBlock(zero).namespace().path().split("_")[0]
         for (x in min.blockX()..max.blockX()) {
             for (z in min.blockZ()..max.blockZ()) {
                 for (y in min.blockY()..max.blockY()) {
@@ -41,7 +42,7 @@ class TreeExtractor(
                     val block = instance().getBlock(absolutePoint)
 
                     if (
-                        block.name().contains("leaves") ||
+                        block.name().contains("${log}_leaves") ||
                         (
                                 absolutePoint.blockX() == zero.blockX()
                                         &&

@@ -3,14 +3,6 @@ height: 12
 area: 11
 
 limit: 1
-ui: "BUILDER_HUT_SHOP"
-shopItems:
-  CONSTRUCTION_HAMMER:
-    variant: "T1"
-    amount: 1
-    cost:
-      NATURAL_CRYSTAL: 50
-      EARTH_CRYSTAL: 50
 tags:
   - "BREAKABLE"
 
