@@ -14,8 +14,7 @@ variants:
       - "<blue>? Добывает природный кристалл из дерева 3-5шт."
     material: "minecraft:wooden_axe"
     properties:
-      minFarm: 3
-      maxFarm: 5
+      extractorMultiplier: 1
   T2:
     name: "<t2>Каменный топор"
     description:
@@ -26,8 +25,7 @@ variants:
       - "<blue>? Добывает природный кристалл из дерева 7-10шт."
     material: "minecraft:stone_axe"
     properties:
-      minFarm: 7
-      maxFarm: 10
+      extractorMultiplier: 1
   T3:
     name: "<t3>Железный топор"
     description:
@@ -38,8 +36,7 @@ variants:
       - "<blue>? Добывает природный кристалл из дерева 12-15шт."
     material: "minecraft:iron_axe"
     properties:
-      minFarm: 12
-      maxFarm: 15
+      extractorMultiplier: 1
   T4:
     name: "<t4>Стихийный топор"
     description:
@@ -50,5 +47,4 @@ variants:
       - "<blue>? Добывает природный кристалл из дерева 17-20шт."
     material: "minecraft:diamond_axe"
     properties:
-      minFarm: 17
-      maxFarm: 20
+      extractorMultiplier: 1

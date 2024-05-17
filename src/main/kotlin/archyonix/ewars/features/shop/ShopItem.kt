@@ -1,7 +1,6 @@
 package archyonix.ewars.features.shop
 
 import archyonix.ewars.entities.item.GameItem
-import archyonix.ewars.entities.item.action.functions.loadActions
 import archyonix.ewars.entities.item.enums.ItemVariant
 import archyonix.ewars.entities.item.functions.asGameItem
 import archyonix.ewars.entities.item.functions.asItemVariant
@@ -14,6 +13,7 @@ import archyonix.ewars.entities.player.showMessage
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.features.shop.functions.withGameItem
 import archyonix.ewars.features.shop.functions.withShopIcon
+import archyonix.ewars.game
 import archyonix.ewars.shared.libs.LoreUtils
 import archyonix.ewars.shared.libs.loadCost
 import archyonix.ewars.shared.libs.loadDependencies
@@ -40,7 +40,7 @@ class ShopItem(
     private val amount = config.getInt("amount", 1)
     private val cost = config.loadCost()
     private val dependencies = config.loadDependencies()
-    private val actions = config.loadActions()
+    private val actions = game.actionManager.readActions(config.getConfigurationSection("actions"))
 
     fun createView(player: Player): UIView {
         val team = player.gameTeam()
@@ -117,7 +117,7 @@ class ShopItem(
     }
 
     private fun executeAction(player: Player) {
-        actions.filter { it.trigger == "CLICK" }.forEach { it.run(player, item!!.item) }
+        actions.filter { it.triggers.contains("CLICK") }.forEach { it.execute(player) }
     }
 
     private fun buildLore(team: GameTeam): List<String> {

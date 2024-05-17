@@ -7,8 +7,7 @@ default:
   flags:
     - "TOOL"
   properties:
-    minFarm: 1
-    maxFarm: 1
+    extractorMultiplier: 1
 variants:
   T0:
     name: "<t0>Примитивный строительный молот"
@@ -17,7 +16,7 @@ variants:
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>1"
     properties:
-      power: 1
+      buildPower: 1
   T1:
     name: "<t1>Каменный молот строителя"
     description:
@@ -25,7 +24,7 @@ variants:
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>2"
     properties:
-      power: 2
+      buildPower: 2
   T2:
     name: "<t2>Железный молот строителя"
     description:
@@ -33,7 +32,7 @@ variants:
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>3"
     properties:
-      power: 3
+      buildPower: 3
   T3:
     name: "<t3>Стихийный молот строителя"
     description:
@@ -41,14 +40,16 @@ variants:
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>5"
     properties:
-      power: 5
+      buildPower: 5
 actions:
   build:
-    executor: "BUILD_OR_REPAIR"
-    trigger: "LEFT_CLICK_BLOCK"
+    executor: "BUILD/REPAIR"
+    trigger:
+      - "LEFT_CLICK_BLOCK"
   menu:
-    executor: "SHOW_UI"
-    trigger: "RIGHT_CLICK"
-    id: "BUILD_MENU"
+    executor: "OPEN_UI"
+    trigger:
+      - "RIGHT_CLICK"
+      - "RIGHT_CLICK_BLOCK"
     properties:
-      id: "BUILD_MENU"
+      name: "BUILD_MENU"

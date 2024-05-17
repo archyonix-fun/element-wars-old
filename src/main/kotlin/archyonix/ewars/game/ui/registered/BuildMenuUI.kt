@@ -1,10 +1,11 @@
-package archyonix.ewars.game.ui
+package archyonix.ewars.game.ui.registered
 
 import archyonix.ewars.entities.item.addStructureBuildTags
 import archyonix.ewars.entities.message.Message
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
+import archyonix.ewars.game.ui.GameUI
 import archyonix.ewars.shared.libs.UIs
 import archyonix.ewars.shared.libs.withColors
 import archyonix.ewars.shared.libs.withProperties
@@ -17,6 +18,7 @@ import net.minestom.server.item.ItemStack
 import net.minestom.server.item.Material
 import net.minestom.server.tag.Tag
 
+@GameUI.RegisteredUI("BUILD_MENU")
 @UIPreset(path = "config/ui/build-menu.yaml", isResource = false)
 class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
     private val team = viewer.gameTeam()

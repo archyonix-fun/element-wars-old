@@ -1,7 +1,5 @@
 package archyonix.ewars.game.handler
 
-import archyonix.ewars.entities.item.action.handler.ItemActionHandler
-import archyonix.ewars.entities.item.action.handler.ItemHandler
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.handler.SpectatorEventHandler
 import archyonix.ewars.entities.resource.handler.ResourceHandler
@@ -11,6 +9,8 @@ import archyonix.ewars.entities.structure.handler.StructureHandler
 import archyonix.ewars.entities.team.functions.distributeTeams
 import archyonix.ewars.entities.team.functions.useGameTeams
 import archyonix.ewars.events
+import archyonix.ewars.features.action.handler.ActionsHandler
+import archyonix.ewars.features.action.handler.ItemActionsHandler
 import archyonix.ewars.game
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
@@ -75,8 +75,7 @@ class GameEventHandler : PublicEventNode("game") {
 
         addChild(StructureBuildHandler())
         addChild(StructureHandler())
-        addChild(ItemActionHandler())
-        addChild(ItemHandler())
+        addChild(ActionsHandler())
         addChild(SpectatorEventHandler())
     }
 }

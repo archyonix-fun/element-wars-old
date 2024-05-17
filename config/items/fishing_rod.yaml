@@ -47,5 +47,6 @@ variants:
       maxFarm: 20
 actions:
   fishing:
-    executor: "FISHING"
-    trigger: "RIGHT_CLICK"
+    executor: "FISH"
+    trigger:
+      - "RIGHT_CLICK"

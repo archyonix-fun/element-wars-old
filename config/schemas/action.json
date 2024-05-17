@@ -1,21 +1,45 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Action",
-  "type": "object",
-  "properties": {
-    "executor": {
-      "$ref": "enums/executors.json"
+  "definitions": {
+    "item": {
+      "title": "Action",
+      "type": "object",
+      "properties": {
+        "executor": {
+          "$ref": "enums/executors.json"
+        },
+        "trigger": {
+          "$ref": "enums/triggers.json#/definitions/item"
+        },
+        "properties": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "executor",
+        "trigger"
+      ]
     },
-    "trigger": {
-      "$ref": "enums/triggers.json"
-    },
-    "properties": {
-      "type": "object"
+    "ui": {
+      "title": "Action",
+      "type": "object",
+      "properties": {
+        "executor": {
+          "$ref": "enums/executors.json"
+        },
+        "trigger": {
+          "$ref": "enums/triggers.json#/definitions/ui"
+        },
+        "properties": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "executor",
+        "trigger"
+      ]
     }
-  },
-  "additionalProperties": false,
-  "required": [
-    "executor",
-    "trigger"
-  ]
+  }
 }

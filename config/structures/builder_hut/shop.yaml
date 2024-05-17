@@ -10,10 +10,3 @@ items:
       EARTH_CRYSTAL: 50
     dependencies:
       - "STRUCTURE:BUILDER_HUT"
-  slot[1]:
-    type: "icon"
-    icon:
-      texture: "HAMMER_REPAIR"
-      name: "Починка молоточка"
-      description:
-        - "Чинит твой молоточек"

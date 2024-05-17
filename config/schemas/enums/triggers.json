@@ -1,11 +1,33 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Triggers",
-  "enum": [
-    "RIGHT_CLICK_BLOCK",
-    "RENDER",
-    "CLICK",
-    "LEFT_CLICK_BLOCK",
-    "RIGHT_CLICK"
-  ]
+  "definitions": {
+    "item": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "enum": [
+              "LEFT_CLICK",
+              "LEFT_CLICK_BLOCK",
+              "RIGHT_CLICK",
+              "RIGHT_CLICK_BLOCK"
+            ]
+          }
+        ]
+      }
+    },
+    "ui": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "enum": [
+              "CLICK"
+            ]
+          }
+        ]
+      }
+    }
+  }
 }

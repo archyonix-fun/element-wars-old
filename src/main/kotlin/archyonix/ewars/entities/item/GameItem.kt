@@ -1,12 +1,12 @@
 package archyonix.ewars.entities.item
 
-import archyonix.ewars.entities.item.action.Action
 import archyonix.ewars.entities.item.enums.ItemFlag
 import archyonix.ewars.entities.item.enums.ItemVariant
 import archyonix.ewars.entities.item.functions.GameItemIdTag
 import archyonix.ewars.entities.item.functions.GameItemRechargeTag
 import archyonix.ewars.entities.item.functions.GameItemTextureTag
 import archyonix.ewars.entities.item.functions.GameItemVariantTag
+import archyonix.ewars.game
 import archyonix.ewars.shared.libs.withColors
 import net.minestom.server.attribute.Attribute
 import net.minestom.server.attribute.AttributeOperation
@@ -56,7 +56,7 @@ class GameItem private constructor(
     val union: String? = config.getString("union")
     private val default = loadDefault(config.getConfigurationSection("default"))
     private val variants = loadVariants(config.getConfigurationSection("variants"))
-    val actions = loadActions(config.getConfigurationSection("actions"))
+    val actions = game.actionManager.readActions(config.getConfigurationSection("actions"))
 
     fun getVariant(variant: ItemVariant) =
         variants.find { it.id == variant.name }
@@ -65,7 +65,7 @@ class GameItem private constructor(
         variants.find { it.id == variant }
 
     fun executeAction(player: Player, trigger: String) {
-        actions.filter { it.trigger == trigger }.forEach { it.run(player, this) }
+        actions.filter { it.triggers.contains(trigger) }.forEach { it.execute(player) }
     }
 
     private fun loadDefault(section: ConfigurationSection?): Variant? =
@@ -76,17 +76,6 @@ class GameItem private constructor(
         return section.getKeys(false)
             .map { Variant(this, section.getConfigurationSection(it)!!, default) }
             .toSet()
-    }
-
-    private fun loadActions(section: ConfigurationSection?): Set<Action> {
-        val actionSet: MutableSet<Action> = HashSet()
-        if (section == null) return actionSet
-
-        for (actionId in section.getKeys(false)) {
-            val config = section.getConfigurationSection(actionId)!!
-            actionSet.add(Action(actionId, config))
-        }
-        return actionSet
     }
 
     class Variant(

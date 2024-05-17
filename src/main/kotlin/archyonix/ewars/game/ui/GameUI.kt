@@ -10,4 +10,10 @@ abstract class GameUI(viewer: Player, inventoryType: InventoryType) : UI(viewer,
     init {
         Colors.colors().forEach { withColor(it, Colors.fromName(it)) }
     }
+
+    @Retention(AnnotationRetention.RUNTIME)
+    @Target(AnnotationTarget.CLASS)
+    annotation class RegisteredUI(
+        val name: String
+    )
 }

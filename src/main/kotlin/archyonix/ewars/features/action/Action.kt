@@ -3,7 +3,7 @@ package archyonix.ewars.features.action
 import net.minestom.server.entity.Player
 
 class Action(
-    val trigger: String,
+    val triggers: Set<String>,
     private val executor: Executor
 ) {
     fun execute(player: Player) = executor.run(player)

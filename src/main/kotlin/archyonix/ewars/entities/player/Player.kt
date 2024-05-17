@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component
 import net.minestom.server.attribute.Attribute
 import net.minestom.server.entity.Player
 import net.minestom.server.tag.Tag
+import java.util.*
 
 enum class PlayerType { PLAYER, SPECTATOR }
 
@@ -53,4 +54,19 @@ fun Player.updateRecharge() {
     val item = itemInMainHand.run { if (hasGameItem()) asItemVariant() else null }
     val recharge = 20f / (item?.recharge ?: 0)
     getAttribute(Attribute.ATTACK_SPEED).baseValue = recharge
+}
+
+private val coolDown: MutableMap<Player, Long> = HashMap()
+fun Player.useCoolDown(): Boolean {
+    val current = Date().time
+    if (coolDown.containsKey(this)) {
+        val last = coolDown[this]!!
+        if (current - last < 100) {
+            return false
+        }
+        coolDown[this] = current
+    } else {
+        coolDown[this] = current
+    }
+    return true
 }

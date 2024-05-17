@@ -14,8 +14,7 @@ variants:
       - "<blue>? Добывает огненный кристалл из магмы 7-10шт."
     material: "minecraft:wooden_pickaxe"
     properties:
-      minFarm: 7
-      maxFarm: 10
+      extractorMultiplier: 1
   T2:
     name: "<t2>Каменная кирка"
     description:
@@ -26,8 +25,7 @@ variants:
       - "<blue>? Добывает огненный кристалл из магмы 10-12шт."
     material: "minecraft:stone_pickaxe"
     properties:
-      minFarm: 10
-      maxFarm: 12
+      extractorMultiplier: 1
   T3:
     name: "<t3>Железная кирка"
     description:
@@ -38,8 +36,7 @@ variants:
       - "<blue>? Добывает огненный кристалл из магмы 12-15шт."
     material: "minecraft:iron_pickaxe"
     properties:
-      minFarm: 12
-      maxFarm: 15
+      extractorMultiplier: 1
   T4:
     name: "<t4>Стихийная кирка"
     description:
@@ -50,5 +47,4 @@ variants:
       - "<blue>? Добывает огненный кристалл из магмы 17-20шт."
     material: "minecraft:diamond_pickaxe"
     properties:
-      minFarm: 17
-      maxFarm: 20
+      extractorMultiplier: 1

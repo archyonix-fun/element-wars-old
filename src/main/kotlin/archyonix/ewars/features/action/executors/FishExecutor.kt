@@ -1,8 +1,7 @@
-package archyonix.ewars.entities.item.action.executors
+package archyonix.ewars.features.action.executors
 
-import archyonix.ewars.entities.item.action.Executor
-import archyonix.ewars.entities.item.action.IExecutor
 import archyonix.ewars.entities.resource.events.SuccessFishingEvent
+import archyonix.ewars.features.action.Action
 import archyonix.ewars.game
 import net.minestom.server.MinecraftServer
 import net.minestom.server.entity.Entity
@@ -10,13 +9,13 @@ import net.minestom.server.entity.EntityType
 import net.minestom.server.entity.Player
 import net.minestom.server.entity.metadata.other.FishingHookMeta
 import net.minestom.server.tag.Tag
-import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.util.*
 
-
-@Executor("FISHING")
-class FishingExecutor : IExecutor {
-    override fun execute(player: Player, data: ConfigurationSection): Boolean {
+@Action.RegisteredExecutor("FISH")
+class FishExecutor(
+    properties: Map<String, Any>
+) : Action.Executor(properties) {
+    override fun run(player: Player): Boolean {
         game.instance.entities
             .filter { it.entityType == EntityType.FISHING_BOBBER }
             .find { (it.entityMeta as FishingHookMeta).ownerEntity == player }

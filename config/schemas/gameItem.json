@@ -80,7 +80,7 @@
     "actions": {
       "patternProperties": {
         ".*": {
-          "$ref": "action.json"
+          "$ref": "action.json#/definitions/item"
         }
       }
     }

@@ -9,6 +9,7 @@ import archyonix.ewars.events
 import archyonix.ewars.features.action.ActionManager
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
+import archyonix.ewars.game.ui.UIManager
 import archyonix.ewars.gameArgs
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
@@ -23,6 +24,7 @@ class Game {
     var startTime by Delegates.notNull<Long>()
 
     val actionManager = ActionManager()
+    val uiManager = UIManager()
     val resourceManager = ResourceManager()
 
     val isDebug: Boolean = gameArgs.IS_DEBUG.toBooleanStrictOrNull() ?: false
