@@ -30,7 +30,7 @@ class ResourceManager {
         }
     }
 
-    fun extract(point: Point, union: String): Resource? {
+    fun extract(point: Point, union: String): MutableSet<Extractor.ResourceVolume>? {
         game.instance.loadChunk(point).get().run {
             val block = getBlock(point)
             val extractor = extractors.values

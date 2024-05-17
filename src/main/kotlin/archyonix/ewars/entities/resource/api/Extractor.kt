@@ -15,7 +15,7 @@ abstract class Extractor(
     var swap: String
     var repair by Delegates.notNull<Boolean>()
     var seconds by Delegates.notNull<Int>()
-    var resource: Resource
+    val resource: MutableSet<ResourceVolume> = HashSet()
 
     init {
         val blocks = config.getString("blocks") ?: throw RuntimeException("Field blocks is null")
@@ -24,8 +24,14 @@ abstract class Extractor(
         val unions = config.getString("unions") ?: throw RuntimeException("Field unions is null")
         this.unions = unions.split(",").toSet()
 
-        val resource = config.getString("resource") ?: throw RuntimeException("Field resource is null")
-        this.resource = Resource.valueOf(resource.uppercase())
+        val resourceSection =
+            config.getConfigurationSection("resources") ?: throw RuntimeException("Field resources is null")
+
+        for (name in resourceSection.getKeys(false)) {
+            val min = resourceSection.getInt("$name.min")
+            val max = resourceSection.getInt("$name.max")
+            resource.add(ResourceVolume(Resource.valueOf(name.uppercase()), min, max))
+        }
 
         this.swap = config.getString("swap") ?: throw RuntimeException("Field swap is null")
         this.repair = config.getBoolean("recovery.enabled")
@@ -41,4 +47,10 @@ abstract class Extractor(
         else unions.contains(union)
 
     abstract fun run(point: Point, toolGroup: String): Boolean
+
+    data class ResourceVolume(
+        val resource: Resource,
+        val min: Int,
+        val max: Int,
+    )
 }
