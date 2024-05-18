@@ -13,6 +13,7 @@ variants:
       - "<blue>? Добывает земляной кристалл из руды 7-10шт."
       - "<blue>? Добывает огненный кристалл из магмы 7-10шт."
     material: "minecraft:wooden_pickaxe"
+    texture: "PICKAXE_T1"
     properties:
       extractorMultiplier: 1
   T2:
@@ -24,6 +25,7 @@ variants:
       - "<blue>? Добывает земляной кристалл из руды 10-12шт."
       - "<blue>? Добывает огненный кристалл из магмы 10-12шт."
     material: "minecraft:stone_pickaxe"
+    texture: "PICKAXE_T2"
     properties:
       extractorMultiplier: 1
   T3:
@@ -35,6 +37,7 @@ variants:
       - "<blue>? Добывает земляной кристалл из руды 12-15шт."
       - "<blue>? Добывает огненный кристалл из магмы 12-15шт."
     material: "minecraft:iron_pickaxe"
+    texture: "PICKAXE_T3"
     properties:
       extractorMultiplier: 1
   T4:
@@ -46,5 +49,6 @@ variants:
       - "<blue>? Добывает земляной кристалл из руды 17-20шт."
       - "<blue>? Добывает огненный кристалл из магмы 17-20шт."
     material: "minecraft:diamond_pickaxe"
+    texture: "PICKAXE_T4"
     properties:
       extractorMultiplier: 1

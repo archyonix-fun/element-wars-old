@@ -65,7 +65,10 @@ class GameItem private constructor(
         variants.find { it.id == variant }
 
     fun executeAction(player: Player, trigger: String) {
-        actions.filter { it.triggers.contains(trigger) }.forEach { it.execute(player) }
+        actions.filter { it.triggers.contains(trigger) }.forEach {
+            if(it.execute(player)) executeAction(player, "ON_SUCCESS:${it.id}")
+            else executeAction(player, "ON_FAILED:${it.id}")
+        }
     }
 
     private fun loadDefault(section: ConfigurationSection?): Variant? =
@@ -84,6 +87,7 @@ class GameItem private constructor(
         default: Variant? = null
     ) {
         val id: String = config.name
+        val order = ItemVariant.valueOf(id.uppercase()).order
         val name: String? = config.getString("name") ?: default?.name
         val description: List<String> = config.contains("description").run {
             if (this) return@run config.getStringList("description")

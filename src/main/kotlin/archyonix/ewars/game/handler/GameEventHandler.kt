@@ -73,9 +73,11 @@ class GameEventHandler : PublicEventNode("game") {
         addChild(ResourceHandler())
         addChild(ResourceWaterHandler())
 
-        addChild(StructureBuildHandler())
         addChild(StructureHandler())
         addChild(ActionsHandler())
         addChild(SpectatorEventHandler())
+
+        // Cancel Events
+        addChild(CancelEventHandler())
     }
 }

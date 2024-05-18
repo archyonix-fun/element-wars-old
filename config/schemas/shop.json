@@ -12,28 +12,6 @@
         ".*": {
           "type": "object",
           "properties": {
-            "type": {
-              "enum": [
-                "item",
-                "icon"
-              ]
-            },
-            "item": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "variant": {
-                  "$ref": "enums/variants.json"
-                }
-              },
-              "required": [
-                "id",
-                "variant"
-              ],
-              "additionalProperties": false
-            },
             "cost": {
               "$ref": "cost.json"
             },
@@ -65,7 +43,7 @@
           },
           "additionalProperties": false,
           "required": [
-            "type"
+            "icon"
           ]
         }
       }

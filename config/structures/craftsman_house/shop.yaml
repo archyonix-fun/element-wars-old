@@ -1,17 +1,48 @@
 name: "CRAFTSMAN_HOUSE"
 items:
   slot[0]:
-    type: "item"
-    item:
-      id: "AXE"
-      variant: "T1"
+    icon:
+      name: "<t1>Примитивный топор"
+      texture: "AXE_T1"
+      description:
+        - "<blue>Добывает природный кристалл из дерева"
+        - "<blue>? Если предмет уже есть, он будет отремонтирован"
+    actions:
+      give:
+        executor: "GIVE_ITEM"
+        trigger:
+          - "CLICK"
+        properties:
+          id: "AXE"
+          variant: "T1"
   slot[1]:
-    type: "item"
-    item:
-      id: "PICKAXE"
-      variant: "T1"
+    icon:
+      name: "<t1>Примитивная кирка"
+      texture: "PICKAXE_T1"
+      description:
+        - "<blue>Добывает земляной кристалл из руды"
+        - "<blue>Добывает огненный кристалл из магмы"
+        - "<blue>? Если предмет уже есть, он будет отремонтирован"
+    actions:
+      give:
+        executor: "GIVE_ITEM"
+        trigger:
+          - "CLICK"
+        properties:
+          id: "PICKAXE"
+          variant: "T1"
   slot[2]:
-    type: "item"
-    item:
-      id: "FISHING_ROD"
-      variant: "T1"
+    icon:
+      name: "<t1>Примитивная удочка"
+      texture: "FISHING_ROD_T1"
+      description:
+        - "<blue>Добывает водный кристалл из воды"
+        - "<blue>? Если предмет уже есть, он будет отремонтирован"
+    actions:
+      give:
+        executor: "GIVE_ITEM"
+        trigger:
+          - "CLICK"
+        properties:
+          id: "FISHING_ROD"
+          variant: "T1"

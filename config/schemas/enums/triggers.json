@@ -13,8 +13,17 @@
               "RIGHT_CLICK",
               "RIGHT_CLICK_BLOCK"
             ]
+          },
+          {
+            "type": "string",
+            "pattern": "ON_FAILED:[A-z0-9]"
+          },
+          {
+            "type": "string",
+            "pattern": "ON_SUCCESS:[A-z0-9]"
           }
-        ]
+        ],
+        "additionalItems": true
       }
     },
     "ui": {

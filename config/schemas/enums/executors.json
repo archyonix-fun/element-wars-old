@@ -4,6 +4,8 @@
   "enum": [
     "BUILD/REPAIR",
     "FISH",
-    "OPEN_UI"
+    "OPEN_UI",
+    "STRUCTURE_UI",
+    "GIVE_ITEM"
   ]
 }

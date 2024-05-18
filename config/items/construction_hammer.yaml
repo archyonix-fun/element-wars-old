@@ -2,7 +2,6 @@ id: "CONSTRUCTION_HAMMER"
 union: "build_tool"
 default:
   material: "minecraft:wooden_pickaxe"
-  texture: "CONSTRUCTION_HAMMER"
   recharge: 0
   flags:
     - "TOOL"
@@ -10,11 +9,12 @@ default:
     extractorMultiplier: 1
 variants:
   T0:
-    name: "<t0>Примитивный строительный молот"
+    name: "<t0>Примитивный молот строителя"
     description:
       - "<text>Важнейший инструмент для любой колонии. Способен возвести"
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>1"
+    texture: "CONSTRUCTION_HAMMER_T0"
     properties:
       buildPower: 1
   T1:
@@ -23,6 +23,7 @@ variants:
       - "<text>Важнейший инструмент для любой колонии. Способен возвести"
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>2"
+    texture: "CONSTRUCTION_HAMMER_T1"
     properties:
       buildPower: 2
   T2:
@@ -31,6 +32,7 @@ variants:
       - "<text>Важнейший инструмент для любой колонии. Способен возвести"
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>3"
+    texture: "CONSTRUCTION_HAMMER_T2"
     properties:
       buildPower: 3
   T3:
@@ -39,6 +41,7 @@ variants:
       - "<text>Важнейший инструмент для любой колонии. Способен возвести"
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>5"
+    texture: "CONSTRUCTION_HAMMER_T3"
     properties:
       buildPower: 5
 actions:
@@ -46,10 +49,14 @@ actions:
     executor: "BUILD/REPAIR"
     trigger:
       - "LEFT_CLICK_BLOCK"
+  structure_ui:
+    executor: "STRUCTURE_UI"
+    trigger:
+      - "RIGHT_CLICK_BLOCK"
   menu:
     executor: "OPEN_UI"
     trigger:
       - "RIGHT_CLICK"
-      - "RIGHT_CLICK_BLOCK"
+      - "ON_FAILED:structure_ui"
     properties:
       name: "BUILD_MENU"

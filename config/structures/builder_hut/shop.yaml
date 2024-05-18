@@ -1,12 +1,20 @@
 name: "BUILDER_HUT"
 items:
   slot[0]:
-    type: "item"
-    item:
-      id: "CONSTRUCTION_HAMMER"
-      variant: "T1"
+    icon:
+      name: "<t1>Каменный молот строителя"
+      texture: "CONSTRUCTION_HAMMER_T1"
+      description:
+        - "<blue>? Скорость строительства: <text>2"
+        - "<blue>? Если предмет уже есть, он будет отремонтирован"
     cost:
       NATURAL_CRYSTAL: 50
       EARTH_CRYSTAL: 50
-    dependencies:
-      - "STRUCTURE:BUILDER_HUT"
+    actions:
+      give:
+        executor: "GIVE_ITEM"
+        trigger:
+          - "CLICK"
+        properties:
+          id: "CONSTRUCTION_HAMMER"
+          variant: "T1"

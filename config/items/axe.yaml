@@ -13,6 +13,7 @@ variants:
       - ""
       - "<blue>? Добывает природный кристалл из дерева 3-5шт."
     material: "minecraft:wooden_axe"
+    texture: "AXE_T1"
     properties:
       extractorMultiplier: 1
   T2:
@@ -24,6 +25,7 @@ variants:
       - ""
       - "<blue>? Добывает природный кристалл из дерева 7-10шт."
     material: "minecraft:stone_axe"
+    texture: "AXE_T2"
     properties:
       extractorMultiplier: 1
   T3:
@@ -35,6 +37,7 @@ variants:
       - ""
       - "<blue>? Добывает природный кристалл из дерева 12-15шт."
     material: "minecraft:iron_axe"
+    texture: "AXE_T3"
     properties:
       extractorMultiplier: 1
   T4:
@@ -46,5 +49,6 @@ variants:
       - ""
       - "<blue>? Добывает природный кристалл из дерева 17-20шт."
     material: "minecraft:diamond_axe"
+    texture: "AXE_T4"
     properties:
       extractorMultiplier: 1
