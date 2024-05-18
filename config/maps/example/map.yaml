@@ -1,7 +1,7 @@
 name: example
 displayName: Example Map
 teamCount: 1
-teamSize: 1
+teamSize: 2
 
 worldSpawn: "-45:89:121:-120:0"
 spawnList:
