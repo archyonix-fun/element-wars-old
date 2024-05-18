@@ -2,6 +2,7 @@ package archyonix.ewars.features.action.executors
 
 import archyonix.ewars.entities.resource.events.SuccessFishingEvent
 import archyonix.ewars.features.action.Action
+import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game
 import net.minestom.server.MinecraftServer
 import net.minestom.server.entity.Entity
@@ -11,7 +12,7 @@ import net.minestom.server.entity.metadata.other.FishingHookMeta
 import net.minestom.server.tag.Tag
 import java.util.*
 
-@Action.RegisteredExecutor("FISH")
+@ClassLibrary.RegisteredClass("FISH", ClassLibrary.Type.EXECUTOR)
 class FishExecutor(
     properties: Map<String, Any>
 ) : Action.Executor(properties) {

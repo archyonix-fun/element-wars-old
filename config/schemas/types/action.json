@@ -6,10 +6,10 @@
       "type": "object",
       "properties": {
         "executor": {
-          "$ref": "enums/executors.json"
+          "$ref": "../enums/executors.json"
         },
         "trigger": {
-          "$ref": "enums/triggers.json#/definitions/item"
+          "$ref": "../enums/triggers.json#/definitions/item"
         },
         "properties": {
           "type": "object"
@@ -26,10 +26,10 @@
       "type": "object",
       "properties": {
         "executor": {
-          "$ref": "enums/executors.json"
+          "$ref": "../enums/executors.json"
         },
         "trigger": {
-          "$ref": "enums/triggers.json#/definitions/ui"
+          "$ref": "../enums/triggers.json#/definitions/ui"
         },
         "properties": {
           "type": "object"

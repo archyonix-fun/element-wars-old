@@ -1,10 +1,11 @@
 package archyonix.ewars.features.action.executors
 
 import archyonix.ewars.features.action.Action
+import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game
 import net.minestom.server.entity.Player
 
-@Action.RegisteredExecutor("OPEN_UI")
+@ClassLibrary.RegisteredClass("OPEN_UI", ClassLibrary.Type.EXECUTOR)
 class UIExecutor(
     properties: Map<String, Any>
 ) : Action.Executor(properties) {

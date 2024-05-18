@@ -3,10 +3,11 @@ package archyonix.ewars.features.action.executors
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.features.action.Action
+import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.structureManager
 import net.minestom.server.entity.Player
 
-@Action.RegisteredExecutor("STRUCTURE_UI")
+@ClassLibrary.RegisteredClass("STRUCTURE_UI", ClassLibrary.Type.EXECUTOR)
 class StructureUIExecutor(
     properties: Map<String, Any>
 ) : Action.Executor(properties) {

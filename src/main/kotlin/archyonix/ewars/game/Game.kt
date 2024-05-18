@@ -7,6 +7,7 @@ import archyonix.ewars.entities.resource.ResourceManager
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.events
 import archyonix.ewars.features.action.ActionManager
+import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
 import archyonix.ewars.game.ui.UIManager
@@ -23,6 +24,7 @@ class Game {
     val messages: Map<String, String> = loadMessages()
     var startTime by Delegates.notNull<Long>()
 
+    val classLibrary = ClassLibrary()
     val actionManager = ActionManager()
     val uiManager = UIManager()
     val resourceManager = ResourceManager()

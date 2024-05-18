@@ -1,7 +1,7 @@
 components:
   CAMP_FIRE:
     component: "UIView"
-    displayName: "<blue>Костёр"
+    displayName: "Костёр"
     description:
       - "<text>Основное здание Вашего поселения. Является"
       - "<text>точкой возрождения команды"

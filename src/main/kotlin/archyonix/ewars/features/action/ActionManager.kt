@@ -1,24 +1,10 @@
 package archyonix.ewars.features.action
 
+import archyonix.ewars.features.classlibrary.ClassLibrary
+import archyonix.ewars.game
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
-import org.reflections.Reflections
 
-@SuppressWarnings("all")
 class ActionManager {
-    private val executorClass: MutableMap<String, Class<out Action.Executor>> = HashMap()
-
-    init {
-        val reflections = Reflections("archyonix.ewars.features.action.executors")
-        reflections.getTypesAnnotatedWith(Action.RegisteredExecutor::class.java)
-            .forEach {
-                if (it.superclass == Action.Executor::class.java) {
-                    val name = it.getAnnotation(Action.RegisteredExecutor::class.java).name
-                    @Suppress("UNCHECKED_CAST")
-                    executorClass[name] = it as Class<out Action.Executor>
-                }
-            }
-    }
-
     fun readActions(config: ConfigurationSection?): Set<Action> {
         val actionSet: MutableSet<Action> = HashSet()
         if (config == null) return actionSet
@@ -36,9 +22,10 @@ class ActionManager {
     }
 
     private fun createExecutor(name: String, properties: Map<String, Any> = HashMap()): Action.Executor? {
-        val exClass = executorClass[name] ?: return null
-        return exClass.getDeclaredConstructor(Map::class.java)
-            .newInstance(properties)
+        val exConstructor = game.classLibrary
+            .findConstructor<Action.Executor>(name, ClassLibrary.Type.EXECUTOR) ?: return null
+        
+        return exConstructor.newInstance(properties)
     }
 
     private fun readProperties(config: ConfigurationSection): Map<String, Any> {

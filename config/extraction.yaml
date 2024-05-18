@@ -7,9 +7,6 @@ LEAVES:
   swap: "minecraft:air"
   unions: "build_tool"
   extractor: "DEFAULT"
-  recovery:
-    enabled: false
-    seconds:
 
 ORE_BUILD_TOOL:
   blocks: "minecraft:iron_ore"
@@ -33,9 +30,6 @@ LOG:
   swap: "minecraft:air"
   unions: "axe"
   extractor: "TREE"
-  recovery:
-    enabled: false
-    seconds: 0
 
 MAGMA:
   blocks: "minecraft:magma_block"

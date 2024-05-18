@@ -10,10 +10,11 @@ import archyonix.ewars.entities.player.addItem
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.features.action.Action
+import archyonix.ewars.features.classlibrary.ClassLibrary
 import net.minestom.server.entity.Player
 import net.minestom.server.item.ItemStack
 
-@Action.RegisteredExecutor("GIVE_ITEM")
+@ClassLibrary.RegisteredClass("GIVE_ITEM", ClassLibrary.Type.EXECUTOR)
 class GiveItemExecutor(
     properties: Map<String, Any>
 ) : Action.Executor(properties) {

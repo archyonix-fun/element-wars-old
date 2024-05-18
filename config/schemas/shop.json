@@ -13,7 +13,7 @@
           "type": "object",
           "properties": {
             "cost": {
-              "$ref": "cost.json"
+              "$ref": "types/cost.json"
             },
             "icon": {
               "type": "object",
@@ -36,7 +36,7 @@
             "actions": {
               "patternProperties": {
                 ".*": {
-                  "$ref": "action.json#/definitions/ui"
+                  "$ref": "types/action.json#/definitions/ui"
                 }
               }
             }

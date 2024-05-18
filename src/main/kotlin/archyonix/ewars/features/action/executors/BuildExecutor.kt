@@ -7,11 +7,12 @@ import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.structure.controllers.StructureTower
 import archyonix.ewars.entities.structure.functions.withGrid
 import archyonix.ewars.features.action.Action
+import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game.functions.ActionBar
 import archyonix.ewars.structureManager
 import net.minestom.server.entity.Player
 
-@Action.RegisteredExecutor("BUILD/REPAIR")
+@ClassLibrary.RegisteredClass("BUILD/REPAIR", ClassLibrary.Type.EXECUTOR)
 class BuildExecutor(
     properties: Map<String, Any>
 ) : Action.Executor(properties) {
