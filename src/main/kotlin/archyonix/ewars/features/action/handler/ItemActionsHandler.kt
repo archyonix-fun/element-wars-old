@@ -11,19 +11,23 @@ import net.minestom.server.event.player.PlayerUseItemEvent
 
 class ItemActionsHandler : PublicEventNode("item-actions") {
     init {
+        priority = 0
         addListener(PlayerBlockInteractEvent::class.java) { event ->
+            if (event.isCancelled) return@addListener
             if (event.hand != Player.Hand.MAIN) return@addListener
             val item = event.player.itemInMainHand.asGameItem() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
             item.executeAction(event.player, "RIGHT_CLICK_BLOCK")
         }
         addListener(PlayerUseItemEvent::class.java) { event ->
+            if (event.isCancelled) return@addListener
             if (event.hand != Player.Hand.MAIN) return@addListener
             val item = event.player.itemInMainHand.asGameItem() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
             item.executeAction(event.player, "RIGHT_CLICK")
         }
         addListener(PlayerHandAnimationEvent::class.java) { event ->
+            if (event.isCancelled) return@addListener
             if (event.hand != Player.Hand.MAIN) return@addListener
             val item = event.player.itemInMainHand.asGameItem() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
@@ -33,6 +37,7 @@ class ItemActionsHandler : PublicEventNode("item-actions") {
             else item.executeAction(event.player, "LEFT_CLICK")
         }
         addListener(PlayerSwapItemEvent::class.java) { event ->
+            if (event.isCancelled) return@addListener
             val item = event.player.itemInMainHand.asGameItem() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
             item.executeAction(event.player, "SWAP")

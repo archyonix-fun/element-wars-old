@@ -3,6 +3,7 @@ package archyonix.ewars.features.action
 import net.minestom.server.entity.Player
 
 class Action(
+    val id: String,
     val triggers: Set<String>,
     private val executor: Executor
 ) {

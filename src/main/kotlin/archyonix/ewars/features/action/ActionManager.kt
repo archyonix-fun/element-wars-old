@@ -30,7 +30,7 @@ class ActionManager {
             val properties = readProperties(actionData)
 
             val executor = createExecutor(executorName, properties) ?: continue
-            actionSet.add(Action(triggers, executor))
+            actionSet.add(Action(actionId, triggers, executor))
         }
         return actionSet
     }
