@@ -3,14 +3,13 @@ package archyonix.ewars.entities.`$structure`.controllers
 import archyonix.ewars.entities.`$structure`.Structure
 import archyonix.ewars.entities.`$structure`.events.*
 import archyonix.ewars.entities.region.Zone
+import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.shared.libs.getDirection
 import net.minestom.server.instance.block.Block
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import kotlin.math.round
 
-class DefaultController(
-    config: ConfigurationSection
-) : Structure.Config.Controller(config) {
+class DefaultController : Structure.Config.Controller(null) {
     init {
         addListener(CalculateStructurePositionEvent::class.java) { event ->
             event.resultPosition = event.builder.position

@@ -1,7 +1,12 @@
 package archyonix.ewars.entities.`$structure`
 
+import archyonix.ewars.entities.`$structure`.controllers.DefaultController
+import archyonix.ewars.entities.`$structure`.events.*
+import archyonix.ewars.entities.region.Region3D
+import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.entities.structure.Dependence
 import archyonix.ewars.entities.team.GameTeam
+import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.features.shop.CostInfo
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.AppSchema
@@ -9,16 +14,92 @@ import net.minestom.server.coordinate.Point
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode
 import net.minestom.server.event.PublicEventNode
+import net.minestom.server.instance.block.Block
 import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
+import java.util.*
+import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.min
 
 class Structure(
     val id: String,
     val position: Point,
     val direction: Direction,
-    val team: GameTeam
+    val team: GameTeam,
+    private val buildZone: Zone,
 ) {
+    val config = game.structureManager.getConfig(id)
+    val properties: MutableMap<String, Any?> = HashMap()
+    private var currentVariant: Config.Variant? = null
+    private var process: Process = Process(Process.Type.IDLE)
 
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getProperty(key: String) =
+        properties[key] as T?
+
+    fun <T> setProperty(key: String, value: Any?) {
+        properties[key] = value
+    }
+
+    fun changeVariant(variantId: String): Boolean {
+        if (process.type != Process.Type.IDLE) return false
+        val foundedVariant = config.variants.find { it.id == variantId }
+            ?: throw RuntimeException("Variant with id `$variantId` is not exists")
+        return changeVariant(foundedVariant)
+    }
+
+    fun changeVariant(variant: Config.Variant): Boolean {
+        if (!config.variants.contains(variant))
+            throw RuntimeException("The transmitted variant `${variant.id}` is not intended for this structure")
+
+        if (process.type != Process.Type.IDLE) return false
+        val processType = if (currentVariant == null) Process.Type.BUILDING else Process.Type.UPGRADE
+        val changeVariantEvent = StructureChangeVariantEvent(this, variant)
+        config.handler.call(changeVariantEvent)
+        currentVariant = changeVariantEvent.resultVariant
+
+        buildZone.fill(Block.AIR)
+        process = Process(processType, currentVariant!!.buildPoints, 0)
+        currentVariant?.installBlueprint(config, position, direction)
+        return true
+    }
+
+    fun build(value: Int): Boolean {
+        if (process.hasFinished()) return false
+        val startProgress = process.getProgress()
+
+        val buildEvent = StructureBuildEvent(this, value)
+        config.handler.call(buildEvent)
+        process.addProgress(buildEvent.buildPoints)
+
+        return if (startProgress < process.getProgress()) {
+            build(startProgress)
+            true
+        } else false
+    }
+
+    private fun build(startProgress: Float) {
+        currentVariant?.schema?.build(
+            game.instance, direction, position, team,
+            startProgress, process.getProgress(),
+            useEffects = true
+        )
+    }
+
+    fun deconstruct(): Boolean {
+        val deconstructEvent = StructureDeconstructEvent(this)
+        config.handler.call(deconstructEvent)
+        if (deconstructEvent.isCancelled) return false
+        buildZone.fill(Block.AIR)
+        return true
+    }
+
+    fun getVariant() = currentVariant
+    fun getProcess() = process
+
+    // Child classed
     class Config(
         config: ConfigurationSection
     ) {
@@ -42,11 +123,39 @@ class Structure(
             }
             return@run variantList
         }
+        val controllers: List<Controller> = run {
+            val section = config.getConfigurationSection("controllers")
+                ?: return@run listOf(DefaultController())
+            val controllerList: MutableList<Controller> = ArrayList()
+            for (id in section.getKeys(false)) {
+                val controllerConfig = section.getConfigurationSection(id) ?: continue
+                val controllerConstructor = game.classLibrary
+                    .findConstructor<Controller>(id, ClassLibrary.Type.STRUCTURE_CONTROLLER)
+                    ?: throw RuntimeException("Controller with id `$id` is not exists")
+                controllerList.add(controllerConstructor.newInstance(controllerConfig))
+            }
+            controllerList.add(DefaultController())
+            for (controller in controllerList) handler.addChild(controller)
+
+            return@run controllerList
+        }
+
+        val defaultVariant = run {
+            if (variants.isEmpty()) throw RuntimeException("Field variants is empty")
+            return@run variants[0]
+        }
 
         init {
             game.handler.addChild(handler)
         }
+
         // Functions
+        fun hasController(controllerName: String): Boolean {
+            val foundedController = controllers
+                .filter { it.javaClass.isAnnotationPresent(ClassLibrary.RegisteredClass::class.java) }
+                .find { it.javaClass.getAnnotation(ClassLibrary.RegisteredClass::class.java).name == id.uppercase() }
+            return foundedController != null
+        }
 
         fun checkBuildingLimit(team: GameTeam): Boolean {
             return if (buildingLimit == 0) true
@@ -87,6 +196,7 @@ class Structure(
             config: ConfigurationSection,
             defaultSettings: DefaultSettings
         ) {
+            val id: String = config.name
             val name: String = config.getString("name")
                 ?: defaultSettings.name
                 ?: throw RuntimeException("Field name is null")
@@ -105,10 +215,83 @@ class Structure(
                 ?: emptyList()
             val buildPoints: Int = config
                 .getInt("buildPoints", defaultSettings.buildPoints)
+
+            fun installBlueprint(config: Config, position: Point, direction: Direction) {
+                val radius = floor(config.area.size / 2.0).toInt()
+                val point = position.add((-radius).toDouble(), .0, (-radius).toDouble())
+                schema.build(game.instance, direction, point)
+            }
+
+            fun checkDependencies(team: GameTeam): Boolean {
+                for (dependency in dependencies) {
+                    if (!dependency.check(team)) return false
+                }
+                return true
+            }
         }
 
         abstract class Controller(
-            config: ConfigurationSection
+            config: ConfigurationSection?
         ) : PublicEventNode("structure-controller")
+    }
+
+    class Process(
+        val type: Type,
+        private var maxValue: Int = 0,
+        private var currentValue: Int = 0
+    ) {
+        private val startTime = Date().time + 0
+        private var updateTime = Date().time + 0
+
+        fun addProgress(value: Int) {
+            currentValue = max(value, maxValue)
+        }
+
+        fun subProgress(value: Int) {
+            currentValue = min(value, 0)
+        }
+
+        fun hasFinished() = calcProgress() == 1f
+        fun getProgress() = calcProgress()
+        fun startTime() = startTime
+        fun updateTime() = updateTime
+        private fun calcProgress() = currentValue / maxValue.toFloat()
+        enum class Type { BUILDING, IDLE, UPGRADE, REPAIR }
+    }
+
+    class Extension(
+        private val parent: Structure,
+        val config: Config,
+        val position: Point,
+        val direction: Direction
+    ) {
+        val region3D: Region3D = Region3D.fromSizeArea(position, config.area)
+        fun build() {
+            val extensionStartBuildingEvent = StructureExtensionStartBuildingEvent(parent, this)
+            parent.config.handler.call(extensionStartBuildingEvent)
+            config.schema.build(game.instance, direction, position, parent.team)
+        }
+
+        fun deconstruct(): Boolean {
+            val extensionDeconstructEvent = StructureExtensionDeconstructEvent(parent, this)
+            parent.config.handler.call(extensionDeconstructEvent)
+            if (extensionDeconstructEvent.isCancelled) return false
+            config.schema.fillWithOutAir(game.instance, position, direction, Block.AIR)
+            return true
+        }
+
+        class Config(
+            config: ConfigurationSection
+        ) {
+            val id: String = config.name
+            val area: Structure.Config.Area = Structure.Config.Area(
+                config.getConfigurationSection("area")
+                    ?: throw RuntimeException("Field area is null")
+            )
+            val schema: AppSchema = AppSchema(
+                config.getString("schema")
+                    ?: throw RuntimeException("Field schema is null")
+            )
+        }
     }
 }

@@ -36,6 +36,11 @@ class StructureManager {
             return false
         }
 
+        if (!structureConfig.defaultVariant.checkDependencies(structureTeam)) {
+            builder.showActionBar("Не все тебования выполнены", MessageType.WARNING)
+            return false
+        }
+
         val calcPositionEvent = CalculateStructurePositionEvent(structureConfig, builder)
         structureConfig.handler.call(calcPositionEvent)
         val position = calcPositionEvent.resultPosition
@@ -65,9 +70,19 @@ class StructureManager {
         structureConfig.handler
             .call(PrepareBuildZoneEvent(structureConfig, buildZoneAir, buildZoneBase))
 
-        val structure = Structure(structureId, position, direction, builder.gameTeam())
+        val structure = Structure(structureId, position, direction, builder.gameTeam(), buildZoneAir)
         structureSet.add(structure)
 
+        val startBuildingEvent = StructureStartBuildingEvent(structure, structureConfig.defaultVariant)
+        structureConfig.handler.call(startBuildingEvent)
+        structure.changeVariant(startBuildingEvent.resultVariant)
+
+        return true
+    }
+
+    fun deconstructStructure(structure: Structure): Boolean {
+        if (!structure.deconstruct()) return false
+        structureSet.remove(structure)
         return true
     }
 

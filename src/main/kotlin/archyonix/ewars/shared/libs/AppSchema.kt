@@ -152,7 +152,7 @@ class AppSchema(path: String) {
         instance: Instance,
         direction: Direction,
         pos: Point,
-        team: GameTeam,
+        team: GameTeam? = null,
         percentS: Float = 0F,
         percentE: Float = 1F,
         useEffects: Boolean = false
@@ -204,7 +204,7 @@ class AppSchema(path: String) {
 
     fun fillWithOutAir(
         instance: Instance,
-        pos: Pos,
+        pos: Point,
         direction: Direction,
         fillingBlock: Block,
     ): CompletableFuture<Region?> {

@@ -1,7 +1,6 @@
 package archyonix.ewars.entities.region
 
 import archyonix.ewars.game
-import net.minestom.server.coordinate.Pos
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.instance.block.Block
 import java.util.*
@@ -14,6 +13,14 @@ class Zone(
     private val maxY: Int,
     private val maxZ: Int,
 ) {
+    companion object {
+        fun fromRegion3D(region3D: Region3D): Zone =
+            Zone(
+                region3D.startX, region3D.startY, region3D.startZ,
+                region3D.endX, region3D.endY, region3D.endZ
+            )
+    }
+
     fun notSolidBlockCount(limit: Int = Int.MAX_VALUE): Int {
         var count = 0
         val instance = game.instance

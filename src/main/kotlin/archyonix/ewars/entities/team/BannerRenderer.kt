@@ -11,10 +11,10 @@ import java.io.StringReader
 
 
 class BannerRenderer(
-    team: GameTeam,
+    team: GameTeam?,
 ) {
-    private val firstColor = DyeColor.valueOf(team.bannerColorFirst)
-    private val secondColor = DyeColor.valueOf(team.bannerColorSecond)
+    private val firstColor = if(team != null) DyeColor.valueOf(team.bannerColorFirst) else DyeColor.WHITE
+    private val secondColor = if(team != null) DyeColor.valueOf(team.bannerColorSecond) else DyeColor.WHITE
     private val compound = SNBTParser(
         StringReader(
             "{Patterns:[{Color:${firstColor.ordinal},Pattern:\"gra\"},{Color:${secondColor.ordinal},Pattern:\"gru\"}]}"

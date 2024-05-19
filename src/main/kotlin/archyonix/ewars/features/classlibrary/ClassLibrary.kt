@@ -44,6 +44,7 @@ class ClassLibrary {
     ) {
         EXECUTOR(arrayOf(Map::class.java)),
         EXTRACTOR(arrayOf(ConfigurationSection::class.java)),
-        UI(arrayOf(Player::class.java))
+        UI(arrayOf(Player::class.java)),
+        STRUCTURE_CONTROLLER(arrayOf(ConfigurationSection::class.java)),
     }
 }
