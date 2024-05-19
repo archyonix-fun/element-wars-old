@@ -9,7 +9,7 @@ import net.minestom.server.instance.block.Block
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import kotlin.math.round
 
-class DefaultController : Structure.Config.Controller(null) {
+class DefaultController : Structure.Config.Controller("DEFAULT") {
     init {
         addListener(CalculateStructurePositionEvent::class.java) { event ->
             event.resultPosition = event.builder.position
