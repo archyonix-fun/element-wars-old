@@ -3,11 +3,23 @@ package archyonix.ewars.features.shop
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.resource.Resource
 import net.minestom.server.entity.Player
+import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.util.*
 
 class CostInfo(
     private val resources: Map<Resource, Int> = EnumMap(Resource::class.java)
 ) {
+    companion object {
+        fun import(section: ConfigurationSection?): CostInfo? {
+            if(section == null) return null
+            val resources: MutableMap<Resource, Int> = EnumMap(Resource::class.java)
+            for (key in section.getKeys(false)) {
+                val resource = Resource.values().find { it.name == key } ?: continue
+                resources[resource] = section.getInt(key)
+            }
+            return CostInfo(resources)
+        }
+    }
     fun isEmpty() = resources.isEmpty()
 
     fun buildLore(): List<String> {

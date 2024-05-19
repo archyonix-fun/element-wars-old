@@ -17,6 +17,7 @@ fun main(args: Array<String>) {
 
     gameArgs = GameArgs(args)
     game = Game()
+    game.init()
 
     events = ServerEventHandler()
     events.call(InitGameEvent(game))

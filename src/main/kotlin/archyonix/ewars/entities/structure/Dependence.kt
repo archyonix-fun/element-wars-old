@@ -3,11 +3,26 @@ package archyonix.ewars.entities.structure
 import archyonix.ewars.entities.structure.enums.DependenceType
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.structureManager
+import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 
 class Dependence(
     private val type: DependenceType,
     private val targets: Set<String>
 ) {
+    companion object {
+        fun import(section: ConfigurationSection?): List<Dependence>? {
+            if(section == null) return null
+            return section.getStringList("dependencies")
+                .map {
+                    val split = it.split(":")
+                    val depType = DependenceType.valueOf(split[0])
+                    val targets = split.subList(1, split.size).toSet()
+
+                    Dependence(depType, targets)
+                }
+        }
+    }
+
     private var variants: List<StructureVariant>? = null
 
     fun generateLore(team: GameTeam): String? {

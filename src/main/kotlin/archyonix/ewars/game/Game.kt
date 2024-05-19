@@ -1,5 +1,6 @@
 package archyonix.ewars.game
 
+import archyonix.ewars.entities.`$structure`.StructureManager
 import archyonix.ewars.entities.map.GameMap
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.getRole
@@ -10,6 +11,7 @@ import archyonix.ewars.features.action.ActionManager
 import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
+import archyonix.ewars.game.handler.GameEventHandler
 import archyonix.ewars.game.ui.UIManager
 import archyonix.ewars.gameArgs
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
@@ -24,12 +26,25 @@ class Game {
     val messages: Map<String, String> = loadMessages()
     var startTime by Delegates.notNull<Long>()
 
-    val classLibrary = ClassLibrary()
-    val actionManager = ActionManager()
-    val uiManager = UIManager()
-    val resourceManager = ResourceManager()
+    lateinit var classLibrary: ClassLibrary
+    lateinit var actionManager: ActionManager
+    lateinit var uiManager: UIManager
+    lateinit var resourceManager: ResourceManager
+    lateinit var handler: GameEventHandler
+    lateinit var structureManager: StructureManager
 
     val isDebug: Boolean = gameArgs.IS_DEBUG.toBooleanStrictOrNull() ?: false
+
+    fun init(): Game {
+        this.classLibrary = ClassLibrary()
+        this.actionManager = ActionManager()
+        this.uiManager = UIManager()
+        this.resourceManager = ResourceManager()
+        this.handler = GameEventHandler()
+        this.structureManager = StructureManager()
+
+        return this
+    }
 
     var stage = GameStage.EXPECTATION
         set(value) {

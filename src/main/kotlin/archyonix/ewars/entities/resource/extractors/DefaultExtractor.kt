@@ -1,12 +1,14 @@
 package archyonix.ewars.entities.resource.extractors
 
 import archyonix.ewars.entities.resource.api.Extractor
+import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game
 import net.minestom.server.coordinate.Point
 import net.minestom.server.instance.block.Block
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.time.Duration
 
+@ClassLibrary.RegisteredClass("DEFAULT", ClassLibrary.Type.EXTRACTOR)
 class DefaultExtractor(
     config: ConfigurationSection
 ) : Extractor(config) {

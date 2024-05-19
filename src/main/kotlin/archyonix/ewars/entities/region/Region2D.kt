@@ -1,6 +1,7 @@
 package archyonix.ewars.entities.region
 
 import net.minestom.server.coordinate.Point
+import kotlin.math.floor
 
 class Region2D(
     val startX: Int,
@@ -10,11 +11,20 @@ class Region2D(
 ) {
     val width = endX - startX
     val length = endZ - startZ
+
+    companion object {
+        fun fromSizeArea(pos: Point, sizeArea: Int): Region2D {
+            val radius = floor(sizeArea / 2.0).toInt()
+            val isEven = sizeArea % 2 == 0
+            return Region2D(pos, radius, isEven)
+        }
+    }
+
     constructor(pos: Point, radius: Int, isEven: Boolean = false) : this(
         pos.blockX() - radius,
         pos.blockZ() - radius,
-        pos.blockX() + radius + if(isEven) -1 else 0,
-        pos.blockZ() + radius + if(isEven) -1 else 0,
+        pos.blockX() + radius + if (isEven) -1 else 0,
+        pos.blockZ() + radius + if (isEven) -1 else 0,
     )
 
     fun contains(region: Region2D): Boolean {
@@ -34,11 +44,11 @@ class Region2D(
     }
 
     fun merge(region: Region2D): Region2D {
-        val minX = if(startX < region.startX) startX else region.startX
-        val minZ = if(startZ < region.startZ) startZ else region.startZ
+        val minX = if (startX < region.startX) startX else region.startX
+        val minZ = if (startZ < region.startZ) startZ else region.startZ
 
-        val maxX = if(endX > region.endX) endX else region.endX
-        val maxZ = if(endZ > region.endZ) endZ else region.endZ
+        val maxX = if (endX > region.endX) endX else region.endX
+        val maxZ = if (endZ > region.endZ) endZ else region.endZ
 
         return Region2D(minX, minZ, maxX, maxZ)
     }

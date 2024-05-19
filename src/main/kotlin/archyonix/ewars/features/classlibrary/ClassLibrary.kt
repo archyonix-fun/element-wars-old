@@ -1,6 +1,7 @@
 package archyonix.ewars.features.classlibrary
 
 import net.minestom.server.entity.Player
+import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import org.reflections.Reflections
 import java.lang.reflect.Constructor
 
@@ -18,7 +19,7 @@ class ClassLibrary {
         println("Registered ${library.size} classes")
     }
 
-    fun <T>findClass(name: String, type: Type): Class<T>? {
+    fun <T> findClass(name: String, type: Type): Class<T>? {
         val id = "${name}-${type.name}"
         val foundClass = library[id] ?: return null
 
@@ -26,7 +27,7 @@ class ClassLibrary {
         return foundClass as Class<T>
     }
 
-    fun <T>findConstructor(name: String, type: Type): Constructor<T>? {
+    fun <T> findConstructor(name: String, type: Type): Constructor<T>? {
         val foundedClass = findClass<T>(name, type) ?: return null
         return foundedClass.getDeclaredConstructor(*type.constructorArgs)
     }
@@ -42,7 +43,7 @@ class ClassLibrary {
         val constructorArgs: Array<Class<*>> = emptyArray()
     ) {
         EXECUTOR(arrayOf(Map::class.java)),
-        EXTRACTOR,
-        UI
+        EXTRACTOR(arrayOf(ConfigurationSection::class.java)),
+        UI(arrayOf(Player::class.java))
     }
 }

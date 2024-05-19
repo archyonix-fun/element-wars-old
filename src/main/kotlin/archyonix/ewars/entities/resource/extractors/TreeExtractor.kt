@@ -1,12 +1,14 @@
 package archyonix.ewars.entities.resource.extractors
 
 import archyonix.ewars.entities.resource.api.Extractor
+import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game
 import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.instance.block.Block
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 
+@ClassLibrary.RegisteredClass("TREE", ClassLibrary.Type.EXTRACTOR)
 class TreeExtractor(
     config: ConfigurationSection
 ) : Extractor(config) {
