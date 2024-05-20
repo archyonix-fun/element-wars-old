@@ -32,6 +32,7 @@ class GameItem private constructor(
         val FISHING_ROD = loadByName("fishing_rod")
         val PICKAXE = loadByName("pickaxe")
         val AXE = loadByName("axe")
+        val STRUCTURE_SCHEMA = loadByName("structure_schema")
 
         fun items(): Set<GameItem> =
             GameItem::class.java

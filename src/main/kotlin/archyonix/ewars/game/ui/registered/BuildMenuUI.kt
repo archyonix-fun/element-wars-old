@@ -1,6 +1,7 @@
 package archyonix.ewars.game.ui.registered
 
-import archyonix.ewars.entities.item.addStructureBuildTags
+import archyonix.ewars.entities.item.GameItem
+import archyonix.ewars.entities.item.enums.ItemVariant
 import archyonix.ewars.entities.message.Message
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.player.gameTeam
@@ -16,7 +17,6 @@ import archyonix.uikit.components.UIView
 import net.minestom.server.entity.Player
 import net.minestom.server.inventory.InventoryType
 import net.minestom.server.item.ItemStack
-import net.minestom.server.item.Material
 import net.minestom.server.tag.Tag
 
 @ClassLibrary.RegisteredClass("BUILD_MENU", ClassLibrary.Type.UI)
@@ -42,14 +42,18 @@ class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
                     it
                 }
                 .onAction {
-                    if (variant.checkDependencies(team)) {
-                        if (config.checkLimit(viewer.gameTeam())) {
-                            if (variant.costInfo.pay(viewer)) {
-                                viewer.inventory.addItemStack(getBuildItem(view.id))
-                                showByMessage(viewer, variant.displayName)
-                            } else viewer.showActionBar(Message.NOT_ENOUGH_MONEY, MessageType.WARNING)
-                        } else viewer.showActionBar(Message.BUILDING_LIMIT_EXCEEDED, MessageType.WARNING)
-                    } else viewer.showActionBar(Message.NO_DEPENDENCIES, MessageType.WARNING)
+                    if(!config.checkLimit(viewer.gameTeam())) {
+                        viewer.showActionBar(Message.BUILDING_LIMIT_EXCEEDED, MessageType.WARNING)
+                        return@onAction
+                    }
+                    if(!variant.checkDependencies(team)) {
+                        viewer.showActionBar(Message.NO_DEPENDENCIES, MessageType.WARNING)
+                        return@onAction
+                    }
+                    if (variant.costInfo.pay(viewer)) {
+                        viewer.inventory.addItemStack(getBuildItem(view.id))
+                        showByMessage(viewer, variant.displayName)
+                    } else viewer.showActionBar(Message.NOT_ENOUGH_MONEY, MessageType.WARNING)
                 }
         }
     }
@@ -68,15 +72,11 @@ class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
         val config = structureManager.getConfig(structureId)
         val variant = config.variants[0]
 
-        return ItemStack.of(Material.STICK)
+        return GameItem.STRUCTURE_SCHEMA
+            .getVariant(ItemVariant.DEFAULT)!!
+            .createItemStack(1)
             .withDisplayName(variant.displayName.withColors())
-            .withLore(
-                listOf(
-                    "<blue>Используй ПКМ для размещения",
-                    "<yellow>Используй <red>Q <yellow>чтобы продать за половину стоимости"
-                ).map { it.withColors() }
-            )
-            .addStructureBuildTags(structureId)
+            .withTag(Tag.String("structureId"), structureId)
             .withTag(Tag.String("texture"), variant.name)
     }
 }
