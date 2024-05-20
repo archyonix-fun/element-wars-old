@@ -2,7 +2,10 @@ package archyonix.ewars.entities.region
 
 import archyonix.ewars.entities.`$structure`.Structure
 import net.minestom.server.coordinate.Point
+import net.minestom.server.coordinate.Pos
 import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.min
 
 class Region3D(
     val startX: Int,
@@ -31,6 +34,11 @@ class Region3D(
         pos.blockX() + radius + if (isEven) -1 else 0,
         pos.blockY() + height - 1,
         pos.blockZ() + radius + if (isEven) -1 else 0,
+    )
+
+    constructor(startPoint: Point, endPoint: Point) : this(
+        startPoint.blockX(), startPoint.blockY(), startPoint.blockZ(),
+        endPoint.blockX(), endPoint.blockY(), endPoint.blockZ()
     )
 
     fun contains(region: Region3D): Boolean {
@@ -66,4 +74,27 @@ class Region3D(
 
         return Region3D(minX, minY, minZ, maxX, maxY, maxZ)
     }
+
+    fun findCenter(): Point {
+        val centerX = endX - (width / 2.0)
+        val centerY = endY - (height / 2.0)
+        val centerZ = endZ - (length / 2.0)
+
+        return Pos(centerX, centerY, centerZ)
+    }
+
+    fun normalize(): Region3D {
+        val minX = min(startX, endX)
+        val minY = min(startY, endY)
+        val minZ = min(startZ, endZ)
+
+        val maxX = max(startX, endX)
+        val maxY = max(startY, endY)
+        val maxZ = max(startZ, endZ)
+
+        return Region3D(minX, minY, maxZ, maxX, maxY, maxZ)
+    }
+
+    fun minPoint(): Point = Pos(startX.toDouble(), startY.toDouble(), startZ.toDouble())
+    fun maxPoint(): Point = Pos(endX.toDouble(), endY.toDouble(), endZ.toDouble())
 }

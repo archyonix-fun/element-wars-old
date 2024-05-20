@@ -69,4 +69,49 @@ controllers:
         x: 2
         z: 6
         y: 0
+  WALLS:
+    samples:
+      WALL_STRAIGHT:
+        schema: "#wallStraightSchema"
+        gateSettings:
+          schema: "#gateStraightSchema"
+          block: "#gateBlock"
+          openingDistance: 3
+          gate:
+            min:
+              x: 3
+              y: 0
+              z: 1
+            max:
+              x: 4
+              y: 2
+              z: 2
+      WALL_SLOPE:
+        schema: "#wallSlopeSchema"
+    directions:
+      NORTH_WEST:
+        extension: "NORTH_WEST"
+        sample: "WALL_SLOPE"
+      NORTH:
+        extension: "NORTH"
+        sample: "WALL_STRAIGHT"
+      EAST_NORTH:
+        extension: "EAST_NORTH"
+        sample: "WALL_SLOPE"
+      EAST:
+        extension: "EAST"
+        sample: "WALL_STRAIGHT"
+      SOUTH_EAST:
+        extension: "SOUTH_EAST"
+        sample: "WALL_SLOPE"
+      SOUTH:
+        extension: "SOUTH"
+        sample: "WALL_STRAIGHT"
+      WEST_SOUTH:
+        extension: "WEST_SOUTH"
+        sample: "WALL_SLOPE"
+      WEST:
+        extension: "WEST"
+        sample: "WALL_STRAIGHT"
+
 variants:

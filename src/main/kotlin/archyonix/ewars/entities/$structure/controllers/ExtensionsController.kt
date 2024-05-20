@@ -9,7 +9,7 @@ import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 @ClassLibrary.RegisteredClass(name = "EXTENSIONS", ClassLibrary.Type.STRUCTURE_CONTROLLER)
 open class ExtensionsController(
     config: ConfigurationSection
-) : Structure.Config.Controller("EXTENSIONS") {
+) : Structure.Config.Controller<ExtensionsController.StructureController>("EXTENSIONS") {
     private val configMap: Map<String, Structure.Extension.Config> = run {
         val extensions: MutableMap<String, Structure.Extension.Config> = HashMap()
         for (id in config.getKeys(false)) {
@@ -19,12 +19,12 @@ open class ExtensionsController(
         return@run extensions
     }
 
-    fun getConfig(extensionId: String) =
-        configMap[extensionId] ?: throw RuntimeException("Config with id `$extensionId` is not exists")
-
-    fun getStructureController(structure: Structure): StructureController {
+    override fun getStructureController(structure: Structure): StructureController {
         return StructureController(structure, this)
     }
+
+    private fun getConfig(extensionId: String) =
+        configMap[extensionId] ?: throw RuntimeException("Config with id `$extensionId` is not exists")
 
     // Child classes
     class StructureController(

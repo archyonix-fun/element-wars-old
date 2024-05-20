@@ -11,6 +11,7 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.title.Title.Times
+import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
 import net.minestom.server.utils.Direction
@@ -56,23 +57,23 @@ fun Pos.firstFromTop(): Pos {
     return Pos(x, y.toDouble(), z)
 }
 
-fun Pos.withDirection(dir: Direction, area: Short): Pos {
+fun Point.withDirection(dir: Direction, area: Short): Point {
     val width = area - 1.0
 
     val newX = when (dir) {
-        Direction.NORTH -> abs(x - width)
-        Direction.EAST -> z
-        Direction.WEST -> abs(z - width)
-        else -> x
+        Direction.NORTH -> abs(x() - width)
+        Direction.EAST -> z()
+        Direction.WEST -> abs(z() - width)
+        else -> x()
     }
     val newZ = when (dir) {
-        Direction.NORTH -> abs(z - width)
-        Direction.EAST -> abs(x - width)
-        Direction.WEST -> x
-        else -> z
+        Direction.NORTH -> abs(z() - width)
+        Direction.EAST -> abs(x() - width)
+        Direction.WEST -> x()
+        else -> z()
     }
 
-    return Pos(newX, y, newZ)
+    return Pos(newX, y(), newZ)
 }
 
 fun String.facingWithDir(direction: Direction): String {

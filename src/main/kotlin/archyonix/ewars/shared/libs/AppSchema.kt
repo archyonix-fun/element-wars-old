@@ -240,7 +240,7 @@ class AppSchema(path: String) {
         }
     }
 
-    private fun showEffect(position: Pos) {
+    private fun showEffect(position: Point) {
         val sound = Sound.sound(SoundEvent.BLOCK_WOOD_PLACE, Sound.Source.BLOCK, 1f, 1f)
         val particlePacket = ParticlePacket(
             Particle.CLOUD.id(),
