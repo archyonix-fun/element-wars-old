@@ -21,7 +21,5 @@ class StructureHandler : PublicEventNode("structure-handler") {
             structure.openUI(event.player)
             event.isCancelled = true
         }
-
-        addChild(StructureBuildHandler())
     }
 }

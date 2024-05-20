@@ -42,12 +42,12 @@ class DefaultController : Structure.Config.Controller<Any>("DEFAULT") {
             val size = event.structureConfig.area.size
             val errorLimit = round(size * size * 0.1).toInt()
             if (!event.validateAirZone(errorLimit)) {
-                event.setErrorMessage("Что-то мешает, найдите более открытое пространство")
+                event.setWarningMessage("Что-то мешает, найдите более открытое пространство")
                 event.isValid = false
                 return@addListener
             }
             if (!event.validateBaseZone(errorLimit)) {
-                event.setErrorMessage("Что-то мешает, найдите более ровную поверхность")
+                event.setWarningMessage("Что-то мешает, найдите более ровную поверхность")
                 event.isValid = false
                 return@addListener
             }

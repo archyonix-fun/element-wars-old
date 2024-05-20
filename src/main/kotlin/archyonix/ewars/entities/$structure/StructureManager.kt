@@ -63,7 +63,7 @@ class StructureManager {
         val validateBuildZoneEvent = ValidateBuildZoneEvent(structureConfig, buildZoneAir, buildZoneBase)
         structureConfig.handler.call(validateBuildZoneEvent)
         if (!validateBuildZoneEvent.isValid) {
-            builder.showActionBar(validateBuildZoneEvent.getErrorMessage(), MessageType.WARNING)
+            builder.showActionBar(validateBuildZoneEvent.getWarningMessage(), MessageType.WARNING)
             return false
         }
 
@@ -73,7 +73,7 @@ class StructureManager {
         val structure = Structure(structureId, position, direction, builder.gameTeam(), buildZoneAir)
         structureSet.add(structure)
 
-        val startBuildingEvent = StructureStartBuildingEvent(structure, structureConfig.defaultVariant)
+        val startBuildingEvent = StructurePlaceEvent(structure, structureConfig.defaultVariant)
         structureConfig.handler.call(startBuildingEvent)
         structure.changeVariant(startBuildingEvent.resultVariant)
 

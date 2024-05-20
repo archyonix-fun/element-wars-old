@@ -101,6 +101,7 @@ class Structure(
         val handler: EventNode<Event> = EventNode.all("structure-handler")
         val id: String = config.getString("id")
             ?: throw RuntimeException("Field name is null")
+        val grid: Int = config.getInt("grid", 1)
         val area: Area = Area(
             config.getConfigurationSection("area")
                 ?: throw RuntimeException("Field area is null")
@@ -251,11 +252,11 @@ class Structure(
         }
 
         abstract class Controller<T>(
-            val name: String,
+            val controllerName: String,
             val dependencies: Set<String> = emptySet()
         ) : PublicEventNode("structure-controller") {
             open fun checkDependencies(controllerList: Set<Controller<*>>): Boolean {
-                val controllers = controllerList.map { it.name }.toSet()
+                val controllers = controllerList.map { it.controllerName }.toSet()
                 return controllers.containsAll(dependencies)
             }
             open fun init(structureConfig: Config) {}
