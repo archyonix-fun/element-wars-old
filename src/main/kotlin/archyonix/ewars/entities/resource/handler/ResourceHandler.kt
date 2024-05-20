@@ -5,10 +5,8 @@ import archyonix.ewars.entities.item.functions.asGameItem
 import archyonix.ewars.entities.item.functions.asItemVariant
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
-import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.Colors
-import archyonix.ewars.structureManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.minestom.server.event.PublicEventNode
@@ -21,7 +19,7 @@ class ResourceHandler : PublicEventNode("resource-handler") {
 
     init {
         addListener(PlayerBlockBreakEvent::class.java) { event ->
-            if (structureManager.findStructure<Structure>(event.blockPosition) != null) return@addListener
+            if (game.structureManager.findStructure3D(event.blockPosition) != null) return@addListener
             val itemStack = event.player.itemInMainHand
             val gameItem = itemStack.asGameItem() ?: return@addListener
             val itemVariant = itemStack.asItemVariant() ?: return@addListener

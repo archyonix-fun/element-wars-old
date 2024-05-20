@@ -57,6 +57,24 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="Structure">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="Structure" />
+              <option name="relativePathToSchema" value="config/schemas/structure.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="pattern" value="true" />
+                    <option name="path" value="config/structures/*/structure.yaml" />
+                    <option name="mappingKind" value="Pattern" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
       </map>
     </state>
   </component>

@@ -1,6 +1,6 @@
 package archyonix.ewars.features.action.executors
 
-import archyonix.ewars.entities.`$structure`.events.StructurePrePlaceEvent
+import archyonix.ewars.entities.structure.events.StructurePrePlaceEvent
 import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.item.functions.asGameItem
 import archyonix.ewars.features.action.Action

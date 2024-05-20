@@ -1,9 +1,8 @@
 package archyonix.ewars.shared.libs
 
 import archyonix.ewars.entities.resource.Resource
-import archyonix.ewars.entities.structure.Dependence
-import archyonix.ewars.entities.structure.enums.DependenceType
 import archyonix.ewars.features.shop.CostInfo
+import archyonix.ewars.features.shop.Dependence
 import archyonix.ewars.game
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
@@ -209,7 +208,7 @@ fun ConfigurationSection.loadDependencies(): List<Dependence> {
     return getStringList("dependencies")
         .map {
             val split = it.split(":")
-            val depType = DependenceType.valueOf(split[0])
+            val depType = Dependence.DependenceType.valueOf(split[0])
             val targets = split.subList(1, split.size).toSet()
 
             Dependence(depType, targets)

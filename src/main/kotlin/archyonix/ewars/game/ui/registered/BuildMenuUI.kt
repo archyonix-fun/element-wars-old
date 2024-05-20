@@ -7,11 +7,11 @@ import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.features.classlibrary.ClassLibrary
+import archyonix.ewars.game
 import archyonix.ewars.game.ui.GameUI
 import archyonix.ewars.shared.libs.UIs
 import archyonix.ewars.shared.libs.withColors
 import archyonix.ewars.shared.libs.withProperties
-import archyonix.ewars.structureManager
 import archyonix.uikit.annotations.UIPreset
 import archyonix.uikit.components.UIView
 import net.minestom.server.entity.Player
@@ -29,11 +29,11 @@ class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
         for (component in components) {
             val view = component as UIView
 
-            val config = structureManager.getConfig(view.id)
+            val config = game.structureManager.getConfig(view.id)
             val variant = config.variants[0]
 
             val description = view.description as MutableList<String>
-            description.addAll(variant.buildLore(team))
+            //description.addAll(variant.buildLore(team))
 
             view
                 .withDescription(description)
@@ -42,7 +42,7 @@ class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
                     it
                 }
                 .onAction {
-                    if(!config.checkLimit(viewer.gameTeam())) {
+                    if(!config.checkBuildingLimit(viewer.gameTeam())) {
                         viewer.showActionBar(Message.BUILDING_LIMIT_EXCEEDED, MessageType.WARNING)
                         return@onAction
                     }
@@ -50,9 +50,9 @@ class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
                         viewer.showActionBar(Message.NO_DEPENDENCIES, MessageType.WARNING)
                         return@onAction
                     }
-                    if (variant.costInfo.pay(viewer)) {
+                    if (variant.cost.pay(viewer)) {
                         viewer.inventory.addItemStack(getBuildItem(view.id))
-                        showByMessage(viewer, variant.displayName)
+                        showByMessage(viewer, variant.name)
                     } else viewer.showActionBar(Message.NOT_ENOUGH_MONEY, MessageType.WARNING)
                 }
         }
@@ -69,14 +69,14 @@ class BuildMenuUI(viewer: Player) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
     }
 
     private fun getBuildItem(structureId: String): ItemStack {
-        val config = structureManager.getConfig(structureId)
+        val config = game.structureManager.getConfig(structureId)
         val variant = config.variants[0]
 
         return GameItem.STRUCTURE_SCHEMA
             .getVariant(ItemVariant.DEFAULT)!!
             .createItemStack(1)
-            .withDisplayName(variant.displayName.withColors())
+            .withDisplayName(variant.name.withColors())
             .withTag(Tag.String("structureId"), structureId)
-            .withTag(Tag.String("texture"), variant.name)
+            .withTag(Tag.String("texture"), variant.id)
     }
 }

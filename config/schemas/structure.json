@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Structure",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "grid": {
+      "type": "integer"
+    },
+    "area": {
+      "$ref": "types/area.json"
+    },
+    "buildingLimit": {
+      "type": "integer"
+    },
+    "controllers": {
+      "type": "object",
+      "properties": {
+        "EXTENSIONS": {
+          "$ref": "controller/extensions.json"
+        },
+        "WALLS": {
+          "$ref": "controller/walls.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "variants": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "schema": {
+              "type": "string"
+            },
+            "cost": {
+              "$ref": "types/cost.json"
+            },
+            "dependencies": {
+              "type": "array"
+            },
+            "buildPoints": {
+              "type": "integer",
+              "pattern": ">0"
+            },
+            "properties": {
+              "type": "object",
+              "patternProperties": {
+                ".*": {
+                  "type": [
+                    "string",
+                    "integer",
+                    "number",
+                    "boolean"
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": ["name", "schema", "buildPoints"]
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["id", "area", "variants"]
+}

@@ -1,17 +1,14 @@
-name: "BUILDER_HUT"
-height: 12
-area: 11
+id: "BUILDER_HUT"
+area:
+  height: 12
+  size: 11
+buildingLimit: 1
 
-limit: 1
-tags:
-  - "BREAKABLE"
 
 variants:
   BUILDER_HUT:
-    displayName: "Хижина строителя"
+    name: "Хижина строителя"
+    schema: "builder_hut.schem"
     buildPoints: 15
-    schema: "schemas/builder_hut.schem"
     cost:
       NATURAL_CRYSTAL: 25
-    data:
-      health: 100

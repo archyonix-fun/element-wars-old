@@ -1,17 +1,17 @@
 components:
-  CAMP_FIRE:
-    component: "UIView"
-    displayName: "Костёр"
-    description:
-      - "<text>Основное здание Вашего поселения. Является"
-      - "<text>точкой возрождения команды"
-      - ""
-      - "<blue>? Является точкой возрождения команды"
-    order: 0
-    tags:
-      texture: "CAMP_FIRE"
-    icon: "minecraft:stick"
-    pos: "1:1"
+  #CAMP_FIRE:
+  #  component: "UIView"
+  #  displayName: "Костёр"
+  #  description:
+  #    - "<text>Основное здание Вашего поселения. Является"
+  #    - "<text>точкой возрождения команды"
+  #    - ""
+  #    - "<blue>? Является точкой возрождения команды"
+  #  order: 0
+  #  tags:
+  #    texture: "CAMP_FIRE"
+  #  icon: "minecraft:stick"
+  #  pos: "1:1"
   BUILDER_HUT:
     component: "UIView"
     displayName: "Хижина строителя"
@@ -25,32 +25,32 @@ components:
       texture: "BUILDER_HUT"
     icon: "minecraft:stick"
     pos: "2:1"
-  CRAFTSMAN_HOUSE:
-    component: "UIView"
-    displayName: "Дом ремесленника (Дерево)"
-    description:
-      - "<text>Открывает доступ к инструментам, что"
-      - "<text>значительно упрощает добычу ресурсов"
-      - ""
-      - "<blue>? Базовые нструменты"
-    order: 0
-    tags:
-      texture: "WOOD_CRAFTSMAN_HOUSE"
-    icon: "minecraft:stick"
-    pos: "3:1"
-  MILL:
-    component: "UIView"
-    displayName: "Мельница"
-    description:
-      - "<text>Вас замучал голод? Тогда данное здание"
-      - "<text>именно то, что вам нужно."
-      - ""
-      - "<blue>? Можно преобрести еду"
-    order: 0
-    tags:
-      texture: "MILL"
-    icon: "minecraft:stick"
-    pos: "4:1"
+  #CRAFTSMAN_HOUSE:
+  #  component: "UIView"
+  #  displayName: "Дом ремесленника (Дерево)"
+  #  description:
+  #    - "<text>Открывает доступ к инструментам, что"
+  #    - "<text>значительно упрощает добычу ресурсов"
+  #    - ""
+  #    - "<blue>? Базовые нструменты"
+  #  order: 0
+  #  tags:
+  #    texture: "WOOD_CRAFTSMAN_HOUSE"
+  #  icon: "minecraft:stick"
+  #  pos: "3:1"
+  #MILL:
+  #  component: "UIView"
+  #  displayName: "Мельница"
+  #  description:
+  #    - "<text>Вас замучал голод? Тогда данное здание"
+  #    - "<text>именно то, что вам нужно."
+  #    - ""
+  #    - "<blue>? Можно преобрести еду"
+  #  order: 0
+  #  tags:
+  #    texture: "MILL"
+  #  icon: "minecraft:stick"
+  #  pos: "4:1"
   TOWER:
     component: "UIView"
     displayName: "Деревянная Башня"

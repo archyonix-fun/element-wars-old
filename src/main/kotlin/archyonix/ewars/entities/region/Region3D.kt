@@ -1,6 +1,6 @@
 package archyonix.ewars.entities.region
 
-import archyonix.ewars.entities.`$structure`.Structure
+import archyonix.ewars.entities.structure.Structure
 import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Pos
 import kotlin.math.floor

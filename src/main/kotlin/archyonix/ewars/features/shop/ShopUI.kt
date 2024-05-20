@@ -13,11 +13,11 @@ class ShopUI(
     viewer: Player,
     structure: Structure
 ) : GameUI(viewer, InventoryType.CHEST_6_ROW) {
-    private val items = structure.config.shopItems()
+    //private val items = structure.config.shopItems()
 
     init {
-        withDisplayName(UIs.valueOf(structure.config.uiName).title)
-        for (item in items) withComponent(item.createView(viewer))
+        //withDisplayName(UIs.valueOf(structure.config.uiName).title)
+        //for (item in items) withComponent(item.createView(viewer))
 
         findComponent<UIView>("deconstruct")
             ?.onAction {

@@ -1,6 +1,6 @@
 package archyonix.ewars.game
 
-import archyonix.ewars.entities.`$structure`.StructureManager
+import archyonix.ewars.entities.structure.StructureManager
 import archyonix.ewars.entities.map.GameMap
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.getRole

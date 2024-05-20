@@ -78,11 +78,11 @@ controllers:
           block: "#gateBlock"
           openingDistance: 3
           gate:
-            min:
+            startPoint:
               x: 3
               y: 0
               z: 1
-            max:
+            endPoint:
               x: 4
               y: 2
               z: 2

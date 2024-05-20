@@ -11,6 +11,7 @@ import archyonix.ewars.shared.libs.withColors
 import net.minestom.server.attribute.Attribute
 import net.minestom.server.attribute.AttributeOperation
 import net.minestom.server.entity.Player
+import net.minestom.server.item.ItemHideFlag
 import net.minestom.server.item.ItemStack
 import net.minestom.server.item.Material
 import net.minestom.server.item.attribute.AttributeSlot
@@ -131,13 +132,18 @@ class GameItem private constructor(
                 it.attributes(
                     listOf(
                         ItemAttribute(
-                            UUID.randomUUID(),
+                            UUID.fromString("d541bf47-0e97-4591-984e-9f0882d75d98"),
                             Attribute.ATTACK_SPEED.key,
                             Attribute.ATTACK_SPEED,
                             AttributeOperation.ADDITION,
                             8.0, AttributeSlot.MAINHAND
                         )
                     )
+                ).hideFlag(
+                    ItemHideFlag.HIDE_UNBREAKABLE,
+                    ItemHideFlag.HIDE_ATTRIBUTES,
+                    ItemHideFlag.HIDE_ENCHANTS,
+                    ItemHideFlag.HIDE_POTION_EFFECTS,
                 )
             }
 

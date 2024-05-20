@@ -1,22 +1,129 @@
-name: "TOWER"
-height: 12
-area: 12
-ui: "TOWER_MENU"
-tags:
-  - "BREAKABLE"
+id: "TOWER"
+area:
+  height: 8
+  size: 12
+grid: 12
+buildingLimit: 0
+controllers:
+  EXTENSIONS:
+    NORTH_WEST:
+      area:
+        height: 5
+        size: 4
+      position:
+        x: 2
+        z: 2
+        y: 0
+    NORTH:
+      area:
+        height: 5
+        size: 4
+      position:
+        x: 6
+        z: 2
+        y: 0
+    EAST_NORTH:
+      area:
+        height: 5
+        size: 4
+      position:
+        x: 10
+        z: 2
+        y: 0
+    EAST:
+      area:
+        height: 5
+        size: 4
+      position:
+        x: 10
+        z: 6
+        y: 0
+    SOUTH_EAST:
+      area:
+        height: 5
+        size: 4
+      position:
+        x: 10
+        z: 10
+        y: 0
+    SOUTH:
+      area:
+        height: 5
+        size: 4
+      position:
+        x: 6
+        z: 10
+        y: 0
+    WEST_SOUTH:
+      area:
+        height: 5
+        size: 4
+      position:
+        x: 2
+        z: 10
+        y: 0
+    WEST:
+      area:
+        height: 5
+        size: 4
+      position:
+        x: 2
+        z: 6
+        y: 0
+  WALLS:
+    samples:
+      WALL_STRAIGHT:
+        schema: "#wallStraightSchema"
+        gateSettings:
+          schema: "#gateStraightSchema"
+          block: "#gateBlock"
+          openingDistance: 3
+          gate:
+            startPoint:
+              x: 3
+              y: 0
+              z: 1
+            endPoint:
+              x: 4
+              y: 2
+              z: 2
+      WALL_SLOPE:
+        schema: "#wallSlopeSchema"
+    directions:
+      NORTH_WEST:
+        extension: "NORTH_WEST"
+        sample: "WALL_SLOPE"
+      NORTH:
+        extension: "NORTH"
+        sample: "WALL_STRAIGHT"
+      EAST_NORTH:
+        extension: "EAST_NORTH"
+        sample: "WALL_SLOPE"
+      EAST:
+        extension: "EAST"
+        sample: "WALL_STRAIGHT"
+      SOUTH_EAST:
+        extension: "SOUTH_EAST"
+        sample: "WALL_SLOPE"
+      SOUTH:
+        extension: "SOUTH"
+        sample: "WALL_STRAIGHT"
+      WEST_SOUTH:
+        extension: "WEST_SOUTH"
+        sample: "WALL_SLOPE"
+      WEST:
+        extension: "WEST"
+        sample: "WALL_STRAIGHT"
 
 variants:
   WOOD_TOWER:
-    displayName: "Деревянная башня"
+    name: "Деревянная башня"
     buildPoints: 5
-    schema: "schemas/wood_tower.schem"
-    dependencies:
-      - "STRUCTURE:BUILDER_HUT"
+    schema: "wood_tower.schem"
     cost:
       NATURAL_CRYSTAL: 50
-    data:
-      wallSchema-straight: "schemas/wood_wall-straight.schem"
-      wallSchema-slope: "schemas/wood_wall-slope.schem"
-      gateSchema: "schemas/wood_gate.schem"
-      gatePattern: 1
-      health: 100
+    properties:
+      wallStraightSchema: "wood_wall-straight.schem"
+      gateStraightSchema: "wood_gate.schem"
+      gateBlock: "wood_wall-slope.schem"
+      wallSlopeSchema: "wood_wall-slope.schem"
