@@ -6,6 +6,7 @@
     "FISH",
     "OPEN_UI",
     "STRUCTURE_UI",
-    "GIVE_ITEM"
+    "GIVE_ITEM",
+    "STRUCTURE_PLACE"
   ]
 }

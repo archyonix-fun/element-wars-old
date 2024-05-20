@@ -28,6 +28,7 @@
               {
                 "enum": [
                   "TOOL",
+                  "ITEM",
                   "WEAPON_MELEE",
                   "WEAPON_RANGE"
                 ]
