@@ -1,14 +1,23 @@
 package archyonix.ewars.entities.structure.controllers
 
-import archyonix.ewars.entities.structure.Structure
+import archyonix.ewars.entities.item.GameItem
+import archyonix.ewars.entities.item.functions.hasGameItem
+import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region3D
 import archyonix.ewars.entities.region.Zone
+import archyonix.ewars.entities.structure.Structure
+import archyonix.ewars.entities.structure.events.StructureDeconstructEvent
+import archyonix.ewars.entities.structure.events.StructureUpdateEvent
+import archyonix.ewars.entities.structure.functions.showRegion
+import archyonix.ewars.entities.structure.types.StructureOffset
 import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.AppSchema
 import archyonix.ewars.shared.libs.config.Properties
 import archyonix.ewars.shared.libs.withDirection
+import net.minestom.server.coordinate.Point
 import net.minestom.server.entity.EntityType
+import net.minestom.server.entity.Player
 import net.minestom.server.instance.block.Block
 import net.minestom.server.tag.Tag
 import net.minestom.server.utils.Direction
@@ -21,6 +30,31 @@ class WallController(
 ) : Structure.Config.Controller<WallController.StructureController>("WALLS", setOf("EXTENSIONS")) {
     val config: Config = Config(config)
     private lateinit var extensions: ExtensionsController
+
+    init {
+        addListener(StructureUpdateEvent::class.java) { event ->
+            val structure = event.structure
+            val nearbyPlayers = game.getPlayers()
+                .filter { it.gameTeam() == structure.team }
+                .filter { it.position.distance(structure.position) <= structure.config.area.size }
+                .filter { it.itemInMainHand.hasGameItem(GameItem.CONSTRUCTION_HAMMER) }
+            if (nearbyPlayers.isEmpty()) return@addListener
+
+            val controller = getStructureController(structure)
+            for (offset in StructureOffset.Global2D.values()) {
+                if (controller.getTypeFromOffset(offset) != Config.WallData.Type.NOTHING) continue
+                game.structureManager.findNeighborFromOffset(structure, offset) ?: continue
+                nearbyPlayers.forEach { controller.showRegionFromOffset(it, offset) }
+            }
+        }
+        addListener(StructureDeconstructEvent::class.java) { event ->
+            val structure = event.structure
+            val controller = getStructureController(structure)
+            for (offset in StructureOffset.Global2D.values()) {
+                controller.modify(offset, Config.WallData.Type.NOTHING)
+            }
+        }
+    }
 
     override fun init(structureConfig: Structure.Config) {
         this.extensions = structureConfig.getController("EXTENSIONS")
@@ -40,29 +74,70 @@ class WallController(
         private val schemasPath = "config/structures/${structure.id}/schemas/"
         private val walls: Array<Config.WallData> = run {
             return@run structure.getProperty<Array<Config.WallData>>("walls")
-                ?: return@run Array<Config.WallData>(8) { Config.WallData(Config.WallData.Type.NONE) }
+                ?: return@run Array<Config.WallData>(8) { Config.WallData(Config.WallData.Type.NOTHING) }
         }
 
-        fun modify(direction: Config.DirectionSettings.Direction, type: Config.WallData.Type) {}
+        fun modify(offset: StructureOffset.Global2D, type: Config.WallData.Type): Boolean {
+            val neighbor = game.structureManager.findNeighborFromOffset(structure, offset) ?: return false
+            if (neighbor.id != structure.id) return false
+            val controller = neighbor.config
+                .getController<WallController>("WALLS")
+                ?.getStructureController(neighbor) ?: return false
+            when (type) {
+                Config.WallData.Type.NOTHING -> {
+                    deconstruct(offset)
+                    controller.deconstruct(offset.reflect())
+                }
+
+                else -> {
+                    construct(offset, type)
+                    controller.construct(offset.reflect(), type)
+                }
+            }
+            return true
+        }
+
+        fun getTypeFromOffset(offset: StructureOffset.Global2D) = walls[offset.index].type
+
+        fun showRegionFromOffset(player: Player, offset: StructureOffset.Global2D) {
+            val extension = getExtensionFromOffset(offset)
+            showRegion(extension.region3D, player)
+        }
+
+        fun getOffsetByPoint(point: Point): StructureOffset.Global2D? {
+            if (!structure.region3D.contains(point)) return null
+            for (offset in StructureOffset.Global2D.values()) {
+                if (getExtensionFromOffset(offset).region3D.contains(point))
+                    return offset
+            }
+            return null
+        }
+
+        private fun getExtensionFromOffset(offset: StructureOffset.Global2D): Structure.Extension {
+            val directionSettings = controller.config.directions[offset.name]
+                ?: throw RuntimeException("Unregistered direction with name: ${offset.name}")
+            return getOrCreateExtension(directionSettings.extension, offset.direction)
+        }
 
         private fun getOrCreateExtension(id: String, direction: Direction): Structure.Extension {
             return structureExtensions.getExtension(id)
                 ?: structureExtensions.createExtension(id, direction)
         }
 
-        private fun construct(direction: Config.DirectionSettings.Direction, type: Config.WallData.Type) {
-            val directionSettings = controller.config.directions[direction.name]
-                ?: throw RuntimeException("Unregistered direction with name: ${direction.name}")
-            val extension = getOrCreateExtension(directionSettings.extension, direction.minecraftDirection)
+        private fun construct(offset: StructureOffset.Global2D, type: Config.WallData.Type) {
+            val directionSettings = controller.config.directions[offset.name]
+                ?: throw RuntimeException("Unregistered direction with name: ${offset.name}")
+            val extension = getOrCreateExtension(directionSettings.extension, offset.direction)
             val sample = controller.config.samples[directionSettings.sample]
                 ?: throw RuntimeException("Sample with id `${directionSettings.sample}` is not exists")
             val variant = structure.getVariant()
                 ?: throw RuntimeException("Structure Variant is null")
 
+            deconstruct(offset)
             when (type) {
                 Config.WallData.Type.WALL -> {
                     val schema = AppSchema("${schemasPath}${sample.getSchema(variant)}")
-                    walls[direction.index] = Config.WallData(Config.WallData.Type.WALL)
+                    walls[offset.index] = Config.WallData(Config.WallData.Type.WALL)
                     extension.build(schema)
                     save()
                 }
@@ -75,9 +150,9 @@ class WallController(
                     val openingDistance = gateSettings.openingDistance
                     val region3D = run {
                         val firstPoint = structure.buildPosition.add(gateSettings.startPoint.asPoint())
-                            .withDirection(direction.minecraftDirection, structure.config.area.size.toShort())
+                            .withDirection(offset.direction, structure.config.area.size.toShort())
                         val secondPoint = structure.buildPosition.add(gateSettings.startPoint.asPoint())
-                            .withDirection(direction.minecraftDirection, structure.config.area.size.toShort())
+                            .withDirection(offset.direction, structure.config.area.size.toShort())
                         return@run Region3D(firstPoint, secondPoint).normalize()
                     }
 
@@ -89,7 +164,7 @@ class WallController(
                     wallData.setProperty("region", region3D)
                     wallData.setProperty("isOpen", false)
 
-                    walls[direction.index] = wallData
+                    walls[offset.index] = wallData
                     extension.build(schema)
                     save()
                 }
@@ -98,20 +173,20 @@ class WallController(
             }
         }
 
-        fun deconstruct(direction: Config.DirectionSettings.Direction) {
-            val current = walls[direction.index]
-            if (current.type == Config.WallData.Type.NONE) return
-            val directionSettings = controller.config.directions[direction.name]
-                ?: throw RuntimeException("Unregistered direction with name: ${direction.name}")
-            val extension = getOrCreateExtension(directionSettings.extension, direction.minecraftDirection)
+        fun deconstruct(offset: StructureOffset.Global2D) {
+            val current = walls[offset.index]
+            if (current.type == Config.WallData.Type.NOTHING) return
+            val directionSettings = controller.config.directions[offset.name]
+                ?: throw RuntimeException("Unregistered direction with name: ${offset.name}")
+            val extension = getOrCreateExtension(directionSettings.extension, offset.direction)
 
-            if (current.type == Config.WallData.Type.GATE) closeGate(direction)
-            walls[direction.index] = Config.WallData(Config.WallData.Type.NONE)
+            if (current.type == Config.WallData.Type.GATE) closeGate(offset)
+            walls[offset.index] = Config.WallData(Config.WallData.Type.NOTHING)
             extension.deconstruct()
         }
 
-        fun openGate(direction: Config.DirectionSettings.Direction) {
-            val gate = walls[direction.index]
+        fun openGate(offset: StructureOffset.Global2D) {
+            val gate = walls[offset.index]
             if (gate.type != Config.WallData.Type.GATE) return
 
             val uuid = gate.getProperty<String>("uuid")
@@ -128,8 +203,8 @@ class WallController(
             Zone.fromRegion3D(region3D).fill(Block.AIR)
         }
 
-        fun closeGate(direction: Config.DirectionSettings.Direction) {
-            val gate = walls[direction.index]
+        fun closeGate(offset: StructureOffset.Global2D) {
+            val gate = walls[offset.index]
             if (gate.type != Config.WallData.Type.GATE) return
 
             val uuid = gate.getProperty<String>("uuid")
@@ -220,13 +295,13 @@ class WallController(
         class DirectionSettings(
             config: ConfigurationSection
         ) {
-            val direction: Direction = Direction.valueOf(config.name)
+            val direction: StructureOffset.Global2D = StructureOffset.Global2D.valueOf(config.name)
             val extension: String = config.getString("extension")
                 ?: throw RuntimeException("Field extension is null")
             val sample: String = config.getString("sample")
                 ?: throw RuntimeException("Field sample is null")
 
-            enum class Direction(
+            enum class DWDAWD(
                 val index: Int,
                 val minecraftDirection: net.minestom.server.utils.Direction
             ) {
@@ -255,7 +330,7 @@ class WallController(
         class WallData(
             val type: Type
         ) : Properties() {
-            enum class Type { NONE, WALL, GATE }
+            enum class Type { NOTHING, WALL, GATE }
         }
     }
 }

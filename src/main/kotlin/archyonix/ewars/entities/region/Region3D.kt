@@ -3,6 +3,7 @@ package archyonix.ewars.entities.region
 import archyonix.ewars.entities.structure.Structure
 import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Pos
+import net.minestom.server.entity.Player
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min

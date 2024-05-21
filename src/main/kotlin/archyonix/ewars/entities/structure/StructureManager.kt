@@ -6,8 +6,10 @@ import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.structure.events.*
 import archyonix.ewars.entities.structure.functions.withGrid
+import archyonix.ewars.entities.structure.types.StructureOffset
 import archyonix.ewars.entities.team.GameTeam
 import net.minestom.server.coordinate.Point
+import net.minestom.server.coordinate.Vec
 import net.minestom.server.entity.Player
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
@@ -24,6 +26,8 @@ class StructureManager {
     fun getConfig(structureId: String) =
         configMap[structureId] ?: throw RuntimeException("Config with id `$structureId` is not exists")
 
+    fun updateStructures() = structureSet.forEach(Structure::update)
+
     fun findStructures(team: GameTeam): Set<Structure> =
         structureSet.filter { it.team == team }.toSet()
 
@@ -35,6 +39,23 @@ class StructureManager {
 
     fun findStructure2D(blockPosition: Point): Structure? =
         structureSet.find { it.region2D.contains(blockPosition) }
+
+    fun findNeighbors(structure: Structure): Set<Structure> {
+        val neighborsSet: MutableSet<Structure> = HashSet()
+        for (offset in StructureOffset.Global2D.values())
+            neighborsSet.add(findNeighborFromOffset(structure, offset) ?: continue)
+        return neighborsSet
+    }
+
+    fun findNeighborFromOffset(structure: Structure, offset: StructureOffset.Global2D): Structure? {
+        val area = structure.config.area
+        val isEven = area.size % 2 == 0
+        val position = offset.vector.mul(area.radius.toDouble())
+        val correctX = if (position.blockX() > 0 && isEven) 1.0 else 0.0
+        val correctZ = if (position.blockZ() > 0 && isEven) 1.0 else 0.0
+        return findStructure2D(structure.position.add(position.sub(Vec(correctX, correctZ))))
+    }
+
 
     fun createStructure(structureId: String, builder: Player): Boolean {
         val structureConfig = getConfig(structureId)

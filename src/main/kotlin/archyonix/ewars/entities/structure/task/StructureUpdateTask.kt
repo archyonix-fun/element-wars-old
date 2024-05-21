@@ -9,8 +9,14 @@ import archyonix.ewars.game
 import net.minestom.server.tag.Tag
 import java.time.Duration
 
-class ShowStructureAreaTask : Runnable {
+class StructureUpdateTask : Runnable {
     override fun run() {
+        showStructureSchemaArea()
+        game.structureManager.updateStructures()
+        game.schedule.buildTask(this).delay(Duration.ofMillis(250)).schedule()
+    }
+
+    private fun showStructureSchemaArea() {
         game.getPlayers()
             .filter { it.isOnGround }
             .filter { it.itemInMainHand.hasGameItem(GameItem.STRUCTURE_SCHEMA) }
@@ -22,7 +28,5 @@ class ShowStructureAreaTask : Runnable {
                 val region2D = Region2D.fromSizeArea(zeroPosition, structureConfig.area.size)
                 showRegion(region2D, it)
             }
-
-        game.schedule.buildTask(this).delay(Duration.ofMillis(250)).schedule()
     }
 }

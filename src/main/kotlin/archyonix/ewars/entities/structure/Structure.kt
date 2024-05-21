@@ -94,6 +94,8 @@ class Structure(
         return true
     }
 
+    fun update() = config.handler.call(StructureUpdateEvent(this))
+
     fun getVariant() = currentVariant
     fun getProcess() = process
 
