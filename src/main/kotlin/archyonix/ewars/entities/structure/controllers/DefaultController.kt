@@ -9,13 +9,13 @@ import kotlin.math.round
 
 class DefaultController : Structure.Config.Controller<Any>("DEFAULT") {
     init {
-        addListener(CalculateStructurePositionEvent::class.java) { event ->
+        addListener(StructureCalculatePositionEvent::class.java) { event ->
             event.resultPosition = event.builder.position
         }
-        addListener(CalculateStructureDirectionEvent::class.java) { event ->
+        addListener(StructureCalculateDirectionEvent::class.java) { event ->
             event.resultDirection = event.builder.getDirection()
         }
-        addListener(CalculateBuildZoneEvent::class.java) { event ->
+        addListener(StructureCalculateBuildZoneEvent::class.java) { event ->
             val height = event.structureConfig.area.height
             val region2D = event.region2D
             val zeroY = event.zeroY
@@ -38,7 +38,7 @@ class DefaultController : Structure.Config.Controller<Any>("DEFAULT") {
                 maxZ = region2D.endZ
             )
         }
-        addListener(ValidateBuildZoneEvent::class.java) { event ->
+        addListener(StructureValidateBuildZoneEvent::class.java) { event ->
             val size = event.structureConfig.area.size
             val errorLimit = round(size * size * 0.1).toInt()
             if (!event.validateAirZone(errorLimit)) {
@@ -53,7 +53,7 @@ class DefaultController : Structure.Config.Controller<Any>("DEFAULT") {
             }
             event.isValid = true
         }
-        addListener(PrepareBuildZoneEvent::class.java) { event ->
+        addListener(StructurePrepareBuildZoneEvent::class.java) { event ->
             event.airZone.fill(Block.AIR)
             event.baseZone.fill(
                 Block.GRASS_BLOCK,

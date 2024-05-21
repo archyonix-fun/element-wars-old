@@ -1,4 +1,4 @@
-package archyonix.ewars.entities.structure.events
+package archyonix.ewars.entities.structure.controllers.extensions.events
 
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.game.events.GameEvent

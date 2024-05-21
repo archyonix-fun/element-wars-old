@@ -2,7 +2,7 @@ package archyonix.ewars.features.action.executors
 
 import archyonix.ewars.entities.item.hasCharged
 import archyonix.ewars.entities.player.gameTeam
-import archyonix.ewars.entities.structure.controllers.WallController
+import archyonix.ewars.entities.structure.controllers.walls.WallsController
 import archyonix.ewars.features.action.Action
 import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game
@@ -21,10 +21,10 @@ class WallsBuildExecutor(
         if (!structure.config.hasController("WALLS")) return false
         if (structure.team != player.gameTeam()) return false
 
-        val controller = structure.config.getController<WallController>("WALLS")
+        val controller = structure.config.getController<WallsController>("WALLS")
             ?.getStructureController(structure) ?: return false
         val offset = controller.getOffsetByPoint(point) ?: return false
-        if (controller.getTypeFromOffset(offset) != WallController.Config.WallData.Type.NOTHING) return false
-        return controller.modify(offset, WallController.Config.WallData.Type.WALL)
+        if (controller.getTypeFromOffset(offset) != WallsController.Config.WallData.Type.NOTHING) return false
+        return controller.modify(offset, WallsController.Config.WallData.Type.WALL)
     }
 }

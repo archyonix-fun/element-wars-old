@@ -1,4 +1,4 @@
-package archyonix.ewars.entities.structure.controllers
+package archyonix.ewars.entities.structure.controllers.walls
 
 import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.item.functions.hasGameItem
@@ -6,6 +6,7 @@ import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region3D
 import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.entities.structure.Structure
+import archyonix.ewars.entities.structure.controllers.extensions.ExtensionsController
 import archyonix.ewars.entities.structure.events.StructureDeconstructEvent
 import archyonix.ewars.entities.structure.events.StructureUpdateEvent
 import archyonix.ewars.entities.structure.functions.showRegion
@@ -25,9 +26,9 @@ import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.util.*
 
 @ClassLibrary.RegisteredClass(name = "WALLS", ClassLibrary.Type.STRUCTURE_CONTROLLER)
-class WallController(
+class WallsController(
     config: ConfigurationSection
-) : Structure.Config.Controller<WallController.StructureController>("WALLS", setOf("EXTENSIONS")) {
+) : Structure.Config.Controller<WallsController.StructureController>("WALLS", setOf("EXTENSIONS")) {
     val config: Config = Config(config)
     private lateinit var extensions: ExtensionsController
 
@@ -68,7 +69,7 @@ class WallController(
     // Child classes
     class StructureController(
         private val structure: Structure,
-        private val controller: WallController
+        private val controller: WallsController
     ) {
         private val structureExtensions = controller.extensions.getStructureController(structure)
         private val schemasPath = "config/structures/${structure.id}/schemas/"
@@ -81,7 +82,7 @@ class WallController(
             val neighbor = game.structureManager.findNeighborFromOffset(structure, offset) ?: return false
             if (neighbor.id != structure.id) return false
             val controller = neighbor.config
-                .getController<WallController>("WALLS")
+                .getController<WallsController>("WALLS")
                 ?.getStructureController(neighbor) ?: return false
             when (type) {
                 Config.WallData.Type.NOTHING -> {

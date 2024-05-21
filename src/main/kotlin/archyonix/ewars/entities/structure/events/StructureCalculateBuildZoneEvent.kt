@@ -5,7 +5,7 @@ import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.game.events.GameEvent
 
-data class CalculateBuildZoneEvent(
+data class StructureCalculateBuildZoneEvent(
     val structureConfig: Structure.Config,
     val zeroY: Int,
     val region2D: Region2D

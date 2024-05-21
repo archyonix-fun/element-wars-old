@@ -1,4 +1,4 @@
-package archyonix.ewars.entities.structure.controllers
+package archyonix.ewars.entities.structure.controllers.extensions
 
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.features.classlibrary.ClassLibrary

@@ -4,6 +4,8 @@ import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.region.Region3D
 import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.entities.structure.controllers.DefaultController
+import archyonix.ewars.entities.structure.controllers.extensions.events.StructureExtensionDeconstructEvent
+import archyonix.ewars.entities.structure.controllers.extensions.events.StructureExtensionStartBuildingEvent
 import archyonix.ewars.entities.structure.events.*
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.features.classlibrary.ClassLibrary

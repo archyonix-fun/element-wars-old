@@ -71,13 +71,13 @@ class StructureManager {
             return false
         }
 
-        val calcPositionEvent = CalculateStructurePositionEvent(structureConfig, builder)
+        val calcPositionEvent = StructureCalculatePositionEvent(structureConfig, builder)
         structureConfig.handler.call(calcPositionEvent)
         val position = (calcPositionEvent.resultPosition
             ?: throw RuntimeException("Calculation Error: position is null"))
             .withGrid(structureConfig.grid)
 
-        val calcDirectionEvent = CalculateStructureDirectionEvent(structureConfig, builder)
+        val calcDirectionEvent = StructureCalculateDirectionEvent(structureConfig, builder)
         structureConfig.handler.call(calcDirectionEvent)
         val direction = calcDirectionEvent.resultDirection
             ?: throw RuntimeException("Calculation Error: direction is null")
@@ -89,14 +89,14 @@ class StructureManager {
             return false
         }
 
-        val calcBuildZoneEvent = CalculateBuildZoneEvent(structureConfig, position.blockY(), region2D)
+        val calcBuildZoneEvent = StructureCalculateBuildZoneEvent(structureConfig, position.blockY(), region2D)
         structureConfig.handler.call(calcBuildZoneEvent)
         val buildZoneAir = calcBuildZoneEvent.resultAirZone
             ?: throw RuntimeException("Calculation Error: air zone is null")
         val buildZoneBase = calcBuildZoneEvent.resultBaseZone
             ?: throw RuntimeException("Calculation Error: base zone is null")
 
-        val validateBuildZoneEvent = ValidateBuildZoneEvent(structureConfig, buildZoneAir, buildZoneBase)
+        val validateBuildZoneEvent = StructureValidateBuildZoneEvent(structureConfig, buildZoneAir, buildZoneBase)
         structureConfig.handler.call(validateBuildZoneEvent)
         if (!validateBuildZoneEvent.isValid) {
             builder.showActionBar(validateBuildZoneEvent.getWarningMessage(), MessageType.WARNING)
@@ -104,7 +104,7 @@ class StructureManager {
         }
 
         structureConfig.handler
-            .call(PrepareBuildZoneEvent(structureConfig, buildZoneAir, buildZoneBase))
+            .call(StructurePrepareBuildZoneEvent(structureConfig, buildZoneAir, buildZoneBase))
 
         val structure = Structure(structureId, position, direction, builder.gameTeam(), buildZoneAir)
         structureSet.add(structure)

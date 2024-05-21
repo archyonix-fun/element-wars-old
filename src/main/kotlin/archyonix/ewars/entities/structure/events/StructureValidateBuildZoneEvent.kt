@@ -4,9 +4,8 @@ import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.structure.events.api.WarningMessageEvent
 import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.game.events.GameEvent
-import net.kyori.adventure.text.Component
 
-class ValidateBuildZoneEvent(
+class StructureValidateBuildZoneEvent(
     val structureConfig: Structure.Config,
     val airZone: Zone,
     val baseZone: Zone,
