@@ -7,6 +7,7 @@
     "OPEN_UI",
     "STRUCTURE_UI",
     "GIVE_ITEM",
-    "STRUCTURE_PLACE"
+    "STRUCTURE_PLACE",
+    "BUILD_WALL"
   ]
 }
