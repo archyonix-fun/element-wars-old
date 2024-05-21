@@ -5,9 +5,11 @@ import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.structure.events.*
+import archyonix.ewars.entities.structure.functions.showEffect
 import archyonix.ewars.entities.structure.functions.withGrid
 import archyonix.ewars.entities.structure.types.StructureOffset
 import archyonix.ewars.entities.team.GameTeam
+import archyonix.ewars.game
 import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.entity.Player
@@ -51,9 +53,11 @@ class StructureManager {
         val area = structure.config.area
         val isEven = area.size % 2 == 0
         val position = offset.vector.mul(area.radius.toDouble())
-        val correctX = if (position.blockX() > 0 && isEven) 1.0 else 0.0
-        val correctZ = if (position.blockZ() > 0 && isEven) 1.0 else 0.0
-        return findStructure2D(structure.position.add(position.sub(Vec(correctX, correctZ))))
+        val correctX = if (position.blockX() > 0 && isEven) 0.0 else 1.0
+        val correctZ = if (position.blockZ() > 0 && isEven) 0.0 else 1.0
+        val point = structure.position.add(position.sub(Vec(correctX, correctZ)))
+        val foundedStructure = findStructure2D(point)
+        return if (foundedStructure != structure) foundedStructure else null
     }
 
 

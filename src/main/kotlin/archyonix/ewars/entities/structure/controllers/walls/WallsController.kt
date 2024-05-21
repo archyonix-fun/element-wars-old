@@ -7,6 +7,7 @@ import archyonix.ewars.entities.region.Region3D
 import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.structure.controllers.extensions.ExtensionsController
+import archyonix.ewars.entities.structure.events.StructureCalculateDirectionEvent
 import archyonix.ewars.entities.structure.events.StructureDeconstructEvent
 import archyonix.ewars.entities.structure.events.StructureUpdateEvent
 import archyonix.ewars.entities.structure.functions.showRegion
@@ -30,11 +31,13 @@ class WallsController(
     config: ConfigurationSection
 ) : Structure.Config.Controller<WallsController.StructureController>("WALLS", setOf("EXTENSIONS")) {
     val config: Config = Config(config)
-    private lateinit var extensions: ExtensionsController
+
 
     init {
         addListener(StructureUpdateEvent::class.java) { event ->
             val structure = event.structure
+            if (structure.getProcess().type != Structure.Process.Type.IDLE) return@addListener
+
             val nearbyPlayers = game.getPlayers()
                 .filter { it.gameTeam() == structure.team }
                 .filter { it.position.distance(structure.position) <= structure.config.area.size }
@@ -44,7 +47,8 @@ class WallsController(
             val controller = getStructureController(structure)
             for (offset in StructureOffset.Global2D.values()) {
                 if (controller.getTypeFromOffset(offset) != Config.WallData.Type.NOTHING) continue
-                game.structureManager.findNeighborFromOffset(structure, offset) ?: continue
+                val neighbor = game.structureManager.findNeighborFromOffset(structure, offset) ?: continue
+                if (neighbor.getProcess().type != Structure.Process.Type.IDLE) continue
                 nearbyPlayers.forEach { controller.showRegionFromOffset(it, offset) }
             }
         }
@@ -55,11 +59,9 @@ class WallsController(
                 controller.modify(offset, Config.WallData.Type.NOTHING)
             }
         }
-    }
-
-    override fun init(structureConfig: Structure.Config) {
-        this.extensions = structureConfig.getController("EXTENSIONS")
-            ?: throw RuntimeException("Controller with id `EXTENSIONS` was not found")
+        addListener(StructureCalculateDirectionEvent::class.java) { event ->
+            event.resultDirection = Direction.SOUTH
+        }
     }
 
     override fun getStructureController(structure: Structure): StructureController {
@@ -71,7 +73,9 @@ class WallsController(
         private val structure: Structure,
         private val controller: WallsController
     ) {
-        private val structureExtensions = controller.extensions.getStructureController(structure)
+        private val structureExtensions = structure.config.getController<ExtensionsController>("EXTENSIONS")
+            ?.getStructureController(structure)
+            ?: throw RuntimeException("Controller with id `EXTENSIONS` was not found")
         private val schemasPath = "config/structures/${structure.id}/schemas/"
         private val walls: Array<Config.WallData> = run {
             return@run structure.getProperty<Array<Config.WallData>>("walls")
@@ -301,31 +305,6 @@ class WallsController(
                 ?: throw RuntimeException("Field extension is null")
             val sample: String = config.getString("sample")
                 ?: throw RuntimeException("Field sample is null")
-
-            enum class DWDAWD(
-                val index: Int,
-                val minecraftDirection: net.minestom.server.utils.Direction
-            ) {
-                NORTH_WEST(0, net.minestom.server.utils.Direction.SOUTH),
-                NORTH(1, net.minestom.server.utils.Direction.SOUTH),
-                EAST_NORTH(2, net.minestom.server.utils.Direction.WEST),
-                EAST(3, net.minestom.server.utils.Direction.WEST),
-                SOUTH_EAST(4, net.minestom.server.utils.Direction.NORTH),
-                SOUTH(5, net.minestom.server.utils.Direction.NORTH),
-                WEST_SOUTH(6, net.minestom.server.utils.Direction.EAST),
-                WEST(7, net.minestom.server.utils.Direction.EAST);
-
-                fun reflect() = when (this) {
-                    NORTH_WEST -> SOUTH_EAST
-                    NORTH -> SOUTH
-                    EAST_NORTH -> WEST_SOUTH
-                    EAST -> WEST
-                    SOUTH_EAST -> NORTH_WEST
-                    SOUTH -> NORTH
-                    WEST_SOUTH -> EAST_NORTH
-                    WEST -> EAST
-                }
-            }
         }
 
         class WallData(

@@ -6,13 +6,16 @@ import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.structure.functions.showRegion
 import archyonix.ewars.entities.structure.functions.withGrid
 import archyonix.ewars.game
+import archyonix.ewars.game.enums.GameStage
 import net.minestom.server.tag.Tag
 import java.time.Duration
 
 class StructureUpdateTask : Runnable {
     override fun run() {
-        showStructureSchemaArea()
-        game.structureManager.updateStructures()
+        if(game.stage == GameStage.RUNTIME) {
+            showStructureSchemaArea()
+            game.structureManager.updateStructures()
+        }
         game.schedule.buildTask(this).delay(Duration.ofMillis(250)).schedule()
     }
 

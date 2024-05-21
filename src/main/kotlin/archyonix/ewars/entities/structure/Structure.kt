@@ -40,11 +40,10 @@ class Structure(
     val region2D = Region2D.fromSizeArea(position, config.area.size)
     val buildPosition = region3D.minPoint()
     private var currentVariant: Config.Variant? = null
-    private var process: Process = Process(Process.Type.IDLE)
+    private var process: Process = Process(Process.Type.NONE)
 
     // Functions
     fun changeVariant(variantId: String): Boolean {
-        if (process.type != Process.Type.IDLE) return false
         val foundedVariant = config.variants.find { it.id == variantId }
             ?: throw RuntimeException("Variant with id `$variantId` is not exists")
         return changeVariant(foundedVariant)
@@ -54,7 +53,7 @@ class Structure(
         if (!config.variants.contains(variant))
             throw RuntimeException("The transmitted variant `${variant.id}` is not intended for this structure")
 
-        if (process.type != Process.Type.IDLE) return false
+        if (process.type != Process.Type.IDLE && process.type != Process.Type.NONE) return false
         val processType = if (currentVariant == null) Process.Type.BUILDING else Process.Type.UPGRADE
         val changeVariantEvent = StructureChangeVariantEvent(this, variant)
         config.handler.call(changeVariantEvent)
@@ -75,6 +74,7 @@ class Structure(
         process.addProgress(buildEvent.buildPoints)
 
         return if (startProgress < process.getProgress()) {
+            if(process.hasFinished()) process = Process(Process.Type.IDLE)
             build(startProgress)
             true
         } else false
@@ -161,7 +161,7 @@ class Structure(
         fun <T : Controller<*>> getController(controllerId: String): T? {
             return controllers
                 .filter { it.javaClass.isAnnotationPresent(ClassLibrary.RegisteredClass::class.java) }
-                .find { it.javaClass.getAnnotation(ClassLibrary.RegisteredClass::class.java).name == id.uppercase() } as T?
+                .find { it.javaClass.getAnnotation(ClassLibrary.RegisteredClass::class.java).name == controllerId.uppercase() } as T?
         }
 
         fun hasController(controllerId: String): Boolean {
@@ -290,19 +290,22 @@ class Structure(
         fun startTime() = startTime
         fun updateTime() = updateTime
         private fun calcProgress() = currentValue / maxValue.toFloat()
-        enum class Type { BUILDING, IDLE, UPGRADE, REPAIR }
+        enum class Type { NONE, BUILDING, IDLE, UPGRADE, REPAIR }
     }
 
     class Extension(
         private val parent: Structure,
         val config: Config,
-        position: Point,
-        val direction: Direction
+        positionLocal: Structure.Config.LocalPosition,
+        positionGlobal: Point,
+        private val direction: Direction
     ) : Properties() {
         val region3D = run {
-            val region3D: Region3D = Region3D.fromSizeArea(position, config.area)
-            val firstPoint = region3D.minPoint().withDirection(direction, config.area.size.toShort())
-            val secondPoint = region3D.maxPoint().withDirection(direction, config.area.size.toShort())
+            val region3D: Region3D = Region3D.fromSizeArea(positionLocal.asPoint(), config.area)
+            val firstPoint = region3D.minPoint()
+                .withDirection(parent.direction, parent.config.area.size.toShort()).add(positionGlobal)
+            val secondPoint = region3D.maxPoint()
+                .withDirection(parent.direction, parent.config.area.size.toShort()).add(positionGlobal)
 
             return@run Region3D(firstPoint, secondPoint).normalize()
         }

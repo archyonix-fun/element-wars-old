@@ -7,7 +7,7 @@ import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 
 @ClassLibrary.RegisteredClass(name = "EXTENSIONS", ClassLibrary.Type.STRUCTURE_CONTROLLER)
-open class ExtensionsController(
+class ExtensionsController(
     config: ConfigurationSection
 ) : Structure.Config.Controller<ExtensionsController.StructureController>("EXTENSIONS") {
     private val configMap: Map<String, Structure.Extension.Config> = run {
@@ -44,8 +44,7 @@ open class ExtensionsController(
 
         fun createExtension(id: String, direction: Direction): Structure.Extension {
             val config = controller.getConfig(id)
-            val position = structure.buildPosition.add(config.position.asPoint())
-            val extension = Structure.Extension(structure, config, position, direction)
+            val extension = Structure.Extension(structure, config, config.position, structure.buildPosition, direction)
             extensionMap[id] = extension
             save()
 

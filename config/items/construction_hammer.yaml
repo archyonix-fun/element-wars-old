@@ -45,10 +45,14 @@ variants:
     properties:
       buildPower: 5
 actions:
+  wall-build:
+    executor: "WALLS_BUILD"
+    trigger:
+      - "LEFT_CLICK_BLOCK"
   build:
     executor: "BUILD/REPAIR"
     trigger:
-      - "LEFT_CLICK_BLOCK"
+      - "ON_FAILED:wall-build"
   structure_ui:
     executor: "STRUCTURE_UI"
     trigger:

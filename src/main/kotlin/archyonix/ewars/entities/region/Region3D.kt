@@ -93,7 +93,7 @@ class Region3D(
         val maxY = max(startY, endY)
         val maxZ = max(startZ, endZ)
 
-        return Region3D(minX, minY, maxZ, maxX, maxY, maxZ)
+        return Region3D(minX, minY, minZ, maxX, maxY, maxZ)
     }
 
     fun minPoint(): Point = Pos(startX.toDouble(), startY.toDouble(), startZ.toDouble())

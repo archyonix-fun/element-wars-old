@@ -9,6 +9,7 @@ import kotlin.math.round
 
 class DefaultController : Structure.Config.Controller<Any>("DEFAULT") {
     init {
+        priority = -1
         addListener(StructureCalculatePositionEvent::class.java) { event ->
             event.resultPosition = event.builder.position
         }

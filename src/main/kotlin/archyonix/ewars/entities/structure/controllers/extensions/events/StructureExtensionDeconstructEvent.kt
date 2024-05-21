@@ -8,6 +8,7 @@ class StructureExtensionDeconstructEvent(
     val structure: Structure,
     val extension: Structure.Extension
 ) : GameEvent, CancellableEvent {
+    private var isCancelled: Boolean = false
     override fun isCancelled(): Boolean = isCancelled
 
     override fun setCancelled(cancel: Boolean) {

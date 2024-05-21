@@ -8,6 +8,6 @@
     "STRUCTURE_UI",
     "GIVE_ITEM",
     "STRUCTURE_PLACE",
-    "BUILD_WALL"
+    "WALLS_BUILD"
   ]
 }

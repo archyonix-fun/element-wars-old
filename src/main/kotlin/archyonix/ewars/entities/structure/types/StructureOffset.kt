@@ -27,14 +27,14 @@ class StructureOffset {
         val direction: Direction,
         val vector: Vec,
     ) {
-        NORTH_WEST(0, Direction.SOUTH, Vec(-1.0, -1.0)),
-        NORTH(1, Direction.SOUTH, Vec(0.0, -1.0)),
-        EAST_NORTH(2, Direction.WEST, Vec(1.0, -1.0)),
-        EAST(3, Direction.WEST, Vec(1.0, 0.0)),
-        SOUTH_EAST(4, Direction.NORTH, Vec(1.0, 1.0)),
-        SOUTH(5, Direction.NORTH, Vec(0.0, 1.0)),
-        WEST_SOUTH(6, Direction.EAST, Vec(-1.0, 1.0)),
-        WEST(7, Direction.EAST, Vec(-1.0, 0.0));
+        NORTH_WEST(0, Direction.WEST, Vec(-1.0, -1.0)),
+        NORTH(1, Direction.WEST, Vec(0.0, -1.0)),
+        EAST_NORTH(2, Direction.NORTH, Vec(1.0, -1.0)),
+        EAST(3, Direction.NORTH, Vec(1.0, 0.0)),
+        SOUTH_EAST(4, Direction.EAST, Vec(1.0, 1.0)),
+        SOUTH(5, Direction.EAST, Vec(0.0, 1.0)),
+        WEST_SOUTH(6, Direction.SOUTH, Vec(-1.0, 1.0)),
+        WEST(7, Direction.SOUTH, Vec(-1.0, 0.0));
 
         fun reflect(): Global2D {
             val vector = vector.mul(-1.0)

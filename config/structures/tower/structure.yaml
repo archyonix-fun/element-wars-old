@@ -73,10 +73,10 @@ controllers:
   WALLS:
     samples:
       WALL_STRAIGHT:
-        schema: "#wallStraightSchema"
+        schema: "$wallStraightSchema"
         gateSettings:
-          schema: "#gateStraightSchema"
-          block: "#gateBlock"
+          schema: "$gateStraightSchema"
+          block: "$gateBlock"
           openingDistance: 3
           gate:
             startPoint:
@@ -88,7 +88,7 @@ controllers:
               y: 2
               z: 2
       WALL_SLOPE:
-        schema: "#wallSlopeSchema"
+        schema: "$wallSlopeSchema"
     directions:
       NORTH_WEST:
         extension: "NORTH_WEST"
