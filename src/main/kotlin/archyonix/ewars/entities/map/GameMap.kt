@@ -1,7 +1,7 @@
 package archyonix.ewars.entities.map
 
 import archyonix.ewars.shared.WorldLoader
-import archyonix.ewars.shared.libs.toPos
+import archyonix.ewars.shared.libs.asPos
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.instance.IChunkLoader
 import net.minestom.server.instance.block.Block
@@ -15,8 +15,8 @@ class GameMap(mapName: String) {
     val DISPLAY_NAME: String = config.getString("displayName")!!
     val TEAM_COUNT: Int = config.getInt("teamCount")
     val TEAM_SIZE: Int = config.getInt("teamSize")
-    val WORLD_SPAWN: Pos = config.getString("worldSpawn")!!.toPos()
-    val SPAWN_LIST: List<Pos> = config.getStringList("spawnList").map { it.toPos() }
+    val WORLD_SPAWN: Pos = config.getString("worldSpawn")!!.asPos()
+    val SPAWN_LIST: List<Pos> = config.getStringList("spawnList").map { it.asPos() }
 
     val WORLD_GENERATOR: Generator = Generator { unit -> unit.modifier().fill(Block.AIR) }
     val WORLD_LOADER: IChunkLoader = WorldLoader("config/maps/$mapName/world")

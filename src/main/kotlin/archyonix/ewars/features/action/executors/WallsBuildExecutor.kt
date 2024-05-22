@@ -18,13 +18,13 @@ class WallsBuildExecutor(
         val point = player.getTargetBlockPosition(5)
             ?.add(0.0, 1.0, 0.0) ?: return false
         val structure = game.structureManager.findStructure3D(point) ?: return false
-        if (!structure.config.hasController("WALLS")) return false
         if (structure.team != player.gameTeam()) return false
 
-        val controller = structure.config.getController<WallsController>("WALLS")
-            ?.getStructureController(structure) ?: return false
-        val offset = controller.getOffsetByPoint(point) ?: return false
-        if (controller.getTypeFromOffset(offset) != WallsController.Config.WallData.Type.NOTHING) return false
-        return controller.modify(offset, WallsController.Config.WallData.Type.WALL)
+        val controller = structure.config.getController(WallsController.Config::class.java)
+            ?.getController(structure) ?: return false
+        return true
+//        val offset = controller.getOffsetByPoint(point) ?: return false
+//        if (controller.getTypeFromOffset(offset) != Walls.Config.WallData.Type.NOTHING) return false
+//        return controller.modify(offset, Walls.Config.WallData.Type.WALL)
     }
 }

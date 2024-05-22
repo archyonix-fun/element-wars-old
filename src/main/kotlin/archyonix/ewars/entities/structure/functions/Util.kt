@@ -45,15 +45,15 @@ fun showRegion(region2D: Region2D, player: Player) {
 }
 
 fun showRegion(region3D: Region3D, player: Player) {
-    val minX = region3D.startX
-    val maxX = region3D.endX
+    val minX = region3D.startPoint().blockX()
+    val maxX = region3D.endPoint().blockX()
 
-    val minZ = region3D.startZ
-    val maxZ = region3D.endZ
+    val minZ = region3D.startPoint().blockZ()
+    val maxZ = region3D.endPoint().blockZ()
 
     for (x in minX..maxX) {
         for (z in minZ..maxZ) {
-            val pos = Pos(x + .5, region3D.startY.toDouble(), z + .5)
+            val pos = Pos(x + .5, region3D.startPoint().blockY().toDouble(), z + .5)
             when {
                 x == minX -> showEffect(player, pos)
                 x == maxX -> showEffect(player, pos)

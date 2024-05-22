@@ -1,32 +1,33 @@
 package archyonix.ewars.entities.region
 
+import archyonix.ewars.entities.region.api.Region
+import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.game
+import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.instance.block.Block
 import java.util.*
 
 class Zone(
-    private val minX: Int,
-    private val minY: Int,
-    private val minZ: Int,
-    private val maxX: Int,
-    private val maxY: Int,
-    private val maxZ: Int,
+    private val startX: Int,
+    private val startY: Int,
+    private val startZ: Int,
+    private val endX: Int,
+    private val endY: Int,
+    private val endZ: Int,
 ) {
-    companion object {
-        fun fromRegion3D(region3D: Region3D): Zone =
-            Zone(
-                region3D.startX, region3D.startY, region3D.startZ,
-                region3D.endX, region3D.endY, region3D.endZ
-            )
-    }
+    constructor(startPoint: Point, endPoint: Point) : this(
+        startPoint.blockX(), startPoint.blockY(), startPoint.blockZ(),
+        endPoint.blockX(), endPoint.blockY(), endPoint.blockZ()
+    )
+    constructor(region: Region): this(region.startPoint(), region.endPoint())
 
     fun notSolidBlockCount(limit: Int = Int.MAX_VALUE): Int {
         var count = 0
         val instance = game.instance
-        for (y in minY..maxY) {
-            for (x in minX..maxX) {
-                for (z in minZ..maxZ) {
+        for (y in startY..endY) {
+            for (x in startX..endX) {
+                for (z in startZ..endZ) {
                     if (count >= limit) return count
                     val absoluteBlockPosition = Vec(x.toDouble(), y.toDouble(), z.toDouble())
                     instance.loadChunk(absoluteBlockPosition).thenRun {
@@ -43,9 +44,9 @@ class Zone(
     fun solidBlockCount(limit: Int = Int.MAX_VALUE): Int {
         var count = 0
         val instance = game.instance
-        for (y in minY..maxY) {
-            for (x in minX..maxX) {
-                for (z in minZ..maxZ) {
+        for (y in startY..endY) {
+            for (x in startX..endX) {
+                for (z in startZ..endZ) {
                     if (count >= limit) return count
                     val absoluteBlockPosition = Vec(x.toDouble(), y.toDouble(), z.toDouble())
                     instance.loadChunk(absoluteBlockPosition).thenRun {
@@ -62,9 +63,9 @@ class Zone(
     fun fill(vararg blocks: Block) {
         val random = Random()
         val instance = game.instance
-        for (y in minY..maxY) {
-            for (x in minX..maxX) {
-                for (z in minZ..maxZ) {
+        for (y in startY..endY) {
+            for (x in startX..endX) {
+                for (z in startZ..endZ) {
                     val block = blocks[random.nextInt(blocks.size)]
                     val absoluteBlockPosition = Vec(x.toDouble(), y.toDouble(), z.toDouble())
                     instance.loadChunk(absoluteBlockPosition).thenRun {
@@ -76,6 +77,6 @@ class Zone(
     }
 
     override fun toString(): String {
-        return "Zone(minX: $minX, minY: $minY, minZ: $minZ, maxX: $maxX, maxY: $maxY, maxZ: $maxZ)"
+        return "Zone(minX: $startX, minY: $startY, minZ: $startZ, maxX: $endX, maxY: $endY, maxZ: $endZ)"
     }
 }

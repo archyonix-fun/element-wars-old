@@ -20,7 +20,7 @@ import java.util.*
 import kotlin.collections.HashMap
 import kotlin.math.abs
 
-fun String.toPos() = split(":")
+fun String.asPos() = split(":")
     .map { it.toDouble() }
     .let {
         Pos(
@@ -56,7 +56,7 @@ fun Pos.firstFromTop(): Pos {
     return Pos(x, y.toDouble(), z)
 }
 
-fun Point.withDirection(dir: Direction, area: Short): Point {
+fun Point.withDirection(dir: Direction, area: Int): Point {
     val width = area - 1.0
 
     val newX = when (dir) {

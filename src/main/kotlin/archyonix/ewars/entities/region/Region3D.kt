@@ -1,101 +1,116 @@
 package archyonix.ewars.entities.region
 
+import archyonix.ewars.entities.region.api.Region
 import archyonix.ewars.entities.structure.Structure
+import archyonix.ewars.shared.libs.asPos
+import archyonix.ewars.shared.libs.withDirection
 import net.minestom.server.coordinate.Point
-import net.minestom.server.coordinate.Pos
-import net.minestom.server.entity.Player
-import kotlin.math.floor
+import net.minestom.server.coordinate.Vec
+import net.minestom.server.utils.Direction
+import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import kotlin.math.max
 import kotlin.math.min
 
 class Region3D(
-    val startX: Int,
-    val startY: Int,
-    val startZ: Int,
-    val endX: Int,
-    val endY: Int,
-    val endZ: Int,
-) {
-    val width = endX - startX
-    val height = endY - startY
-    val length = endZ - startZ
-
-    companion object {
-        fun fromSizeArea(pos: Point, area: Structure.Config.Area): Region3D {
-            val radius = floor(area.size / 2.0).toInt()
-            val isEven = area.size % 2 == 0
-            return Region3D(pos, radius, area.height, isEven)
-        }
-    }
-
-    constructor(pos: Point, radius: Int, height: Int, isEven: Boolean = false) : this(
-        pos.blockX() - radius,
-        pos.blockY(),
-        pos.blockZ() - radius,
-        pos.blockX() + radius + if (isEven) -1 else 0,
-        pos.blockY() + height - 1,
-        pos.blockZ() + radius + if (isEven) -1 else 0,
-    )
-
+    private val startX: Int,
+    private val startY: Int,
+    private val startZ: Int,
+    private val endX: Int,
+    private val endY: Int,
+    private val endZ: Int,
+) : Region {
     constructor(startPoint: Point, endPoint: Point) : this(
         startPoint.blockX(), startPoint.blockY(), startPoint.blockZ(),
         endPoint.blockX(), endPoint.blockY(), endPoint.blockZ()
     )
 
-    fun contains(region: Region3D): Boolean {
-        if (region.startX > endX) return false
-        if (region.endX < startX) return false
+    constructor(origin: Point, area: Structure.Config.Area) : this(
+        startX = origin.blockX() - area.radius,
+        startY = origin.blockY(),
+        startZ = origin.blockZ() - area.radius,
+        endX = origin.blockX() + area.radius + if (area.isEven) -1 else 0,
+        endY = origin.blockY() + area.height - 1,
+        endZ = origin.blockZ() + area.radius + if (area.isEven) -1 else 0,
+    )
 
-        if (region.startY > endY) return false
-        if (region.endY < startY) return false
+    constructor(config: ConfigurationSection) : this(
+        config.getString("startPoint")?.asPos()
+            ?: throw RuntimeException("Region startPoint not found"),
+        config.getString("endPoint")?.asPos()
+            ?: throw RuntimeException("Region endPoint not found"),
+    )
 
-        if (region.startZ > endZ) return false
-        return region.endZ >= startZ
+    override fun getWidth(): Int = endX - startX + 1
+    override fun getHeight(): Int = endY - startY + 1
+    override fun getLength(): Int = endZ - startZ + 1
+
+    override fun contains(other: Region): Boolean {
+        other as Region3D
+        if (other.startX > endX) return false
+        if (other.endX < startX) return false
+
+        if (other.startY > endY) return false
+        if (other.endY < startY) return false
+
+        if (other.startZ > endZ) return false
+        return other.endZ >= startZ
     }
 
-    fun contains(pos: Point): Boolean {
-        if (pos.blockX() > endX) return false
-        if (pos.blockX() < startX) return false
+    override fun contains(point: Point): Boolean {
+        if (point.blockX() > endX) return false
+        if (point.blockX() < startX) return false
 
-        if (pos.blockY() > endY) return false
-        if (pos.blockY() < startY) return false
+        if (point.blockY() > endY) return false
+        if (point.blockY() < startY) return false
 
-        if (pos.blockZ() > endZ) return false
-        return pos.blockZ() >= startZ
+        if (point.blockZ() > endZ) return false
+        return point.blockZ() >= startZ
     }
 
-    fun merge(region: Region3D): Region3D {
-        val minX = if (startX < region.startX) startX else region.startX
-        val minY = if (startY < region.startY) startY else region.startY
-        val minZ = if (startZ < region.startZ) startZ else region.startZ
+    override fun merge(other: Region): Region {
+        other as Region3D
+        val startX = if (this.startX < other.startX) this.startX else other.startX
+        val startY = if (this.startY < other.startY) this.startY else other.startY
+        val startZ = if (this.startZ < other.startZ) this.startZ else other.startZ
 
-        val maxX = if (endX > region.endX) endX else region.endX
-        val maxY = if (endY > region.endY) endY else region.endY
-        val maxZ = if (endZ > region.endZ) endZ else region.endZ
+        val endX = if (this.endX > other.endX) this.endX else other.endX
+        val endY = if (this.endY > other.endY) this.endY else other.endY
+        val endZ = if (this.endZ > other.endZ) this.endZ else other.endZ
 
-        return Region3D(minX, minY, minZ, maxX, maxY, maxZ)
+        return Region3D(startX, startY, startZ, endX, endY, endZ)
     }
 
-    fun findCenter(): Point {
-        val centerX = endX - (width / 2.0)
-        val centerY = endY - (height / 2.0)
-        val centerZ = endZ - (length / 2.0)
+    override fun normalize(): Region {
+        val startX = min(this.startX, this.endX)
+        val startY = min(this.startY, this.endY)
+        val startZ = min(this.startZ, this.endZ)
 
-        return Pos(centerX, centerY, centerZ)
+        val endX = max(this.startX, this.endX)
+        val endY = max(this.startY, this.endY)
+        val endZ = max(this.startZ, this.endZ)
+
+        return Region3D(startX, startY, startZ, endX, endY, endZ)
     }
 
-    fun normalize(): Region3D {
-        val minX = min(startX, endX)
-        val minY = min(startY, endY)
-        val minZ = min(startZ, endZ)
-
-        val maxX = max(startX, endX)
-        val maxY = max(startY, endY)
-        val maxZ = max(startZ, endZ)
-
-        return Region3D(minX, minY, minZ, maxX, maxY, maxZ)
+    override fun offset(absolutePoint: Point): Region {
+        return Region3D(
+            startPoint().add(absolutePoint),
+            endPoint().add(absolutePoint)
+        )
     }
 
-    fun minPoint(): Point = Pos(startX.toDouble(), startY.toDouble(), startZ.toDouble())
-    fun maxPoint(): Point = Pos(endX.toDouble(), endY.toDouble(), endZ.toDouble())
+    override fun rotateY(direction: Direction, planeSize: Int): Region {
+        return Region3D(
+            startPoint().withDirection(direction, planeSize),
+            endPoint().withDirection(direction, planeSize),
+        ).normalize()
+    }
+
+    override fun startPoint(): Point = Vec(
+        startX.toDouble(), startY.toDouble(), startZ.toDouble()
+    )
+
+    override fun endPoint(): Point = Vec(
+        endX.toDouble(), endY.toDouble(), endZ.toDouble()
+    )
 }

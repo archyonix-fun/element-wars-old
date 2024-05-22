@@ -5,16 +5,7 @@
   "pattern": "A-Z0-9",
   "patternProperties": {
     ".*": {
-      "type": "object",
-      "properties": {
-        "area": {
-          "$ref": "../types/area.json"
-        },
-        "position": {
-          "$ref": "../types/position.json"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "../types/region.json"
     }
   }
 }

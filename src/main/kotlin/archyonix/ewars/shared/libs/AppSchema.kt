@@ -177,7 +177,7 @@ class AppSchema(path: String) {
                     val regionBlock = iterator.next()
                     if (index < startIndex) continue
                     if (index >= endIndex) continue
-                    val blockPosition = regionBlock.position().withDirection(direction, width).add(pos)
+                    val blockPosition = regionBlock.position().withDirection(direction, width.toInt()).add(pos)
                     val blockState = Block.fromStateId(regionBlock.stateId)
                     if (blockState != null) {
                         futures.add(instance.loadOptionalChunk(blockPosition).thenRun {
@@ -220,7 +220,7 @@ class AppSchema(path: String) {
                 val iterator = blocks.iterator()
                 while (iterator.hasNext()) {
                     val regionBlock = iterator.next()
-                    val blockPosition = regionBlock.position().withDirection(direction, width).add(pos)
+                    val blockPosition = regionBlock.position().withDirection(direction, width.toInt()).add(pos)
                     futures.add(instance.loadOptionalChunk(blockPosition).thenRun {
                         blockBatch.setBlock(blockPosition, fillingBlock)
                     })

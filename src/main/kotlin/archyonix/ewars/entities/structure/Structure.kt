@@ -3,9 +3,8 @@ package archyonix.ewars.entities.structure
 import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.region.Region3D
 import archyonix.ewars.entities.region.Zone
+import archyonix.ewars.entities.structure.Structure.Controller.Config
 import archyonix.ewars.entities.structure.controllers.DefaultController
-import archyonix.ewars.entities.structure.controllers.extensions.events.StructureExtensionDeconstructEvent
-import archyonix.ewars.entities.structure.controllers.extensions.events.StructureExtensionStartBuildingEvent
 import archyonix.ewars.entities.structure.events.*
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.features.classlibrary.ClassLibrary
@@ -14,7 +13,6 @@ import archyonix.ewars.features.shop.Dependence
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.AppSchema
 import archyonix.ewars.shared.libs.config.Properties
-import archyonix.ewars.shared.libs.withDirection
 import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.event.Event
@@ -36,9 +34,9 @@ class Structure(
     private val buildZone: Zone,
 ) : Properties() {
     val config = game.structureManager.getConfig(id)
-    val region3D = Region3D.fromSizeArea(position, config.area)
+    val region3D = Region3D(position, config.area)
     val region2D = Region2D.fromSizeArea(position, config.area.size)
-    val buildPosition = region3D.minPoint()
+    val buildPosition = region3D.startPoint()
     private var currentVariant: Config.Variant? = null
     private var process: Process = Process(Process.Type.NONE)
 
@@ -74,7 +72,7 @@ class Structure(
         process.addProgress(buildEvent.buildPoints)
 
         return if (startProgress < process.getProgress()) {
-            if(process.hasFinished()) process = Process(Process.Type.IDLE)
+            if (process.hasFinished()) process = Process(Process.Type.IDLE)
             build(startProgress)
             true
         } else false
@@ -116,22 +114,22 @@ class Structure(
         val buildingLimit: Int = config.getInt("buildingLimit", 0)
         private val defaultSettings: DefaultSettings =
             DefaultSettings(config.getConfigurationSection("defaultSettings"))
-        val controllers: Set<Controller<*>> = run {
+        val controllers: Set<Controller.Config<*, *>> = run {
             val section = config.getConfigurationSection("controllers")
-                ?: return@run setOf(DefaultController())
-            val controllerSet: MutableSet<Controller<*>> = HashSet()
+                ?: return@run setOf(DefaultController.Config())
+            val controllerSet: MutableSet<Controller.Config<*, *>> = HashSet()
             for (id in section.getKeys(false)) {
                 val controllerConfig = section.getConfigurationSection(id) ?: continue
                 val controllerConstructor = game.classLibrary
-                    .findConstructor<Controller<*>>(id, ClassLibrary.Type.STRUCTURE_CONTROLLER)
-                    ?: throw RuntimeException("Controller with id `$id` is not exists")
+                    .findConstructor<Controller.Config<*, *>>(id, ClassLibrary.Type.STRUCTURE_CONTROLLER)
+                    ?: throw RuntimeException("Controller config with id `$id` is not found")
                 val controller = controllerConstructor.newInstance(controllerConfig)
                 val dependencies = controller.dependencies.joinToString(", ")
                 if (!controller.checkDependencies(controllerSet))
                     throw RuntimeException("Necessary dependencies for the controller are missing: (${dependencies})")
                 controllerSet.add(controller)
             }
-            controllerSet.add(DefaultController())
+            controllerSet.add(DefaultController.Config())
 
             return@run controllerSet
         }
@@ -158,14 +156,15 @@ class Structure(
 
         // Functions
         @Suppress("UNCHECKED_CAST")
-        fun <T : Controller<*>> getController(controllerId: String): T? {
+        fun <T : Controller.Config<*, *>> getController(configClass: Class<T>): T? {
+            val id = configClass.getAnnotation(ClassLibrary.RegisteredClass::class.java).name
             return controllers
                 .filter { it.javaClass.isAnnotationPresent(ClassLibrary.RegisteredClass::class.java) }
-                .find { it.javaClass.getAnnotation(ClassLibrary.RegisteredClass::class.java).name == controllerId.uppercase() } as T?
+                .find { it.javaClass.getAnnotation(ClassLibrary.RegisteredClass::class.java).name == id } as T?
         }
 
-        fun hasController(controllerId: String): Boolean {
-            return getController<Controller<*>>(controllerId) != null
+        fun hasController(configClass: Class<Controller.Config<*, *>>): Boolean {
+            return getController(configClass) != null
         }
 
         fun checkBuildingLimit(team: GameTeam): Boolean {
@@ -180,6 +179,7 @@ class Structure(
             val size: Int = config.getInt("size")
             val height: Int = config.getInt("height")
             val radius: Int = floor(size / 2.0).toInt()
+            val isEven: Boolean = size % 2 == 0
         }
 
         class LocalPosition(
@@ -254,18 +254,25 @@ class Structure(
                 return true
             }
         }
+    }
 
-        abstract class Controller<T>(
-            val controllerName: String,
+    abstract class Controller<C : Controller<C, T>, T : Controller.Config<C, T>>(
+        val structure: Structure,
+        val config: T
+    ) {
+
+        // Child classes
+        abstract class Config<C : Controller<C, T>, T : Config<C, T>>(
+            val id: String,
             val dependencies: Set<String> = emptySet()
         ) : PublicEventNode("structure-controller") {
-            open fun checkDependencies(controllerList: Set<Controller<*>>): Boolean {
-                val controllers = controllerList.map { it.controllerName }.toSet()
+            open fun init(structureConfig: Structure.Config) {}
+            fun checkDependencies(controllerList: Set<Config<*, *>>): Boolean {
+                val controllers = controllerList.map { it.id }.toSet()
                 return controllers.containsAll(dependencies)
             }
 
-            open fun init(structureConfig: Config) {}
-            abstract fun getStructureController(structure: Structure): T
+            abstract fun getController(structure: Structure): C
         }
     }
 
@@ -286,58 +293,11 @@ class Structure(
         }
 
         fun hasFinished() = calcProgress() == 1f
+        fun hasType(type: Type) = this.type == type
         fun getProgress() = calcProgress()
         fun startTime() = startTime
         fun updateTime() = updateTime
         private fun calcProgress() = currentValue / maxValue.toFloat()
         enum class Type { NONE, BUILDING, IDLE, UPGRADE, REPAIR }
-    }
-
-    class Extension(
-        private val parent: Structure,
-        val config: Config,
-        positionLocal: Structure.Config.LocalPosition,
-        positionGlobal: Point,
-        private val direction: Direction
-    ) : Properties() {
-        val region3D = run {
-            val region3D: Region3D = Region3D.fromSizeArea(positionLocal.asPoint(), config.area)
-            val firstPoint = region3D.minPoint()
-                .withDirection(parent.direction, parent.config.area.size.toShort()).add(positionGlobal)
-            val secondPoint = region3D.maxPoint()
-                .withDirection(parent.direction, parent.config.area.size.toShort()).add(positionGlobal)
-
-            return@run Region3D(firstPoint, secondPoint).normalize()
-        }
-        private var schema: AppSchema? = null
-
-        fun build(schema: AppSchema) {
-            val extensionStartBuildingEvent = StructureExtensionStartBuildingEvent(parent, this)
-            parent.config.handler.call(extensionStartBuildingEvent)
-            schema.build(game.instance, direction, region3D.minPoint(), parent.team)
-            this.schema = schema
-        }
-
-        fun deconstruct(): Boolean {
-            val extensionDeconstructEvent = StructureExtensionDeconstructEvent(parent, this)
-            parent.config.handler.call(extensionDeconstructEvent)
-            if (extensionDeconstructEvent.isCancelled) return false
-            schema?.fillWithOutAir(game.instance, region3D.minPoint(), direction, Block.AIR)
-            return true
-        }
-
-        class Config(
-            config: ConfigurationSection
-        ) {
-            val id: String = config.name
-            val area: Structure.Config.Area = Structure.Config.Area(
-                config.getConfigurationSection("area")
-                    ?: throw RuntimeException("Field area is null")
-            )
-            val position: Structure.Config.LocalPosition = Structure.Config.LocalPosition(
-                config.getConfigurationSection("position")
-                    ?: throw RuntimeException("Field position is null")
-            )
-        }
     }
 }
