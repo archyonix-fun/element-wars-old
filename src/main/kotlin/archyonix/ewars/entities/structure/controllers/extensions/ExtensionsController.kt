@@ -70,7 +70,7 @@ class ExtensionsController(
     class Extension(
         private val parent: Structure,
         private val direction: Direction,
-        config: Config
+        val config: Config
     ) {
         private val area = parent.config.area
         private var schema: AppSchema? = null

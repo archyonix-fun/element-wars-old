@@ -22,9 +22,8 @@ class WallsBuildExecutor(
 
         val controller = structure.config.getController(WallsController.Config::class.java)
             ?.getController(structure) ?: return false
-        return true
-//        val offset = controller.getOffsetByPoint(point) ?: return false
-//        if (controller.getTypeFromOffset(offset) != Walls.Config.WallData.Type.NOTHING) return false
-//        return controller.modify(offset, Walls.Config.WallData.Type.WALL)
+        val offset = controller.offsetByPoint(point) ?: return false
+        if (controller.sampleTypeByOffset(offset) != WallsController.Place.SampleType.NONE) return false
+        return controller.modify(offset, WallsController.Place.SampleType.GATE)
     }
 }

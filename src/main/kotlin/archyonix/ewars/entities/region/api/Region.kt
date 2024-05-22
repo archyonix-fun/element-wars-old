@@ -13,6 +13,7 @@ interface Region {
     fun normalize(): Region
     fun offset(absolutePoint: Point): Region
     fun rotateY(direction: Direction, planeSize: Int): Region
+    fun centerPoint(): Point
     fun startPoint(): Point
     fun endPoint(): Point
 }

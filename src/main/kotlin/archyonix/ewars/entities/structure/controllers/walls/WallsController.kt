@@ -18,8 +18,13 @@ import archyonix.ewars.game
 import archyonix.ewars.shared.libs.AppSchema
 import archyonix.ewars.shared.libs.config.Properties
 import net.minestom.server.coordinate.Point
+import net.minestom.server.coordinate.Pos
+import net.minestom.server.entity.Entity
+import net.minestom.server.entity.EntityType
 import net.minestom.server.entity.Player
+import net.minestom.server.entity.metadata.display.BlockDisplayMeta
 import net.minestom.server.instance.block.Block
+import net.minestom.server.tag.Tag
 import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.util.*
@@ -73,26 +78,50 @@ class WallsController(
         return true
     }
 
-    fun openGate(offset: StructureOffset.Global2D) {
+    fun openGate(offset: StructureOffset.Global2D, hasRecursive: Boolean = true) {
         val place = places[offset.index]
         if (place.sampleType != Place.SampleType.GATE) return
+        if (place.getProperty<Boolean>("isOpen")!!) return
+        val gateConfig = config.samples[config.places[offset.name]?.sampleId]?.gateConfig ?: return
 
-        val region = place.getProperty<Region>("region")
-            ?: throw RuntimeException("Gate region is null")
+        val origin = extensionFromOffset(offset).region
+        val region = gateConfig.region.rotateY(offset.reflect().direction, 4)
 
         place.setProperty("isOpen", true)
-        Zone(region).fill(Block.AIR)
+        Zone(region.offset(origin.startPoint())).fill(Block.AIR)
+
+        if (hasRecursive) {
+            val controller = config.getController(
+                game.structureManager
+                    .findNeighborFromOffset(structure, offset)
+                    ?: return
+            )
+            controller.openGate(offset.reflect(), false)
+        }
     }
 
-    fun closeGate(offset: StructureOffset.Global2D) {
+    fun closeGate(offset: StructureOffset.Global2D, hasRecursive: Boolean = true) {
         val place = places[offset.index]
         if (place.sampleType != Place.SampleType.GATE) return
+        if (!place.getProperty<Boolean>("isOpen")!!) return
+        val gateConfig = config.samples[config.places[offset.name]?.sampleId]?.gateConfig ?: return
+        val block = place.getProperty<Block>("block") ?: return
 
-        val region = place.getProperty<Region>("region")
-            ?: throw RuntimeException("Gate region is null")
+        val origin = extensionFromOffset(offset).region
+        val region = gateConfig.region.rotateY(offset.reflect().direction, 4)
 
         place.setProperty("isOpen", false)
-        Zone(region).fill(Block.BARRIER)
+        val gateZone = region.offset(origin.startPoint())
+        Zone(gateZone).fill(block)
+
+        if (hasRecursive) {
+            val controller = config.getController(
+                game.structureManager
+                    .findNeighborFromOffset(structure, offset)
+                    ?: return
+            )
+            controller.closeGate(offset.reflect(), false)
+        }
     }
 
     private fun extensionFromOffset(offset: StructureOffset.Global2D): ExtensionsController.Extension {
@@ -123,7 +152,7 @@ class WallsController(
                 val gateConfig = sample.gateConfig
                     ?: throw RuntimeException("Gate is not configured for this sample")
                 val schema = AppSchema("${schemasPath}${gateConfig.getSchema(variant)}")
-                val block = Block.fromNamespaceId(gateConfig.getBlock(variant))
+                val block = Block.fromNamespaceId(gateConfig.getBlock(variant))!!
                 val openDistance = gateConfig.openDistance
                 val region = gateConfig.region
                     .rotateY(offset.direction, structure.config.area.size)
@@ -134,7 +163,7 @@ class WallsController(
                 place.setProperty("block", block)
                 place.setProperty("openDistance", openDistance)
                 place.setProperty("region", region)
-                place.setProperty("isOpen", false)
+                place.setProperty("isOpen", true)
 
                 places[offset.index] = place
                 extension.construct(schema)
@@ -194,6 +223,7 @@ class WallsController(
                 val structure = event.structure
                 if (structure.getProcess().type != Structure.Process.Type.IDLE) return@addListener
 
+                updateGates(structure)
                 val nearbyPlayers = game.getPlayers()
                     .filter { it.gameTeam() == structure.team }
                     .filter { it.position.distance(structure.position) <= structure.config.area.size }
@@ -217,6 +247,32 @@ class WallsController(
         }
 
         // Functions
+
+        private fun updateGates(structure: Structure) {
+            val controller = getController(structure)
+            val gates: MutableSet<StructureOffset.Global2D> = HashSet()
+            for (offset in StructureOffset.Global2D.values()) {
+                if (controller.sampleTypeByOffset(offset) == Place.SampleType.GATE)
+                    gates.add(offset)
+            }
+            if (gates.isEmpty()) return
+
+            for (offset in gates) {
+                val openDistance = controller.places[offset.index].getProperty<Int>("openDistance") ?: 0
+                val gateConfig = samples[places[offset.name]?.sampleId]?.gateConfig ?: return
+
+                val origin = controller.extensionFromOffset(offset).region
+                val region = gateConfig.region.rotateY(offset.reflect().direction, 4)
+                val point = region.offset(origin.startPoint()).centerPoint()
+
+                val neighborsPlayers = game.getPlayers()
+                    .filter { it.gameTeam() == structure.team }
+                    .filter { it.position.distance(point) <= openDistance }
+                if (neighborsPlayers.isEmpty()) controller.closeGate(offset)
+                else controller.openGate(offset)
+            }
+        }
+
         fun extensions(): ExtensionsController.Config = extensions!!
         override fun init(structureConfig: Structure.Config) {
             this.extensions = structureConfig.getController(ExtensionsController.Config::class.java)

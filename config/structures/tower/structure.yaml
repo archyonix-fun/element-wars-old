@@ -3,17 +3,16 @@ area:
   height: 8
   size: 12
 grid: 12
-buildingLimit: 0
 controllers:
   EXTENSIONS:
     NORTH_WEST:
       startPoint: "0:0:0"
       endPoint: "3:5:3"
     NORTH:
-      startPoint: "4:0:3"
+      startPoint: "4:0:0"
       endPoint: "7:5:3"
     EAST_NORTH:
-      startPoint: "8:0:3"
+      startPoint: "8:0:0"
       endPoint: "11:5:3"
     EAST:
       startPoint: "8:0:4"
@@ -40,7 +39,7 @@ controllers:
           openDistance: 3
           region:
             startPoint: "3:0:1"
-            endPoint: "4:2:2"
+            endPoint: "3:2:2"
       WALL_SLOPE:
         schema: "$wallSlopeSchema"
     places:
@@ -79,5 +78,5 @@ variants:
     properties:
       wallStraightSchema: "wood_wall-straight.schem"
       gateStraightSchema: "wood_gate.schem"
-      gateBlock: "wood_wall-slope.schem"
       wallSlopeSchema: "wood_wall-slope.schem"
+      gateBlock: "minecraft:stripped_oak_log"

@@ -153,6 +153,11 @@ class Structure(
             game.handler.addChild(handler)
         }
 
+        fun init(): Config {
+            controllers.forEach { it.init(this) }
+            return this
+        }
+
         // Functions
         @Suppress("UNCHECKED_CAST")
         fun <T : Controller.Config<*, *>> getController(configClass: Class<T>): T? {

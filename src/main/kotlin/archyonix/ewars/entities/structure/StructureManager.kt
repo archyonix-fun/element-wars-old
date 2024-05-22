@@ -5,9 +5,11 @@ import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.structure.events.*
+import archyonix.ewars.entities.structure.functions.showEffect
 import archyonix.ewars.entities.structure.functions.withGrid
 import archyonix.ewars.entities.structure.types.StructureOffset
 import archyonix.ewars.entities.team.GameTeam
+import archyonix.ewars.game
 import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.entity.Player
@@ -136,7 +138,7 @@ class StructureManager {
             for (dir in STRUCTURES_DIR.listFiles()!!) {
                 try {
                     val config = YamlConfiguration.loadConfiguration(File(dir, "structure.yaml"))
-                    val structureConfig = Structure.Config(config)
+                    val structureConfig = Structure.Config(config).init()
                     configMap[structureConfig.id] = structureConfig
                 } catch (e: Exception) {
                     throw RuntimeException("Structures dir: ($dir) - ${e.localizedMessage}", e)

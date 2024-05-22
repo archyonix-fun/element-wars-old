@@ -5,6 +5,7 @@ import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.shared.libs.asPos
 import archyonix.ewars.shared.libs.withDirection
 import net.minestom.server.coordinate.Point
+import net.minestom.server.coordinate.Pos
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
@@ -104,6 +105,13 @@ class Region3D(
             startPoint().withDirection(direction, planeSize),
             endPoint().withDirection(direction, planeSize),
         ).normalize()
+    }
+
+    override fun centerPoint(): Point {
+        val x = startX + (getWidth() / 2.0)
+        val y = startY + (getHeight() / 2.0)
+        val z = startZ + (getLength() / 2.0)
+        return Pos(x, y, z)
     }
 
     override fun startPoint(): Point = Vec(
