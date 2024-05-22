@@ -2,7 +2,6 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Walls",
   "type": "object",
-  "pattern": "A-Z0-9",
   "properties": {
     "samples": {
       "type": "object",
@@ -13,7 +12,7 @@
             "schema": {
               "type": "string"
             },
-            "gateSettings": {
+            "gateConfig": {
               "type": "object",
               "properties": {
                 "schema": {
@@ -22,31 +21,18 @@
                 "block": {
                   "type": "string"
                 },
-                "openingDistance": {
+                "openDistance": {
                   "type": "integer"
                 },
-                "gate": {
-                  "type": "object",
-                  "properties": {
-                    "startPoint": {
-                      "$ref": "../types/position.json"
-                    },
-                    "endPoint": {
-                      "$ref": "../types/position.json"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "startPoint",
-                    "endPoint"
-                  ]
+                "region": {
+                  "$ref": "../types/region.json"
                 }
               },
               "additionalProperties": false,
               "required": [
                 "schema",
                 "block",
-                "gate"
+                "region"
               ]
             }
           },
@@ -57,7 +43,7 @@
         }
       }
     },
-    "directions": {
+    "places": {
       "type": "object",
       "properties": {
         "NORTH_WEST": {
@@ -77,30 +63,30 @@
           ]
         },
         "NORTH": {
-          "$ref": "#/properties/directions/properties/NORTH_WEST"
+          "$ref": "#/properties/places/properties/NORTH_WEST"
         },
         "EAST_NORTH": {
-          "$ref": "#/properties/directions/properties/NORTH_WEST"
+          "$ref": "#/properties/places/properties/NORTH_WEST"
         },
         "EAST": {
-          "$ref": "#/properties/directions/properties/NORTH_WEST"
+          "$ref": "#/properties/places/properties/NORTH_WEST"
         },
         "SOUTH_EAST": {
-          "$ref": "#/properties/directions/properties/NORTH_WEST"
+          "$ref": "#/properties/places/properties/NORTH_WEST"
         },
         "SOUTH": {
-          "$ref": "#/properties/directions/properties/NORTH_WEST"
+          "$ref": "#/properties/places/properties/NORTH_WEST"
         },
         "WEST_SOUTH": {
-          "$ref": "#/properties/directions/properties/NORTH_WEST"
+          "$ref": "#/properties/places/properties/NORTH_WEST"
         },
         "WEST": {
-          "$ref": "#/properties/directions/properties/NORTH_WEST"
+          "$ref": "#/properties/places/properties/NORTH_WEST"
         }
       },
       "additionalProperties": false
     }
   },
   "additionalProperties": false,
-  "required": ["samples", "directions"]
+  "required": ["samples", "places"]
 }
