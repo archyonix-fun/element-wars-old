@@ -21,6 +21,10 @@ class Zone(
         endPoint.blockX(), endPoint.blockY(), endPoint.blockZ()
     )
     constructor(region: Region): this(region.startPoint(), region.endPoint())
+    constructor(region: Region, startY: Int, endY: Int): this(
+        region.startPoint().add(0.0, startY.toDouble(), 0.0),
+        region.endPoint().add(0.0, endY.toDouble(), 0.0)
+    )
 
     fun notSolidBlockCount(limit: Int = Int.MAX_VALUE): Int {
         var count = 0

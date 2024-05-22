@@ -25,15 +25,15 @@ fun Point.withGrid(size: Int = 12): Point {
 }
 
 fun showRegion(region2D: Region2D, player: Player) {
-    val minX = region2D.startX
-    val maxX = region2D.endX
+    val minX = region2D.startPoint().blockX()
+    val maxX = region2D.endPoint().blockX()
 
-    val minZ = region2D.startZ
-    val maxZ = region2D.endZ
+    val minZ = region2D.startPoint().blockZ()
+    val maxZ = region2D.endPoint().blockZ()
 
     for (x in minX..maxX) {
         for (z in minZ..maxZ) {
-            val pos = Pos(x + .5, player.position.y, z + .5)
+            val pos = Pos(x + .5, player.position.blockY().toDouble(), z + .5)
             when {
                 x == minX -> showEffect(player, pos)
                 x == maxX -> showEffect(player, pos)

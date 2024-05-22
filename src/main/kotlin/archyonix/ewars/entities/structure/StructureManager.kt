@@ -5,11 +5,9 @@ import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.structure.events.*
-import archyonix.ewars.entities.structure.functions.showEffect
 import archyonix.ewars.entities.structure.functions.withGrid
 import archyonix.ewars.entities.structure.types.StructureOffset
 import archyonix.ewars.entities.team.GameTeam
-import archyonix.ewars.game
 import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.entity.Player
@@ -86,7 +84,7 @@ class StructureManager {
         val direction = calcDirectionEvent.resultDirection
             ?: throw RuntimeException("Calculation Error: direction is null")
 
-        val region2D = Region2D.fromSizeArea(position, structureConfig.area.size)
+        val region2D = Region2D(position, structureConfig.area)
 
         if (!validateRegion(region2D)) {
             builder.showActionBar("Другая постройка мешает строительству", MessageType.WARNING)

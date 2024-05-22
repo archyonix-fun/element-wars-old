@@ -3,7 +3,6 @@ package archyonix.ewars.entities.structure
 import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.region.Region3D
 import archyonix.ewars.entities.region.Zone
-import archyonix.ewars.entities.structure.Structure.Controller.Config
 import archyonix.ewars.entities.structure.controllers.DefaultController
 import archyonix.ewars.entities.structure.events.*
 import archyonix.ewars.entities.team.GameTeam
@@ -35,7 +34,7 @@ class Structure(
 ) : Properties() {
     val config = game.structureManager.getConfig(id)
     val region3D = Region3D(position, config.area)
-    val region2D = Region2D.fromSizeArea(position, config.area.size)
+    val region2D = Region2D(position, config.area)
     val buildPosition = region3D.startPoint()
     private var currentVariant: Config.Variant? = null
     private var process: Process = Process(Process.Type.NONE)

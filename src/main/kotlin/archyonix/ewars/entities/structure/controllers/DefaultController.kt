@@ -30,23 +30,8 @@ class DefaultController(
                 val region2D = event.region2D
                 val zeroY = event.zeroY
 
-                event.resultAirZone = Zone(
-                    startX = region2D.startX,
-                    startY = zeroY,
-                    startZ = region2D.startZ,
-                    endX = region2D.endX,
-                    endY = zeroY + height,
-                    endZ = region2D.endZ
-                )
-
-                event.resultBaseZone = Zone(
-                    startX = region2D.startX,
-                    startY = zeroY - 4,
-                    startZ = region2D.startZ,
-                    endX = region2D.endX,
-                    endY = zeroY - 1,
-                    endZ = region2D.endZ
-                )
+                event.resultAirZone = Zone(region2D, zeroY, zeroY + height)
+                event.resultBaseZone = Zone(region2D, zeroY - 4, zeroY - 1)
             }
             addListener(StructureValidateBuildZoneEvent::class.java) { event ->
                 val size = event.structureConfig.area.size

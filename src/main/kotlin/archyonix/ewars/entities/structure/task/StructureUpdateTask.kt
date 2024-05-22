@@ -28,7 +28,7 @@ class StructureUpdateTask : Runnable {
                 val structureConfig = game.structureManager.getConfig(structureId)
 
                 val zeroPosition = it.position.withGrid(structureConfig.grid)
-                val region2D = Region2D.fromSizeArea(zeroPosition, structureConfig.area.size)
+                val region2D = Region2D(zeroPosition, structureConfig.area)
                 showRegion(region2D, it)
             }
     }
