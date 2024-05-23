@@ -18,13 +18,8 @@ import archyonix.ewars.game
 import archyonix.ewars.shared.libs.AppSchema
 import archyonix.ewars.shared.libs.config.Properties
 import net.minestom.server.coordinate.Point
-import net.minestom.server.coordinate.Pos
-import net.minestom.server.entity.Entity
-import net.minestom.server.entity.EntityType
 import net.minestom.server.entity.Player
-import net.minestom.server.entity.metadata.display.BlockDisplayMeta
 import net.minestom.server.instance.block.Block
-import net.minestom.server.tag.Tag
 import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.util.*
@@ -40,8 +35,8 @@ class WallsController(
             ?: return@run Array<Place>(8) { Place() }
     }
 
-    // Functions
     fun sampleTypeByOffset(offset: StructureOffset.Global2D) = places[offset.index].sampleType
+
     fun offsetByPoint(point: Point): StructureOffset.Global2D? {
         if (!structure.region3D.contains(point)) return null
         for (offset in StructureOffset.Global2D.values()) {
@@ -50,7 +45,6 @@ class WallsController(
         }
         return null
     }
-
     fun showPlaceByOffset(player: Player, offset: StructureOffset.Global2D) {
         val extension = extensionFromOffset(offset)
         showRegion(extension.region as Region3D, player)
@@ -91,12 +85,8 @@ class WallsController(
         Zone(region.offset(origin.startPoint())).fill(Block.AIR)
 
         if (hasRecursive) {
-            val controller = config.getController(
-                game.structureManager
-                    .findNeighborFromOffset(structure, offset)
-                    ?: return
-            )
-            controller.openGate(offset.reflect(), false)
+            neighbourController(offset)
+                ?.openGate(offset.reflect(), false)
         }
     }
 
@@ -115,13 +105,15 @@ class WallsController(
         Zone(gateZone).fill(block)
 
         if (hasRecursive) {
-            val controller = config.getController(
-                game.structureManager
-                    .findNeighborFromOffset(structure, offset)
-                    ?: return
-            )
-            controller.closeGate(offset.reflect(), false)
+            neighbourController(offset)
+                ?.closeGate(offset.reflect(), false)
         }
+    }
+
+    // Functions
+    private fun neighbourController(offset: StructureOffset.Global2D): WallsController? {
+        val neighbor = game.structureManager.findNeighborFromOffset(structure, offset) ?: return null
+        return config.getController(neighbor)
     }
 
     private fun extensionFromOffset(offset: StructureOffset.Global2D): ExtensionsController.Extension {
@@ -259,11 +251,13 @@ class WallsController(
 
             for (offset in gates) {
                 val openDistance = controller.places[offset.index].getProperty<Int>("openDistance") ?: 0
-                val gateConfig = samples[places[offset.name]?.sampleId]?.gateConfig ?: return
 
-                val origin = controller.extensionFromOffset(offset).region
-                val region = gateConfig.region.rotateY(offset.reflect().direction, 4)
-                val point = region.offset(origin.startPoint()).centerPoint()
+                val firstRegion = controller.extensionFromOffset(offset).region
+                val secondRegion = controller.neighbourController(offset)
+                    ?.extensionFromOffset(offset.reflect())?.region ?: return
+
+                val point = firstRegion.merge(secondRegion)
+                    .normalize().centerPoint()
 
                 val neighborsPlayers = game.getPlayers()
                     .filter { it.gameTeam() == structure.team }
