@@ -11,6 +11,7 @@ import archyonix.ewars.entities.structure.controllers.extensions.ExtensionsContr
 import archyonix.ewars.entities.structure.events.StructureCalculateDirectionEvent
 import archyonix.ewars.entities.structure.events.StructureDeconstructEvent
 import archyonix.ewars.entities.structure.events.StructureUpdateEvent
+import archyonix.ewars.entities.structure.functions.showEffect
 import archyonix.ewars.entities.structure.functions.showRegion
 import archyonix.ewars.entities.structure.types.StructureOffset
 import archyonix.ewars.features.classlibrary.ClassLibrary
@@ -18,6 +19,7 @@ import archyonix.ewars.game
 import archyonix.ewars.shared.libs.AppSchema
 import archyonix.ewars.shared.libs.config.Properties
 import net.minestom.server.coordinate.Point
+import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
 import net.minestom.server.instance.block.Block
 import net.minestom.server.utils.Direction
@@ -45,6 +47,7 @@ class WallsController(
         }
         return null
     }
+
     fun showPlaceByOffset(player: Player, offset: StructureOffset.Global2D) {
         val extension = extensionFromOffset(offset)
         showRegion(extension.region as Region3D, player)
@@ -256,8 +259,9 @@ class WallsController(
                 val secondRegion = controller.neighbourController(offset)
                     ?.extensionFromOffset(offset.reflect())?.region ?: return
 
-                val point = firstRegion.merge(secondRegion)
+                val regionCenter = firstRegion.merge(secondRegion)
                     .normalize().centerPoint()
+                val point = Pos(regionCenter.x(), firstRegion.startPoint().y(), regionCenter.z())
 
                 val neighborsPlayers = game.getPlayers()
                     .filter { it.gameTeam() == structure.team }

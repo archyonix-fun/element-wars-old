@@ -79,7 +79,7 @@ class ShopItem(
     private fun buildLore(team: GameTeam): List<String> {
         val lore = mutableListOf<String>()
         lore.addAll(LoreUtils.buildCostLore(cost))
-        lore.addAll(LoreUtils.buildDependenciesLore(dependencies, team))
+        lore.addAll(LoreUtils.buildDependenciesLore(dependencies))
         return lore
     }
 

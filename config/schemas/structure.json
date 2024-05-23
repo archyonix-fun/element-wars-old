@@ -39,6 +39,9 @@
             "schema": {
               "type": "string"
             },
+            "ui": {
+              "type": "string"
+            },
             "cost": {
               "$ref": "types/cost.json"
             },

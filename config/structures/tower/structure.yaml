@@ -73,6 +73,7 @@ variants:
     name: "Деревянная башня"
     buildPoints: 5
     schema: "wood_tower.schem"
+    ui: "wood_tower.yaml"
     cost:
       NATURAL_CRYSTAL: 50
     properties:

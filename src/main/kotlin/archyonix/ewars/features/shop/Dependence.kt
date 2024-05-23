@@ -25,10 +25,8 @@ class Dependence(
 
     private var variants: List<Structure.Config.Variant>? = null
 
-    fun generateLore(team: GameTeam): String? {
+    fun generateLore(): String {
         if (variants == null) variants = findVariants()
-
-        if (check(team)) return null
 
         val names = mutableListOf<String>()
         variants!!.forEach { names.add(it.name) }

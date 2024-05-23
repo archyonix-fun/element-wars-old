@@ -6,6 +6,7 @@ import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.entities.structure.controllers.DefaultController
 import archyonix.ewars.entities.structure.events.*
 import archyonix.ewars.entities.team.GameTeam
+import archyonix.ewars.entities.ui.UI
 import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.features.shop.CostInfo
 import archyonix.ewars.features.shop.Dependence
@@ -205,6 +206,7 @@ class Structure(
         ) {
             val name: String? = config?.getString("name")
             val schema: String? = config?.getString("schema")
+            val ui: String? = config?.getString("ui")
             val cost: CostInfo? = CostInfo
                 .import(config?.getConfigurationSection("cost"))
             val dependencies: List<Dependence>? = Dependence
@@ -236,6 +238,12 @@ class Structure(
                     ?: defaultSettings.schema
                     ?: throw RuntimeException("Field schema is null")
                 AppSchema("config/structures/$structureId/schemas/$localPath")
+            }
+            val ui: UI.Constructor? = run {
+                val localPath = config.getString("ui")
+                    ?: defaultSettings.ui
+                    ?: return@run null
+                return@run UI.Constructor("config/structures/$structureId/ui/$localPath")
             }
             val cost: CostInfo = CostInfo
                 .import(config.getConfigurationSection("cost"))

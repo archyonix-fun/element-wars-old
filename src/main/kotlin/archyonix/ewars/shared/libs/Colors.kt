@@ -5,6 +5,7 @@ import java.lang.reflect.Modifier
 
 class Colors {
     companion object {
+        val WHITE = TextColor.fromHexString("#ffffff")
         val BLUE = TextColor.fromHexString("#0cb2aa")
         val YELLOW = TextColor.fromHexString("#d7a116")
         val RED = TextColor.fromHexString("#c51c29")

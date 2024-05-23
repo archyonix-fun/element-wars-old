@@ -16,13 +16,12 @@ class LoreUtils {
             return lore
         }
 
-        fun buildDependenciesLore(dependencies: List<Dependence>, team: GameTeam): List<String> {
+        fun buildDependenciesLore(dependencies: List<Dependence>): List<String> {
             val lore = mutableListOf<String>()
             if (dependencies.isNotEmpty()) {
                 val lines = mutableListOf<String>()
                 dependencies.forEach {
-                    val line = it.generateLore(team)
-                    if (line != null) lines.add(line)
+                    lines.add(it.generateLore())
                 }
                 if (lines.isNotEmpty()) {
                     lore.add("")
