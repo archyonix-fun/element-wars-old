@@ -1,0 +1,23 @@
+id: "CRAFTSMAN_HOUSE"
+area:
+  height: 12
+  size: 17
+buildingLimit: 1
+
+variants:
+  WOOD_CRAFTSMAN_HOUSE:
+    name: "Дом ремесленника (Дерево)"
+    schema: "craftsman_house-wood.schem"
+    buildPoints: 20
+    dependencies:
+      - "STRUCTURE:BUILDER_HUT"
+    cost:
+      NATURAL_CRYSTAL: 20
+      EARTH_CRYSTAL: 20
+  STONE_CRAFTSMAN_HOUSE:
+    name: "Дом ремесленника (Камень)"
+    schema: "craftsman_house-stone.schem"
+    buildPoints: 50
+    cost:
+      NATURAL_CRYSTAL: 20
+      EARTH_CRYSTAL: 20

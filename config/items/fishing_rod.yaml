@@ -12,7 +12,7 @@ variants:
       - "<text>добывать ресурс из воды"
       - ""
       - "<blue>? Добывает водный кристалл из воды 3-5шт."
-    texture: "FISHING_ROD_T1"
+    icon: "fishing_rod_t1"
     properties:
       minFarm: 3
       maxFarm: 5
@@ -23,7 +23,7 @@ variants:
       - "<text>добывать ресурс из воды"
       - ""
       - "<blue>? Добывает водный кристалл из воды 7-10шт."
-    texture: "FISHING_ROD_T2"
+    icon: "fishing_rod_t2"
     properties:
       minFarm: 7
       maxFarm: 10
@@ -34,7 +34,7 @@ variants:
       - "<text>добывать ресурс из воды"
       - ""
       - "<blue>? Добывает водный кристалл из воды 12-15шт."
-    texture: "FISHING_ROD_T3"
+    icon: "fishing_rod_t3"
     properties:
       minFarm: 12
       maxFarm: 15
@@ -45,7 +45,7 @@ variants:
       - "<text>добывать ресурс из воды"
       - ""
       - "<blue>? Добывает водный кристалл из воды 17-20шт."
-    texture: "FISHING_ROD_T4"
+    icon: "fishing_rod_t4"
     properties:
       minFarm: 17
       maxFarm: 20

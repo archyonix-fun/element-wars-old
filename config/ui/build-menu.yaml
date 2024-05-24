@@ -1,4 +1,107 @@
-components:
+name: ""
+size: "CHEST_6_ROW"
+
+content:
+  slot[10]:
+    DEFAULT:
+      view:
+        name: "<white>Костёр"
+        description:
+          - "<text>Основное здание Вашего поселения. Улучшайте его"
+          - "<text>для перехода на новую ступень развития"
+          - ""
+          - "<blue>? Является точкой возрождения команды"
+        icon: "camp_fire"
+      cost:
+        NATURAL_CRYSTAL: 25
+      actions:
+        give:
+          executor: "STRUCTURE_SCHEMA_GIVE"
+          properties:
+            structureId: "CAMP_FIRE"
+  slot[11]:
+    DEFAULT:
+      view:
+        name: "<white>Хижина строителя"
+        description:
+          - "<text>Является требованием большенства зданий первого"
+          - "<text>тира. Позволяет улучшить молот строителя до <blue>T2"
+          - ""
+          - "<blue>? Необходимо для постройки других зданий."
+        icon: "builder_hut"
+      cost:
+        NATURAL_CRYSTAL: 25
+      actions:
+        give:
+          executor: "STRUCTURE_SCHEMA_GIVE"
+          properties:
+            structureId: "BUILDER_HUT"
+  slot[12]:
+    DEFAULT:
+      view:
+        name: "<white>Дом ремесленника"
+        description:
+          - "<text>Открывает базовые инструменты для добычи"
+          - "<text>ресурсов. Может быть улучшен"
+          - ""
+          - "<blue>? Позволяет покупать/ремонтировать инструменты."
+        icon: "wood_craftsman_house"
+      dependencies:
+        - "STRUCTURE:BUILDER_HUT"
+      cost:
+        NATURAL_CRYSTAL: 20
+        EARTH_CRYSTAL: 20
+      actions:
+        give:
+          executor: "STRUCTURE_SCHEMA_GIVE"
+          properties:
+            structureId: "CRAFTSMAN_HOUSE"
+  slot[13]:
+    DEFAULT:
+      view:
+        name: "<white>Мельница"
+        description:
+          - "<text>Обеспечивает едой всё Ваше поселение."
+          - ""
+          - "<blue>? Позволяет покупать еду."
+        icon: "mill"
+      dependencies:
+        - "STRUCTURE:BUILDER_HUT"
+      cost:
+        NATURAL_CRYSTAL: 75
+        WATER_CRYSTAL: 50
+      actions:
+        give:
+          executor: "STRUCTURE_SCHEMA_GIVE"
+          properties:
+            structureId: "MILL"
+  slot[14]:
+    DEFAULT:
+      view:
+        name: "<white>Стороживая башня"
+        description:
+          - "<text>Защищает поселение от внешних угроз, может быть"
+          - "<text>объединена стенами с соседними башнями"
+          - ""
+          - "<blue>? Мешает передвижению противника."
+        icon: "wood_tower"
+      dependencies:
+        - "STRUCTURE:BUILDER_HUT"
+      cost:
+        NATURAL_CRYSTAL: 75
+        WATER_CRYSTAL: 50
+      actions:
+        give:
+          executor: "STRUCTURE_SCHEMA_GIVE"
+          properties:
+            structureId: "TOWER"
+
+
+
+
+
+
+
   #CAMP_FIRE:
   #  component: "UIView"
   #  displayName: "Костёр"
@@ -12,19 +115,19 @@ components:
   #    texture: "CAMP_FIRE"
   #  icon: "minecraft:stick"
   #  pos: "1:1"
-  BUILDER_HUT:
-    component: "UIView"
-    displayName: "Хижина строителя"
-    description:
-      - "<text>Необходимо для возведения иных зданий <yellow>Т1"
-      - "<text>Может быть улучшено до <blue>Дом строителей"
-      - ""
-      - "<blue>? Разблокирует здания <yellow>Т1"
-    order: 0
-    tags:
-      texture: "BUILDER_HUT"
-    icon: "minecraft:stick"
-    pos: "2:1"
+#  BUILDER_HUT:
+#    component: "UIView"
+#    displayName: "Хижина строителя"
+#    description:
+#      - "<text>Необходимо для возведения иных зданий <yellow>Т1"
+#      - "<text>Может быть улучшено до <blue>Дом строителей"
+#      - ""
+#      - "<blue>? Разблокирует здания <yellow>Т1"
+#    order: 0
+#    tags:
+#      texture: "BUILDER_HUT"
+#    icon: "minecraft:stick"
+#    pos: "2:1"
   #CRAFTSMAN_HOUSE:
   #  component: "UIView"
   #  displayName: "Дом ремесленника (Дерево)"
@@ -51,16 +154,16 @@ components:
   #    texture: "MILL"
   #  icon: "minecraft:stick"
   #  pos: "4:1"
-  TOWER:
-    component: "UIView"
-    displayName: "Деревянная Башня"
-    description:
-      - "<text>Базовое оборонительное сооружение. Мешает"
-      - "<text>противнику передвигаться по Вашей территории"
-      - ""
-      - "<blue>? <text>Объединяется стенами с соседними башнями"
-    order: 0
-    tags:
-      texture: "WOOD_TOWER"
-    icon: "minecraft:stick"
-    pos: "5:1"
+#  TOWER:
+#    component: "UIView"
+#    displayName: "Деревянная Башня"
+#    description:
+#      - "<text>Базовое оборонительное сооружение. Мешает"
+#      - "<text>противнику передвигаться по Вашей территории"
+#      - ""
+#      - "<blue>? <text>Объединяется стенами с соседними башнями"
+#    order: 0
+#    tags:
+#      texture: "WOOD_TOWER"
+#    icon: "minecraft:stick"
+#    pos: "5:1"

@@ -1,0 +1,13 @@
+id: "CAMP_FIRE"
+area:
+  height: 12
+  size: 7
+buildingLimit: 1
+
+variants:
+  CAMP_FIRE:
+    name: "Костёр"
+    schema: "campfire.schem"
+    buildPoints: 10
+    cost:
+      NATURAL_CRYSTAL: 25

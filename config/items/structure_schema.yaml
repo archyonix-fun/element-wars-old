@@ -2,9 +2,7 @@ id: "STRUCTURE_SCHEMA"
 default:
   material: "minecraft:stick"
   flags:
-    - "ITEM"
-  properties:
-    extractorMultiplier: 1
+    - "OTHER"
 variants:
   DEFAULT:
     name: "<t0>Схема здания: "
@@ -12,9 +10,10 @@ variants:
       - "<blue>ПКМ <text>для установки купленного здания на"
       - "<text>текущем месте"
       - "<red>Q <yellow>для продажи за половину стоимости"
-actions:
-  place:
-    executor: "STRUCTURE_PLACE"
-    trigger:
-      - "RIGHT_CLICK_BLOCK"
-      - "RIGHT_CLICK"
+    actions:
+      structure_place:
+        executor: "STRUCTURE_PLACE"
+        trigger:
+          DEFAULT?OR:
+            RIGHT_CLICK: false
+            RIGHT_CLICK_BLOCK: false

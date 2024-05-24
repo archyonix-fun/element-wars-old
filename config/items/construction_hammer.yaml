@@ -7,6 +7,21 @@ default:
     - "TOOL"
   properties:
     extractorMultiplier: 1
+  actions:
+    build_menu:
+      executor: "UI_OPEN"
+      properties:
+        path: "config/ui/build-menu.yaml"
+      trigger:
+        DEFAULT?OR:
+          RIGHT_CLICK: false
+          RIGHT_CLICK_BLOCK: false
+    build_walls:
+      executor: "STRUCTURE_WALLS_BUILD"
+      trigger:
+        action-build: true
+
+
 variants:
   T0:
     name: "<t0>Примитивный молот строителя"
@@ -14,16 +29,21 @@ variants:
       - "<text>Важнейший инструмент для любой колонии. Способен возвести"
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>1"
-    texture: "CONSTRUCTION_HAMMER_T0"
-    properties:
-      buildPower: 1
+    icon: "construction_hammer_t0"
+    actions:
+      build:
+        executor: "STRUCTURE_BUILD"
+        properties:
+          buildPower: 1
+        trigger:
+          LEFT_CLICK_BLOCK: false
   T1:
     name: "<t1>Каменный молот строителя"
     description:
       - "<text>Важнейший инструмент для любой колонии. Способен возвести"
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>2"
-    texture: "CONSTRUCTION_HAMMER_T1"
+    icon: "construction_hammer_t1"
     properties:
       buildPower: 2
   T2:
@@ -32,7 +52,7 @@ variants:
       - "<text>Важнейший инструмент для любой колонии. Способен возвести"
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>3"
-    texture: "CONSTRUCTION_HAMMER_T2"
+    icon: "construction_hammer_t2"
     properties:
       buildPower: 3
   T3:
@@ -41,26 +61,6 @@ variants:
       - "<text>Важнейший инструмент для любой колонии. Способен возвести"
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>5"
-    texture: "CONSTRUCTION_HAMMER_T3"
+    icon: "construction_hammer_t3"
     properties:
       buildPower: 5
-actions:
-  wall-build:
-    executor: "WALLS_BUILD"
-    trigger:
-      - "LEFT_CLICK_BLOCK"
-  build:
-    executor: "BUILD/REPAIR"
-    trigger:
-      - "ON_FAILED:wall-build"
-  structure_ui:
-    executor: "STRUCTURE_UI"
-    trigger:
-      - "RIGHT_CLICK_BLOCK"
-  menu:
-    executor: "OPEN_UI"
-    trigger:
-      - "RIGHT_CLICK"
-      - "ON_FAILED:structure_ui"
-    properties:
-      name: "BUILD_MENU"

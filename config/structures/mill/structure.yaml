@@ -1,0 +1,16 @@
+id: "MILL"
+area:
+  height: 15
+  size: 13
+buildingLimit: 1
+
+variants:
+  MILL:
+    name: "Мельница"
+    schema: "mill.schem"
+    buildPoints: 25
+    dependencies:
+      - "STRUCTURE:BUILDER_HUT"
+    cost:
+      NATURAL_CRYSTAL: 75
+      WATER_CRYSTAL: 50
