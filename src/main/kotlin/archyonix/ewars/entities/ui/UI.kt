@@ -2,6 +2,7 @@ package archyonix.ewars.entities.ui
 
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.player.gameTeam
+import archyonix.ewars.entities.player.getConditions
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.features.action.Action
@@ -30,7 +31,8 @@ import kotlin.math.min
 
 class UI(
     config: Config,
-    val player: Player
+    val player: Player,
+    val owner: Any
 ) : PublicEventNode("ui-handler") {
     private val inventory = Inventory(config.size, Component.text(config.name, Colors.WHITE))
     private val content: Set<UISlot> = config.content.map { UISlot(it) }.toSet()
@@ -47,11 +49,16 @@ class UI(
 
             val player = event.player
             if (!sample.checkConditions(player)) return@addListener
-            if (sample.pay(player)) sample.executeActions(player)
+            if (sample.pay(player)) sample.executeActions(player, owner)
         }
         addListener(InventoryCloseEvent::class.java) {
             if (it.inventory == inventory) unregister()
         }
+    }
+
+    fun close() {
+        player.closeInventory()
+        unregister()
     }
 
     private fun render() {
@@ -97,7 +104,7 @@ class UI(
             return@run Config(config)
         }
 
-        fun buildUI(player: Player) = UI(config, player)
+        fun buildUI(player: Player, owner: Any) = UI(config, player, owner)
     }
 
     class UISlot(
@@ -130,10 +137,10 @@ class UI(
             private val view: View = View(config.view)
 
             fun pay(player: Player) = config.cost.pay(player)
-            fun executeActions(player: Player) {
+            fun executeActions(player: Player, owner: Any) {
                 config.actions
-                    .filter { it.triggers.contains("SUCCESS_PAY") }
-                    .forEach { it.execute(player) }
+                    .filter { it.trigger.contains(player.getConditions()) }
+                    .forEach { it.execute(player, owner) }
             }
 
             fun checkConditions(gameTeam: GameTeam): Boolean {
