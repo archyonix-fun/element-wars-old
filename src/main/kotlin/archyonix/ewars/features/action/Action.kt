@@ -1,6 +1,6 @@
 package archyonix.ewars.features.action
 
-import org.antlr.v4.runtime.atn.SemanticContext.AND
+import net.minestom.server.entity.Player
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 
 class Action(
@@ -8,12 +8,12 @@ class Action(
     val trigger: Trigger,
     private val executor: Executor
 ) {
-    fun execute(caller: Any) = executor.run(caller)
+    fun execute(player: Player, caller: Any) = executor.run(player, caller)
 
     abstract class Executor(
         val properties: Map<String, Any>
     ) {
-        abstract fun run(caller: Any): Boolean
+        abstract fun run(player: Player, caller: Any): Boolean
     }
 
     @Retention(AnnotationRetention.RUNTIME)

@@ -24,7 +24,7 @@ class ActionManager {
 
     private fun createExecutor(name: String, properties: Map<String, Any> = HashMap()): Action.Executor? {
         val exConstructor = game.classLibrary
-            .findConstructor<Action.Executor>(name, ClassLibrary.Type.EXECUTOR) ?: return null
+            .findConstructor<Action.Executor>(name, ClassLibrary.Type.ACTION_EXECUTOR) ?: return null
         
         return exConstructor.newInstance(properties)
     }
