@@ -15,8 +15,8 @@ import archyonix.ewars.shared.libs.withColors
 import net.kyori.adventure.text.Component
 import net.minestom.server.entity.Player
 import net.minestom.server.event.PublicEventNode
-import net.minestom.server.event.inventory.InventoryClickEvent
 import net.minestom.server.event.inventory.InventoryCloseEvent
+import net.minestom.server.event.inventory.InventoryPreClickEvent
 import net.minestom.server.inventory.Inventory
 import net.minestom.server.inventory.InventoryType
 import net.minestom.server.item.ItemHideFlag
@@ -39,8 +39,9 @@ class UI(
 
     init {
         player.openInventory(inventory); render()
-        addListener(InventoryClickEvent::class.java) { event ->
-            if (event.inventory != inventory) return@addListener
+        addListener(InventoryPreClickEvent::class.java) { event ->
+            if (event.player.username != player.username) return@addListener
+            if (event.inventory == inventory) event.isCancelled = true
             if (event.slot < 0 || event.slot >= inventory.size) return@addListener
 
             val sampleId = event.clickedItem.getTag(Tag.String("sampleId"))
@@ -65,6 +66,8 @@ class UI(
         for (slot in content) {
             val sample = slot.samples
                 .lastOrNull { it.checkConditions(player.gameTeam()) }
+                ?: slot.samples
+                    .firstOrNull { !it.checkConditions(player.gameTeam()) }
                 ?: continue
             inventory.setItemStack(slot.index, sample.buildView(player.gameTeam()))
         }
@@ -104,7 +107,11 @@ class UI(
             return@run Config(config)
         }
 
-        fun buildUI(player: Player, owner: Any) = UI(config, player, owner)
+        fun buildUI(player: Player, owner: Any): UI {
+            val ui = UI(config, player, owner)
+            game.handler.addChild(ui)
+            return ui
+        }
     }
 
     class UISlot(
@@ -147,7 +154,7 @@ class UI(
                 for (dependency in config.dependencies) {
                     if (!dependency.check(gameTeam)) return false
                 }
-                return config.cost.check(gameTeam)
+                return true
             }
 
             fun checkConditions(player: Player): Boolean {
@@ -180,9 +187,7 @@ class UI(
                 val cost: CostInfo = CostInfo.import(
                     config.getConfigurationSection("cost")
                 ) ?: CostInfo()
-                val dependencies: List<Dependence> = Dependence.import(
-                    config.getConfigurationSection("dependencies")
-                ) ?: ArrayList()
+                val dependencies: List<Dependence> = Dependence.import(config)
                 val actions: Set<Action> = game.actionManager.readActions(
                     config.getConfigurationSection("actions")
                 )
@@ -199,7 +204,7 @@ class UI(
                         .withDisplayName(config.name.withColors())
                         .withLore(description.map { it.withColors() })
                         .withTag(Tag.String("sampleId"), sampleConfig.id)
-                        .withTag(Tag.String("icon"), if (isConditions) config.icon else "icon:unknown")
+                        .withTag(Tag.String("icon"), if (isConditions) config.icon else "unknown")
                         .withMeta { it.hideFlag(*ItemHideFlag.values()) }
                 }
 

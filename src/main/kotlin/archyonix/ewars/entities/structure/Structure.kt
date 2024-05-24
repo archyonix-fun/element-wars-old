@@ -22,6 +22,7 @@ import net.minestom.server.instance.block.Block
 import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
@@ -209,8 +210,8 @@ class Structure(
             val ui: String? = config?.getString("ui")
             val cost: CostInfo? = CostInfo
                 .import(config?.getConfigurationSection("cost"))
-            val dependencies: List<Dependence>? = Dependence
-                .import(config?.getConfigurationSection("dependencies"))
+            val dependencies: List<Dependence> = if(config != null) Dependence
+                .import(config) else ArrayList()
             val buildPoints: Int = config?.getInt("buildPoints", -1) ?: -1
             val properties: Map<String, Any> = run {
                 val section = config?.getConfigurationSection("properties")

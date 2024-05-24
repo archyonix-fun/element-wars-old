@@ -10,8 +10,7 @@ class Dependence(
     private val targets: Set<String>
 ) {
     companion object {
-        fun import(section: ConfigurationSection?): List<Dependence>? {
-            if (section == null) return null
+        fun import(section: ConfigurationSection): List<Dependence> {
             return section.getStringList("dependencies")
                 .map {
                     val split = it.split(":")
@@ -37,9 +36,9 @@ class Dependence(
         val variants = mutableListOf<Structure.Config.Variant>()
         for (target in targets) {
             val variant = game.structureManager.configMap().values
-                .find { config -> config.variants.find { it.name == target } != null }
+                .find { config -> config.variants.find { it.id == target } != null }
                 ?.variants
-                ?.find { it.name == target }
+                ?.find { it.id == target }
             if (variant != null) variants.add(variant)
         }
         return variants
@@ -51,7 +50,7 @@ class Dependence(
                 val structure = game.structureManager
                     .findStructures(team)
                     .filter { it.getProcess().type != Structure.Process.Type.BUILDING }
-                    .find { targets.contains(it.getVariant()?.name) }
+                    .find { targets.contains(it.getVariant()?.id) }
                 structure != null
             }
         }

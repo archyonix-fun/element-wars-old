@@ -31,6 +31,6 @@ class SchemaGiveExecutor(
             .createItemStack(amount)
             .withDisplayName(variant.name.withColors())
             .withTag(Tag.String("structureId"), structureId)
-            .withTag(Tag.String("icon"), variant.id)
+            .withTag(Tag.String("icon"), variant.id.lowercase())
     }
 }

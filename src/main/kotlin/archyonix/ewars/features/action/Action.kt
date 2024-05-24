@@ -39,13 +39,15 @@ class Action(
 
             private fun importConditions(config: ConfigurationSection?): Condition {
                 if(config == null) return Condition.Group(emptySet(), Condition.Group.Operator.AND)
+                val split = config.name.split("?")
+                val operatorName = if(split.size == 2) split[1] else "AND"
                 val operator = Condition.Group.Operator.values()
-                    .find { it.name == config.name.uppercase() } ?: Condition.Group.Operator.AND
+                    .find { it.name == operatorName.uppercase() } ?: Condition.Group.Operator.AND
                 val conditions: MutableSet<Condition> = HashSet()
                 for (sectionId in config.getKeys(false)) {
                     if (config.isConfigurationSection(sectionId)) {
                         conditions.add(importConditions(config.getConfigurationSection(sectionId)!!))
-                    } else conditions.add(Condition.Impl(sectionId, config.getBoolean(config.name, false)))
+                    } else conditions.add(Condition.Impl(sectionId, config.getBoolean(sectionId, false)))
                 }
                 return Condition.Group(conditions, operator)
             }
@@ -74,7 +76,7 @@ class Action(
                             Operator.OR -> if (condition.contains(values)) return true
                         }
                     }
-                    return true
+                    return operator == Operator.AND
                 }
 
                 enum class Operator { AND, OR }

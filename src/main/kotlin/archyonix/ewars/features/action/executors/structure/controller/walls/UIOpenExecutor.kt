@@ -15,7 +15,7 @@ class UIOpenExecutor(
     properties: Map<String, Any>
 ) : Action.Executor(properties) {
     override fun run(player: Player, caller: Any): Boolean {
-        if (caller !is GameItem) throw RuntimeException("Executor can only be called by a game item")
+        if (caller !is GameItem.Variant) throw RuntimeException("Executor can only be called by a game item")
 
         val point = player.getTargetBlockPosition(5)
             ?.add(0.0, 1.0, 0.0) ?: return false

@@ -21,8 +21,8 @@ class FishExecutor(
         val SPAWN_TIME_TAG = Tag.Long("spawnTime")
     }
     override fun run(player: Player, caller: Any): Boolean {
-        if(caller !is GameItem) throw RuntimeException("Executor can only be called by a game item")
-        if(caller != GameItem.FISHING_ROD) throw RuntimeException("Executor can only be called with a fishing rod")
+        if(caller !is GameItem.Variant) throw RuntimeException("Executor can only be called by a game item")
+        if(caller.item != GameItem.FISHING_ROD) throw RuntimeException("Executor can only be called with a fishing rod")
         val fishingBobber = game.instance.entities
             .filter { it.entityType == EntityType.FISHING_BOBBER }
             .find { (it.entityMeta as FishingHookMeta).ownerEntity == caller }

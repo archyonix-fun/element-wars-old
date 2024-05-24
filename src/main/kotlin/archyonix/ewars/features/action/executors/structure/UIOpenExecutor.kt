@@ -13,7 +13,7 @@ class UIOpenExecutor(
     properties: Map<String, Any>
 ) : Action.Executor(properties) {
     override fun run(player: Player, caller: Any): Boolean {
-        if (caller !is GameItem) throw RuntimeException("Executor can only be called by a game item")
+        if (caller !is GameItem.Variant) throw RuntimeException("Executor can only be called by a game item")
         val point = player.getTargetBlockPosition(5) ?: return false
         val structure = game.structureManager.findStructure3D(point) ?: return false
         if (structure.getProcess().type != Structure.Process.Type.IDLE) return false

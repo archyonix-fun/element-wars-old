@@ -14,7 +14,7 @@ class BuildExecutor(
     properties: Map<String, Any>
 ) : Action.Executor(properties) {
     override fun run(player: Player, caller: Any): Boolean {
-        if (caller !is GameItem) throw RuntimeException("Executor can only be called by a game item")
+        if (caller !is GameItem.Variant) throw RuntimeException("Executor can only be called by a game item")
         if (!player.itemInMainHand.hasCharged()) return false
 
         val point = player.getTargetBlockPosition(5)

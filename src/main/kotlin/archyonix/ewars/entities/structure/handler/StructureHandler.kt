@@ -33,6 +33,7 @@ class StructureHandler : PublicEventNode("structure-handler") {
     private fun showStructureSchemaArea() {
         game.getPlayers()
             .filter { it.isOnGround }
+            .filter { it.itemInMainHand.hasGameItem() }
             .filter { it.itemInMainHand.hasGameItem(GameItem.STRUCTURE_SCHEMA) }
             .forEach {
                 val structureId = it.itemInMainHand.getTag(Tag.String("structureId"))

@@ -7,6 +7,7 @@ import archyonix.ewars.entities.item.functions.GameItemRechargeTag
 import archyonix.ewars.entities.item.functions.GameItemIconTag
 import archyonix.ewars.entities.item.functions.GameItemVariantTag
 import archyonix.ewars.entities.player.getConditions
+import archyonix.ewars.features.action.Action
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.withColors
 import net.minestom.server.attribute.Attribute
@@ -22,6 +23,7 @@ import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
 import java.lang.reflect.Modifier
 import java.util.*
+import kotlin.collections.HashSet
 
 class GameItem private constructor(
     config: ConfigurationSection
@@ -85,7 +87,10 @@ class GameItem private constructor(
         val order = ItemVariant.valueOf(id.uppercase()).order
         val name: String? = config.getString("name") ?: default?.name
         private val description: List<String> = config.contains("description").run {
-            if (this) return@run config.getStringList("description")
+            val description = config.getStringList("description")
+            description.addAll(default?.description ?: emptyList())
+
+            if (this) return@run description
             return@run default?.description ?: emptyList()
         }
         val properties: Map<String, Any> = config.contains("properties").run {
@@ -113,15 +118,22 @@ class GameItem private constructor(
         private val material: Material? =
             if (namespaceID == null) null
             else Material.fromNamespaceId(namespaceID)
-        private val actions = game.actionManager.readActions(config.getConfigurationSection("actions"))
+        private val actions: Set<Action> = run {
+            val section = config.getConfigurationSection("actions")
+            val actions = (default?.actions ?: HashSet()) as MutableSet<Action>
+            actions.addAll(game.actionManager.readActions(section))
+            return@run actions
+        }
 
         fun executeAction(player: Player, conditions: MutableMap<String, Boolean> = mutableMapOf()) {
             val conditionMap = HashMap(player.getConditions())
             conditionMap.putAll(conditions)
 
             actions.filter { it.trigger.contains(conditionMap) }.forEach {
-                conditions["action-${it.id}"] = it.execute(player, this)
-                executeAction(player, conditions)
+                if(!conditions.containsKey("action-${it.id}")) {
+                    conditions["action-${it.id}"] = it.execute(player, this)
+                    executeAction(player, conditions)
+                }
             }
         }
 
