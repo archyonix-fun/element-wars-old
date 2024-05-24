@@ -11,12 +11,13 @@ class ActionManager {
         for (actionId in config.getKeys(false)) {
             val actionData = config.getConfigurationSection(actionId)!!
 
-            val triggers = actionData.getStringList("trigger").toSet()
             val executorName = actionData.getString("executor") ?: continue
-            val properties = readProperties(actionData)
-
+            val properties = importProperties(actionData)
             val executor = createExecutor(executorName, properties) ?: continue
-            actionSet.add(Action(actionId, triggers, executor))
+
+            val trigger = Action.Trigger(Action.Trigger.Config(
+                actionData.getConfigurationSection("trigger")))
+            actionSet.add(Action(actionId, trigger, executor))
         }
         return actionSet
     }
@@ -28,7 +29,7 @@ class ActionManager {
         return exConstructor.newInstance(properties)
     }
 
-    private fun readProperties(config: ConfigurationSection): Map<String, Any> {
+    private fun importProperties(config: ConfigurationSection): Map<String, Any> {
         val properties: MutableMap<String, Any> = HashMap()
         val section = config.getConfigurationSection("properties") ?: return properties
         for (id in section.getKeys(false)) {

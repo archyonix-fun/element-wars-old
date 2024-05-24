@@ -10,6 +10,7 @@ import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.TextColor
 import net.minestom.server.MinecraftServer
 import net.minestom.server.coordinate.Pos
+import net.minestom.server.entity.Player
 import net.minestom.server.scoreboard.Team
 
 class GameTeam(
@@ -26,6 +27,8 @@ class GameTeam(
     var resources: ResourceStorage = ResourceStorage()
     var infoBar: TeamBar = TeamBar(resources)
     var spawn = Pos(.0, .0, .0)
+    val conditions: MutableMap<String, Boolean> = HashMap()
+    val playerConditions: MutableMap<Player, MutableMap<String, Boolean>> = HashMap()
 
     fun getPlayers() = game.getPlayers().filter {
         try {
