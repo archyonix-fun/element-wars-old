@@ -9,6 +9,7 @@ import archyonix.ewars.entities.team.functions.distributeTeams
 import archyonix.ewars.entities.team.functions.useGameTeams
 import archyonix.ewars.events
 import archyonix.ewars.features.action.handler.ActionsHandler
+import archyonix.ewars.features.hide_in_bushes.HideInBushesHandler
 import archyonix.ewars.game
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
@@ -19,7 +20,7 @@ import archyonix.ewars.game.functions.configureSpectator
 import archyonix.ewars.game.functions.giveStartGameItems
 import archyonix.ewars.game.task.CountdownTask
 import archyonix.ewars.game.task.ExpectationTask
-import archyonix.ewars.game.task.HiddenTask
+import archyonix.ewars.game.task.GameTickTask
 import net.minestom.server.entity.GameMode
 import net.minestom.server.event.PublicEventNode
 import java.util.*
@@ -55,7 +56,7 @@ class GameEventHandler : PublicEventNode("game") {
                 }
 
                 GameStage.RUNTIME -> {
-                    game.schedule.scheduleNextTick(HiddenTask())
+                    game.schedule.scheduleNextTick(GameTickTask())
                     game.startTime = Date().time + (3600000 * 3)
 
                     game.teams = useGameTeams()
@@ -71,6 +72,7 @@ class GameEventHandler : PublicEventNode("game") {
         addChild(ResourcePackHandler())
         addChild(ResourceHandler())
         addChild(ResourceWaterHandler())
+        addChild(HideInBushesHandler())
 
         addChild(StructureHandler())
         addChild(ActionsHandler())

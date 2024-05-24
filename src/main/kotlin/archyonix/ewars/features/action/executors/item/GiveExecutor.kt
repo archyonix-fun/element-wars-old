@@ -1,7 +1,6 @@
-package archyonix.ewars.features.action.executors
+package archyonix.ewars.features.action.executors.item
 
 import archyonix.ewars.entities.item.GameItem
-import archyonix.ewars.entities.item.enums.ItemVariant
 import archyonix.ewars.entities.item.functions.asGameItem
 import archyonix.ewars.entities.item.functions.asItemVariant
 import archyonix.ewars.entities.item.functions.hasGameItem
@@ -14,37 +13,36 @@ import archyonix.ewars.features.classlibrary.ClassLibrary
 import net.minestom.server.entity.Player
 import net.minestom.server.item.ItemStack
 
-@ClassLibrary.RegisteredClass("GIVE_ITEM", ClassLibrary.Type.EXECUTOR)
-class GiveItemExecutor(
+@ClassLibrary.RegisteredClass("ITEM_GIVE", ClassLibrary.Type.ACTION_EXECUTOR)
+class GiveExecutor(
     properties: Map<String, Any>
 ) : Action.Executor(properties) {
-    private var item: GameItem
-    private var variant: GameItem.Variant
-    private val amount = properties.getOrDefault("amount", 1) as Int
-    init {
+    val item = run {
         val itemId = (properties["id"] ?: "") as String
-        this.item = GameItem.items().find { it.id == itemId }
+        return@run GameItem.items().find { it.id == itemId }
             ?: throw RuntimeException("Unknown item: $itemId")
-
-        val variant = (properties["variant"] ?: "") as String
-        this.variant = item.getVariant(variant)
-            ?: throw RuntimeException("Unknown variant: $itemId")
     }
-    override fun run(player: Player): Boolean {
-        if(item.union != null) {
+    val variant = run {
+        val variantId = (properties["variant"] ?: "") as String
+        return@run item.getVariant(variantId)
+            ?: throw RuntimeException("Unknown variant: $variantId")
+    }
+    private val amount = properties.getOrDefault("amount", 1) as Int
+    override fun run(player: Player, caller: Any): Boolean {
+        if (item.union != null) {
             val savedItem = player.inventory.itemStacks
                 .filter { it.hasGameItem(item) }
                 .find { it.asItemVariant()?.order!! >= variant.order } != null
             if (savedItem) {
                 player.showActionBar(Message.ALREADY_PURCHASED, MessageType.WARNING)
                 return false
-            } else clearByUnion(player, item.union!!)
+            } else clearUnionItems(player, item.union)
         }
         player.addItem(variant, amount)
         return true
     }
 
-    private fun clearByUnion(player: Player, union: String) {
+    private fun clearUnionItems(player: Player, union: String) {
         val inv = player.inventory
         for (slot in 0 until inv.size) {
             if (inv.getItemStack(slot).asGameItem()?.union == union) {
