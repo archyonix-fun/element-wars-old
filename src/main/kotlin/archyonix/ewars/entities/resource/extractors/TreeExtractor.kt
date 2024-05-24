@@ -8,7 +8,7 @@ import net.minestom.server.coordinate.Pos
 import net.minestom.server.instance.block.Block
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 
-@ClassLibrary.RegisteredClass("TREE", ClassLibrary.Type.EXTRACTOR)
+@ClassLibrary.RegisteredClass("TREE", ClassLibrary.Type.RESOURCE_EXTRACTOR)
 class TreeExtractor(
     config: ConfigurationSection
 ) : Extractor(config) {

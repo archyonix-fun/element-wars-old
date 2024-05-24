@@ -8,7 +8,7 @@ import net.minestom.server.instance.block.Block
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.time.Duration
 
-@ClassLibrary.RegisteredClass("DEFAULT", ClassLibrary.Type.EXTRACTOR)
+@ClassLibrary.RegisteredClass("DEFAULT", ClassLibrary.Type.RESOURCE_EXTRACTOR)
 class DefaultExtractor(
     config: ConfigurationSection
 ) : Extractor(config) {

@@ -1,6 +1,5 @@
 package archyonix.ewars.features.classlibrary
 
-import net.minestom.server.entity.Player
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import org.reflections.Reflections
 import java.lang.reflect.Constructor
@@ -42,9 +41,8 @@ class ClassLibrary {
     enum class Type(
         val constructorArgs: Array<Class<*>> = emptyArray()
     ) {
-        EXECUTOR(arrayOf(Map::class.java)),
-        EXTRACTOR(arrayOf(ConfigurationSection::class.java)),
-        UI(arrayOf(Player::class.java)),
+        ACTION_EXECUTOR(arrayOf(Map::class.java)),
+        RESOURCE_EXTRACTOR(arrayOf(ConfigurationSection::class.java)),
         STRUCTURE_CONTROLLER(arrayOf(ConfigurationSection::class.java)),
     }
 }
