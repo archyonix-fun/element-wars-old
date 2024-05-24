@@ -12,7 +12,6 @@ import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
 import archyonix.ewars.game.handler.GameEventHandler
-import archyonix.ewars.game.ui.UIManager
 import archyonix.ewars.gameArgs
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
@@ -28,7 +27,6 @@ class Game {
 
     lateinit var classLibrary: ClassLibrary
     lateinit var actionManager: ActionManager
-    lateinit var uiManager: UIManager
     lateinit var resourceManager: ResourceManager
     lateinit var handler: GameEventHandler
     lateinit var structureManager: StructureManager
@@ -38,7 +36,6 @@ class Game {
     fun init(): Game {
         this.classLibrary = ClassLibrary()
         this.actionManager = ActionManager()
-        this.uiManager = UIManager()
         this.resourceManager = ResourceManager()
         this.handler = GameEventHandler()
         this.structureManager = StructureManager()

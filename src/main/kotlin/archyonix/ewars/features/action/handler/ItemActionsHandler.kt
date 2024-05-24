@@ -1,6 +1,6 @@
 package archyonix.ewars.features.action.handler
 
-import archyonix.ewars.entities.item.functions.asGameItem
+import archyonix.ewars.entities.item.functions.asItemVariant
 import archyonix.ewars.entities.player.useCoolDown
 import net.minestom.server.entity.Player
 import net.minestom.server.event.PublicEventNode
@@ -15,32 +15,32 @@ class ItemActionsHandler : PublicEventNode("item-actions") {
         addListener(PlayerBlockInteractEvent::class.java) { event ->
             if (event.isCancelled) return@addListener
             if (event.hand != Player.Hand.MAIN) return@addListener
-            val item = event.player.itemInMainHand.asGameItem() ?: return@addListener
+            val item = event.player.itemInMainHand.asItemVariant() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
-            item.executeAction(event.player, "RIGHT_CLICK_BLOCK")
+            item.executeAction(event.player, mutableMapOf(Pair("RIGHT_CLICK_BLOCK", true)))
         }
         addListener(PlayerUseItemEvent::class.java) { event ->
             if (event.isCancelled) return@addListener
             if (event.hand != Player.Hand.MAIN) return@addListener
-            val item = event.player.itemInMainHand.asGameItem() ?: return@addListener
+            val item = event.player.itemInMainHand.asItemVariant() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
-            item.executeAction(event.player, "RIGHT_CLICK")
+            item.executeAction(event.player, mutableMapOf(Pair("RIGHT_CLICK", true)))
         }
         addListener(PlayerHandAnimationEvent::class.java) { event ->
             if (event.isCancelled) return@addListener
             if (event.hand != Player.Hand.MAIN) return@addListener
-            val item = event.player.itemInMainHand.asGameItem() ?: return@addListener
+            val item = event.player.itemInMainHand.asItemVariant() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
             val blockPosition = event.player.getTargetBlockPosition(5)
 
-            if (blockPosition != null) item.executeAction(event.player, "LEFT_CLICK_BLOCK")
-            else item.executeAction(event.player, "LEFT_CLICK")
+            if (blockPosition != null) item.executeAction(event.player, mutableMapOf(Pair("LEFT_CLICK_BLOCK", true)))
+            else item.executeAction(event.player, mutableMapOf(Pair("LEFT_CLICK", true)))
         }
         addListener(PlayerSwapItemEvent::class.java) { event ->
             if (event.isCancelled) return@addListener
-            val item = event.player.itemInMainHand.asGameItem() ?: return@addListener
+            val item = event.player.itemInMainHand.asItemVariant() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
-            item.executeAction(event.player, "SWAP")
+            item.executeAction(event.player, mutableMapOf(Pair("SWAP", true)))
         }
     }
 }

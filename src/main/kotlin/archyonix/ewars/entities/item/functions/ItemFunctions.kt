@@ -6,7 +6,7 @@ import net.minestom.server.tag.Tag
 
 val GameItemIdTag = Tag.String("itemId")
 val GameItemVariantTag = Tag.String("itemVariant")
-val GameItemTextureTag = Tag.String("texture")
+val GameItemIconTag = Tag.String("texture")
 val GameItemRechargeTag = Tag.Float("recharge")
 
 fun ItemStack.hasGameItem() = hasTag(GameItemIdTag)

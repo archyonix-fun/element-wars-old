@@ -4,8 +4,9 @@ import archyonix.ewars.entities.item.enums.ItemFlag
 import archyonix.ewars.entities.item.enums.ItemVariant
 import archyonix.ewars.entities.item.functions.GameItemIdTag
 import archyonix.ewars.entities.item.functions.GameItemRechargeTag
-import archyonix.ewars.entities.item.functions.GameItemTextureTag
+import archyonix.ewars.entities.item.functions.GameItemIconTag
 import archyonix.ewars.entities.item.functions.GameItemVariantTag
+import archyonix.ewars.entities.player.getConditions
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.withColors
 import net.minestom.server.attribute.Attribute
@@ -58,20 +59,12 @@ class GameItem private constructor(
     val union: String? = config.getString("union")
     private val default = loadDefault(config.getConfigurationSection("default"))
     private val variants = loadVariants(config.getConfigurationSection("variants"))
-    val actions = game.actionManager.readActions(config.getConfigurationSection("actions"))
 
     fun getVariant(variant: ItemVariant) =
         variants.find { it.id == variant.name }
 
     fun getVariant(variant: String) =
         variants.find { it.id == variant }
-
-    fun executeAction(player: Player, trigger: String) {
-        actions.filter { it.triggers.contains(trigger) }.forEach {
-            if(it.execute(player)) executeAction(player, "ON_SUCCESS:${it.id}")
-            else executeAction(player, "ON_FAILED:${it.id}")
-        }
-    }
 
     private fun loadDefault(section: ConfigurationSection?): Variant? =
         if (section == null) null else Variant(this, section)
@@ -91,7 +84,7 @@ class GameItem private constructor(
         val id: String = config.name
         val order = ItemVariant.valueOf(id.uppercase()).order
         val name: String? = config.getString("name") ?: default?.name
-        val description: List<String> = config.contains("description").run {
+        private val description: List<String> = config.contains("description").run {
             if (this) return@run config.getStringList("description")
             return@run default?.description ?: emptyList()
         }
@@ -111,22 +104,33 @@ class GameItem private constructor(
             if (this) return@run config.getStringList("flags").map { ItemFlag.valueOf(it) }.toSet()
             return@run default?.flags ?: emptySet()
         }
-        val texture: String? = config.getString("texture") ?: default?.texture
+        private val icon: String? = config.getString("icon") ?: default?.icon
         val recharge: Int = config.contains("recharge").run {
             if (this) return@run config.getInt("recharge")
             return@run default?.recharge ?: 0
         }
         private val namespaceID: String? = config.getString("material") ?: default?.namespaceID
-        val material: Material? =
+        private val material: Material? =
             if (namespaceID == null) null
             else Material.fromNamespaceId(namespaceID)
+        private val actions = game.actionManager.readActions(config.getConfigurationSection("actions"))
+
+        fun executeAction(player: Player, conditions: MutableMap<String, Boolean> = mutableMapOf()) {
+            val conditionMap = HashMap(player.getConditions())
+            conditionMap.putAll(conditions)
+
+            actions.filter { it.trigger.contains(conditionMap) }.forEach {
+                conditions["action-${it.id}"] = it.execute(player, this)
+                executeAction(player, conditions)
+            }
+        }
 
         fun createItemStack(amount: Int = 1) = ItemStack.of(material ?: Material.AIR, amount)
             .withDisplayName(name?.withColors())
             .withLore(description.map { it.withColors() })
             .withTag(GameItemIdTag, item.id)
             .withTag(GameItemVariantTag, id)
-            .withTag(GameItemTextureTag, texture)
+            .withTag(GameItemIconTag, icon)
             .withTag(GameItemRechargeTag, recharge.toFloat())
             .withMeta {
                 it.attributes(
