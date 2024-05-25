@@ -4,6 +4,7 @@ import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.item.functions.hasGameItem
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region2D
+import archyonix.ewars.entities.structure.controllers.walls.WallsHandler
 import archyonix.ewars.entities.structure.functions.showRegion
 import archyonix.ewars.entities.structure.functions.withGrid
 import archyonix.ewars.game
@@ -14,6 +15,7 @@ import net.minestom.server.tag.Tag
 
 class StructureHandler : PublicEventNode("structure-handler") {
     init {
+        priority = -1
         addListener(GameTickEvent::class.java) {
             game.structureManager.updateStructures()
             showStructureSchemaArea()
@@ -28,6 +30,8 @@ class StructureHandler : PublicEventNode("structure-handler") {
 
             variant.ui?.buildUI(event.player, structure)
         }
+
+        addChild(WallsHandler())
     }
 
     private fun showStructureSchemaArea() {

@@ -7,6 +7,7 @@ import net.minestom.server.event.trait.CancellableEvent
 class StructureDeconstructEvent(
     val structure: Structure
 ) : GameEvent, CancellableEvent {
+    private var isCancelled: Boolean = false
     override fun isCancelled(): Boolean = isCancelled
 
     override fun setCancelled(cancel: Boolean) {

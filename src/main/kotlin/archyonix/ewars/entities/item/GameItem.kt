@@ -125,14 +125,14 @@ class GameItem private constructor(
             return@run actions
         }
 
-        fun executeAction(player: Player, conditions: MutableMap<String, Boolean> = mutableMapOf()) {
+        fun executeActions(player: Player, conditions: MutableMap<String, Boolean> = mutableMapOf()) {
             val conditionMap = HashMap(player.getConditions())
             conditionMap.putAll(conditions)
 
             actions.filter { it.trigger.contains(conditionMap) }.forEach {
                 if(!conditions.containsKey("action-${it.id}")) {
                     conditions["action-${it.id}"] = it.execute(player, this)
-                    executeAction(player, conditions)
+                    executeActions(player, conditions)
                 }
             }
         }

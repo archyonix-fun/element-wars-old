@@ -11,9 +11,9 @@ import archyonix.ewars.entities.structure.controllers.extensions.ExtensionsContr
 import archyonix.ewars.entities.structure.events.StructureCalculateDirectionEvent
 import archyonix.ewars.entities.structure.events.StructureDeconstructEvent
 import archyonix.ewars.entities.structure.events.StructureUpdateEvent
-import archyonix.ewars.entities.structure.functions.showEffect
 import archyonix.ewars.entities.structure.functions.showRegion
 import archyonix.ewars.entities.structure.types.StructureOffset
+import archyonix.ewars.entities.ui.UI
 import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.AppSchema
@@ -31,6 +31,7 @@ class WallsController(
     config: Config
 ) : Structure.Controller<WallsController, WallsController.Config>(structure, config) {
     private val schemasPath = "config/structures/${structure.id}/schemas/"
+    private val uisPath = "config/structures/${structure.id}/ui/"
     private val extensions = config.extensions().getController(structure)
     private val places: Array<Place> = run {
         return@run structure.getProperty<Array<Place>>("places")
@@ -71,6 +72,34 @@ class WallsController(
                 construct(offset, sampleType)
                 neighborController.construct(offset.reflect(), sampleType)
             }
+        }
+        return true
+    }
+
+    fun openUI(offset: StructureOffset.Global2D, player: Player): Boolean {
+        val sampleType = places[offset.index].sampleType
+        if (sampleType == Place.SampleType.NONE) return false
+
+        val placeConfig = config.places[offset.name]
+            ?: throw RuntimeException("Unregistered place with name: ${offset.name}")
+        val sample = config.samples[placeConfig.sampleId]
+            ?: throw RuntimeException("Sample with id `${placeConfig.sampleId}` is not exists")
+        val variant = structure.getVariant()
+            ?: throw RuntimeException("Structure Variant is null")
+
+        when (sampleType) {
+            Place.SampleType.WALL -> {
+                val path = sample.getUI(variant) ?: return false
+                UI.Constructor("$uisPath$path").buildUI(player, WallData(this, offset))
+            }
+
+            Place.SampleType.GATE -> {
+                val gateConfig = sample.gateConfig ?: return false
+                val path = gateConfig.getUI(variant) ?: return false
+                UI.Constructor("$uisPath$path").buildUI(player, WallData(this, offset))
+            }
+
+            else -> return false
         }
         return true
     }
@@ -174,6 +203,7 @@ class WallsController(
         if (current.sampleType == Place.SampleType.NONE) return
         val placeConfig = config.places[offset.name]
             ?: throw RuntimeException("Unregistered direction with name: ${offset.name}")
+        if (current.sampleType == Place.SampleType.GATE) openGate(offset)
         val extension = extensions.getOrCreateExtension(placeConfig.extensionId, offset.direction)
         places[offset.index] = Place()
         extension.deconstruct()
@@ -230,6 +260,7 @@ class WallsController(
                     if (controller.sampleTypeByOffset(offset) != Place.SampleType.NONE) continue
                     val neighbor = game.structureManager.findNeighborFromOffset(structure, offset) ?: continue
                     if (neighbor.getProcess().type != Structure.Process.Type.IDLE) continue
+                    if (neighbor.id != structure.id) continue
                     nearbyPlayers.forEach { controller.showPlaceByOffset(it, offset) }
                 }
             }
@@ -284,6 +315,7 @@ class WallsController(
         class Sample(
             config: ConfigurationSection
         ) {
+            private val ui: String? = config.getString("ui")
             private val schema: String = config.getString("schema")
                 ?: throw RuntimeException("Field schema is null")
             val gateConfig: Gate? = run {
@@ -291,17 +323,20 @@ class WallsController(
                 return@run Gate(section)
             }
 
+            fun getUI(variant: Structure.Config.Variant): String? {
+                if (ui == null) return null
+                return variant.findValue(ui)
+            }
+
             fun getSchema(variant: Structure.Config.Variant): String {
-                if (!schema.startsWith("$")) return schema
-                val key = schema.substring(1)
-                return variant.getProperty<String>(key)
-                    ?: throw RuntimeException("Variant property with name `$key` is not exists")
+                return variant.findValue(schema)
             }
 
             // Child classes
             class Gate(
                 config: ConfigurationSection
             ) {
+                private val ui: String? = config.getString("ui")
                 private val schema: String = config.getString("schema")
                     ?: throw RuntimeException("Field schema is null")
                 private val block: String = config.getString("block")
@@ -313,18 +348,17 @@ class WallsController(
                 )
 
                 // Functions
+                fun getUI(variant: Structure.Config.Variant): String? {
+                    if (ui == null) return null
+                    return variant.findValue(ui)
+                }
+
                 fun getSchema(variant: Structure.Config.Variant): String {
-                    if (!schema.startsWith("$")) return schema
-                    val key = schema.substring(1)
-                    return variant.getProperty<String>(key)
-                        ?: throw RuntimeException("Variant property with name `$key` is not exists")
+                    return variant.findValue(schema)
                 }
 
                 fun getBlock(variant: Structure.Config.Variant): String {
-                    if (!block.startsWith("$")) return schema
-                    val key = block.substring(1)
-                    return variant.getProperty<String>(key)
-                        ?: throw RuntimeException("Variant property with name `$key` is not exists")
+                    return variant.findValue(block)
                 }
             }
         }
@@ -345,4 +379,9 @@ class WallsController(
 
         enum class SampleType { NONE, WALL, GATE }
     }
+
+    data class WallData(
+        val controller: WallsController,
+        val offset: StructureOffset.Global2D
+    )
 }

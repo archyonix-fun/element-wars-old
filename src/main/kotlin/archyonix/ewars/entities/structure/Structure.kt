@@ -251,10 +251,15 @@ class Structure(
                 ?: defaultSettings.cost
                 ?: CostInfo()
             val dependencies: List<Dependence> = Dependence.import(config)
-                ?: defaultSettings.dependencies
-                ?: emptyList()
             val buildPoints: Int = config
                 .getInt("buildPoints", defaultSettings.buildPoints)
+
+            fun findValue(field: String): String {
+                if (!field.startsWith("$")) return field
+                val key = field.substring(1)
+                return getProperty<String>(key)
+                    ?: throw RuntimeException("Variant property with name `$key` is not exists")
+            }
 
             fun installBlueprint(structure: Structure) {
                 schema.fillWithOutAir(game.instance, structure.buildPosition, structure.direction, Block.SCAFFOLDING)

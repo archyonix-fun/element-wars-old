@@ -38,6 +38,7 @@ class UI(
     private val content: Set<UISlot> = config.content.map { UISlot(it) }.toSet()
 
     init {
+        closeOtherUIs()
         player.openInventory(inventory); render()
         addListener(InventoryPreClickEvent::class.java) { event ->
             if (event.player.username != player.username) return@addListener
@@ -50,7 +51,7 @@ class UI(
 
             val player = event.player
             if (!sample.checkConditions(player)) return@addListener
-            if (sample.pay(player)) sample.executeActions(player, owner)
+            if (sample.pay(player)) sample.executeActions(player, this)
         }
         addListener(InventoryCloseEvent::class.java) {
             if (it.inventory == inventory) unregister()
@@ -60,6 +61,12 @@ class UI(
     fun close() {
         player.closeInventory()
         unregister()
+    }
+
+    private fun closeOtherUIs() {
+        if (player.openInventory == null) return
+        game.handler.call(InventoryCloseEvent(player.openInventory, player))
+        player.closeInventory()
     }
 
     private fun render() {
@@ -144,10 +151,16 @@ class UI(
             private val view: View = View(config.view)
 
             fun pay(player: Player) = config.cost.pay(player)
-            fun executeActions(player: Player, owner: Any) {
-                config.actions
-                    .filter { it.trigger.contains(player.getConditions()) }
-                    .forEach { it.execute(player, owner) }
+            fun executeActions(player: Player, ui: UI, conditions: MutableMap<String, Boolean> = mutableMapOf()) {
+                val conditionMap = HashMap(player.getConditions())
+                conditionMap.putAll(conditions)
+
+                config.actions.filter { it.trigger.contains(conditionMap) }.forEach {
+                    if (!conditions.containsKey("action-${it.id}")) {
+                        conditions["action-${it.id}"] = it.execute(player, ui)
+                        executeActions(player, ui, conditions)
+                    }
+                }
             }
 
             fun checkConditions(gameTeam: GameTeam): Boolean {

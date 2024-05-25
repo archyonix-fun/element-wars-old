@@ -9,8 +9,8 @@ import archyonix.ewars.features.classlibrary.ClassLibrary
 import archyonix.ewars.game
 import net.minestom.server.entity.Player
 
-@ClassLibrary.RegisteredClass("STRUCTURE_WALLS_BUILD", ClassLibrary.Type.ACTION_EXECUTOR)
-class BuildExecutor(
+@ClassLibrary.RegisteredClass("STRUCTURE_WALLS_PLACE", ClassLibrary.Type.ACTION_EXECUTOR)
+class PlaceExecutor(
     properties: Map<String, Any>
 ) : Action.Executor(properties) {
     override fun run(player: Player, caller: Any): Boolean {

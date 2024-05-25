@@ -17,14 +17,14 @@ class ItemActionsHandler : PublicEventNode("item-actions") {
             if (event.hand != Player.Hand.MAIN) return@addListener
             val item = event.player.itemInMainHand.asItemVariant() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
-            item.executeAction(event.player, mutableMapOf(Pair("RIGHT_CLICK_BLOCK", true)))
+            item.executeActions(event.player, mutableMapOf(Pair("RIGHT_CLICK_BLOCK", true)))
         }
         addListener(PlayerUseItemEvent::class.java) { event ->
             if (event.isCancelled) return@addListener
             if (event.hand != Player.Hand.MAIN) return@addListener
             val item = event.player.itemInMainHand.asItemVariant() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
-            item.executeAction(event.player, mutableMapOf(Pair("RIGHT_CLICK", true)))
+            item.executeActions(event.player, mutableMapOf(Pair("RIGHT_CLICK", true)))
         }
         addListener(PlayerHandAnimationEvent::class.java) { event ->
             if (event.isCancelled) return@addListener
@@ -33,14 +33,14 @@ class ItemActionsHandler : PublicEventNode("item-actions") {
             if (!event.player.useCoolDown()) return@addListener
             val blockPosition = event.player.getTargetBlockPosition(5)
 
-            if (blockPosition != null) item.executeAction(event.player, mutableMapOf(Pair("LEFT_CLICK_BLOCK", true)))
-            else item.executeAction(event.player, mutableMapOf(Pair("LEFT_CLICK", true)))
+            if (blockPosition != null) item.executeActions(event.player, mutableMapOf(Pair("LEFT_CLICK_BLOCK", true)))
+            else item.executeActions(event.player, mutableMapOf(Pair("LEFT_CLICK", true)))
         }
         addListener(PlayerSwapItemEvent::class.java) { event ->
             if (event.isCancelled) return@addListener
             val item = event.player.itemInMainHand.asItemVariant() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
-            item.executeAction(event.player, mutableMapOf(Pair("SWAP", true)))
+            item.executeActions(event.player, mutableMapOf(Pair("SWAP", true)))
         }
     }
 }
