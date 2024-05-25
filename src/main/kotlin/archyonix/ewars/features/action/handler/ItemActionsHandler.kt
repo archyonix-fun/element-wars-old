@@ -4,6 +4,8 @@ import archyonix.ewars.entities.item.functions.asItemVariant
 import archyonix.ewars.entities.player.useCoolDown
 import net.minestom.server.entity.Player
 import net.minestom.server.event.PublicEventNode
+import net.minestom.server.event.item.ItemDropEvent
+import net.minestom.server.event.player.PlayerBlockBreakEvent
 import net.minestom.server.event.player.PlayerBlockInteractEvent
 import net.minestom.server.event.player.PlayerHandAnimationEvent
 import net.minestom.server.event.player.PlayerSwapItemEvent
@@ -36,11 +38,26 @@ class ItemActionsHandler : PublicEventNode("item-actions") {
             if (blockPosition != null) item.executeActions(event.player, mutableMapOf(Pair("LEFT_CLICK_BLOCK", true)))
             else item.executeActions(event.player, mutableMapOf(Pair("LEFT_CLICK", true)))
         }
+        addListener(PlayerBlockBreakEvent::class.java) { event ->
+            if (event.isCancelled) return@addListener
+            val item = event.player.itemInMainHand.asItemVariant() ?: return@addListener
+            if (!event.player.useCoolDown()) return@addListener
+
+            item.executeActions(event.player, mutableMapOf(Pair("BLOCK_BREAK", true)))
+        }
         addListener(PlayerSwapItemEvent::class.java) { event ->
             if (event.isCancelled) return@addListener
             val item = event.player.itemInMainHand.asItemVariant() ?: return@addListener
             if (!event.player.useCoolDown()) return@addListener
-            item.executeActions(event.player, mutableMapOf(Pair("SWAP", true)))
+            item.executeActions(event.player, mutableMapOf(Pair("ITEM_SWAP", true)))
+        }
+        addListener(ItemDropEvent::class.java) { event ->
+            if (event.isCancelled) return@addListener
+            event.isCancelled = true
+            if (event.player.openInventory != null) return@addListener
+            val item = event.player.itemInMainHand.asItemVariant() ?: return@addListener
+            if (!event.player.useCoolDown()) return@addListener
+            item.executeActions(event.player, mutableMapOf(Pair("ITEM_DROP", true)))
         }
     }
 }

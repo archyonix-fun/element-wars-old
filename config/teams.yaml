@@ -1,10 +1,10 @@
 red:
-  displayName: "Красные"
+  name: "Красные"
   color: "#eb120e"
   bannerColorFirst: "RED"
   bannerColorSecond: "MAGENTA"
 blue:
-  displayName: "Синие"
+  name: "Синие"
   color: "#1a58c4"
   bannerColorFirst: "BLUE"
   bannerColorSecond: "LIGHT_BLUE"

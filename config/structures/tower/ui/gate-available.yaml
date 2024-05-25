@@ -3,7 +3,7 @@ size: "CHEST_6_ROW"
 
 content:
   slot[10]:
-    DEFAULT:
+    DEFAUL:
       view:
         name: "<blue>Построить врата"
         description:

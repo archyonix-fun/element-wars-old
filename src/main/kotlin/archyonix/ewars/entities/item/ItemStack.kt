@@ -28,7 +28,7 @@ fun ItemStack.hasCharged(): Boolean {
         resetCharge()
         return true
     }
-    return !(getChargeValue() < 1)
+    return !(getChargeValue() < 1.0f)
 }
 
 fun ItemStack.resetCharge() {

@@ -15,7 +15,7 @@ import net.minestom.server.scoreboard.Team
 
 class GameTeam(
     val id: String,
-    val displayName: String,
+    val name: String,
     val bannerColorFirst: String = "white",
     val bannerColorSecond: String = "white",
     color: String

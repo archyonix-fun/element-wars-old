@@ -2,6 +2,32 @@ name: ""
 size: "CHEST_6_ROW"
 
 content:
+  slot[10]:
+    T1-HAMMER:
+      view:
+        name: "<t1>Каменный молот строителя"
+        description:
+          - "<text>Важнейший инструмент для любой колонии. Способен возвести"
+          - "<text>все здания и даже добыть некоторые ресурсы."
+          - "<blue>Скорость строительства: <text>2"
+        icon: "construction_hammer_t1"
+        cost:
+          NATURAL_CRYSTAL: 50
+          EARTH_CRYSTAL: 50
+      actions:
+        give_item:
+          executor: "ITEM_GIVE"
+          properties:
+            id: "CONSTRUCTION_HAMMER"
+            variant: "T1"
+        pay:
+          executor: "PAY"
+          properties:
+            cost:
+              NATURAL_CRYSTAL: 50
+              EARTH_CRYSTAL: 50
+          trigger:
+            action-give_item: false
   slot[43]:
     DEFAULT:
       view:

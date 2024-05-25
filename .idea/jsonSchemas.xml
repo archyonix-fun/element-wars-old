@@ -57,6 +57,42 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="Team">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="Team" />
+              <option name="relativePathToSchema" value="https://raw.githubusercontent.com/archyonix-fun/resources/main/ElementWars/schemas/entities/TEAM/index.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="pattern" value="true" />
+                    <option name="path" value="config/teams.yaml" />
+                    <option name="mappingKind" value="Pattern" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="UI">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="UI" />
+              <option name="relativePathToSchema" value="https://raw.githubusercontent.com/archyonix-fun/resources/main/ElementWars/schemas/entities/UI/index.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="pattern" value="true" />
+                    <option name="path" value="**/ui/*.yaml" />
+                    <option name="mappingKind" value="Pattern" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
       </map>
     </state>
   </component>

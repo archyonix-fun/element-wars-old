@@ -14,8 +14,13 @@ variants:
       - "<blue>? Добывает огненный кристалл из магмы 7-10шт."
     material: "minecraft:wooden_pickaxe"
     icon: "pickaxe_t1"
-    properties:
-      extractorMultiplier: 1
+    actions:
+      extract:
+        executor: "RESOURCE_EXTRACT"
+        properties:
+          multiplier: 1.0
+        trigger:
+          BLOCK_BREAK: false
   T2:
     name: "<t2>Каменная кирка"
     description:
@@ -26,8 +31,13 @@ variants:
       - "<blue>? Добывает огненный кристалл из магмы 10-12шт."
     material: "minecraft:stone_pickaxe"
     icon: "pickaxe_t2"
-    properties:
-      extractorMultiplier: 1
+    actions:
+      extract:
+        executor: "RESOURCE_EXTRACT"
+        properties:
+          multiplier: 2.0
+        trigger:
+          BLOCK_BREAK: false
   T3:
     name: "<t3>Железная кирка"
     description:
@@ -38,8 +48,13 @@ variants:
       - "<blue>? Добывает огненный кристалл из магмы 12-15шт."
     material: "minecraft:iron_pickaxe"
     icon: "pickaxe_t3"
-    properties:
-      extractorMultiplier: 1
+    actions:
+      extract:
+        executor: "RESOURCE_EXTRACT"
+        properties:
+          multiplier: 3.0
+        trigger:
+          BLOCK_BREAK: false
   T4:
     name: "<t4>Стихийная кирка"
     description:
@@ -50,5 +65,10 @@ variants:
       - "<blue>? Добывает огненный кристалл из магмы 17-20шт."
     material: "minecraft:diamond_pickaxe"
     icon: "pickaxe_t4"
-    properties:
-      extractorMultiplier: 1
+    actions:
+      extract:
+        executor: "RESOURCE_EXTRACT"
+        properties:
+          multiplier: 5.0
+        trigger:
+          BLOCK_BREAK: false

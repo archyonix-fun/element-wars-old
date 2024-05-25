@@ -120,7 +120,7 @@ class GameItem private constructor(
             else Material.fromNamespaceId(namespaceID)
         private val actions: Set<Action> = run {
             val section = config.getConfigurationSection("actions")
-            val actions = (default?.actions ?: HashSet()) as MutableSet<Action>
+            val actions = HashSet((default?.actions ?: HashSet())) as MutableSet<Action>
             actions.addAll(game.actionManager.readActions(section))
             return@run actions
         }

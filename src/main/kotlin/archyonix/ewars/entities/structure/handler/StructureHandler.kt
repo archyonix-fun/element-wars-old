@@ -4,6 +4,7 @@ import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.item.functions.hasGameItem
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.region.Region2D
+import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.structure.controllers.walls.WallsHandler
 import archyonix.ewars.entities.structure.functions.showRegion
 import archyonix.ewars.entities.structure.functions.withGrid
@@ -24,6 +25,8 @@ class StructureHandler : PublicEventNode("structure-handler") {
             val structure = game.structureManager.findStructure3D(event.blockPosition)
                 ?: return@addListener
             if (event.player.gameTeam() != structure.team)
+                return@addListener
+            if (structure.getProcess().type != Structure.Process.Type.IDLE)
                 return@addListener
             val variant = structure.getVariant()
                 ?: return@addListener

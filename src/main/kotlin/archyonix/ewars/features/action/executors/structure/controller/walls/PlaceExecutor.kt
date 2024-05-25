@@ -3,6 +3,7 @@ package archyonix.ewars.features.action.executors.structure.controller.walls
 import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.item.hasCharged
 import archyonix.ewars.entities.player.gameTeam
+import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.structure.controllers.walls.WallsController
 import archyonix.ewars.features.action.Action
 import archyonix.ewars.features.classlibrary.ClassLibrary
@@ -21,6 +22,7 @@ class PlaceExecutor(
             ?.add(0.0, 1.0, 0.0) ?: return false
         val structure = game.structureManager.findStructure3D(point) ?: return false
         if (structure.team != player.gameTeam()) return false
+        if(structure.getProcess().type != Structure.Process.Type.IDLE) return false
 
         val controller = structure.config.getController(WallsController.Config::class.java)
             ?.getController(structure) ?: return false

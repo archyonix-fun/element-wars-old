@@ -14,7 +14,7 @@ class ResourcePackHandler : PublicEventNode("rp-handler") {
         ResourcePackInfo.resourcePackInfo(
             UUID.randomUUID(),
             URI("https://github.com/archyonix-fun/resources/raw/main/ElementWars/ElementWars.zip"),
-            "9486af36d9d48d0cb5a9d069e0f8d127"
+            "676678e58b5c3c06696690b141593a2b"
         )
     )
 

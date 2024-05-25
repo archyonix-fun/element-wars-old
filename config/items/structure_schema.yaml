@@ -17,3 +17,13 @@ variants:
           DEFAULT?OR:
             RIGHT_CLICK: false
             RIGHT_CLICK_BLOCK: false
+      sell:
+        executor: "STRUCTURE_SCHEMA_SELL"
+        trigger:
+          ITEM_DROP: false
+      remove:
+        executor: "ITEM_REMOVE"
+        trigger:
+          DEFAULT?OR:
+            action-structure_place: false
+            action-sell: false

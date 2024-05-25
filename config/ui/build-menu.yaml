@@ -15,10 +15,17 @@ content:
       cost:
         NATURAL_CRYSTAL: 25
       actions:
+        pay:
+          executor: "PAY"
+          properties:
+            cost:
+              NATURAL_CRYSTAL: 25
         give:
           executor: "STRUCTURE_SCHEMA_GIVE"
           properties:
             structureId: "CAMP_FIRE"
+          trigger:
+            action-pay: false
   slot[11]:
     DEFAULT:
       view:
@@ -32,10 +39,17 @@ content:
       cost:
         NATURAL_CRYSTAL: 25
       actions:
+        pay:
+          executor: "PAY"
+          properties:
+            cost:
+              NATURAL_CRYSTAL: 25
         give:
           executor: "STRUCTURE_SCHEMA_GIVE"
           properties:
             structureId: "BUILDER_HUT"
+          trigger:
+            action-pay: false
   slot[12]:
     DEFAULT:
       view:
@@ -52,10 +66,18 @@ content:
         NATURAL_CRYSTAL: 20
         EARTH_CRYSTAL: 20
       actions:
+        pay:
+          executor: "PAY"
+          properties:
+            cost:
+              NATURAL_CRYSTAL: 20
+              EARTH_CRYSTAL: 20
         give:
           executor: "STRUCTURE_SCHEMA_GIVE"
           properties:
             structureId: "CRAFTSMAN_HOUSE"
+          trigger:
+            action-pay: false
   slot[13]:
     DEFAULT:
       view:
@@ -71,10 +93,18 @@ content:
         NATURAL_CRYSTAL: 75
         WATER_CRYSTAL: 50
       actions:
+        pay:
+          executor: "PAY"
+          properties:
+            cost:
+              NATURAL_CRYSTAL: 75
+              WATER_CRYSTAL: 50
         give:
           executor: "STRUCTURE_SCHEMA_GIVE"
           properties:
             structureId: "MILL"
+          trigger:
+            action-pay: false
   slot[14]:
     DEFAULT:
       view:
@@ -91,79 +121,15 @@ content:
         NATURAL_CRYSTAL: 75
         WATER_CRYSTAL: 50
       actions:
+        pay:
+          executor: "PAY"
+          properties:
+            cost:
+              NATURAL_CRYSTAL: 75
+              WATER_CRYSTAL: 50
         give:
           executor: "STRUCTURE_SCHEMA_GIVE"
           properties:
             structureId: "TOWER"
-
-
-
-
-
-
-
-  #CAMP_FIRE:
-  #  component: "UIView"
-  #  displayName: "Костёр"
-  #  description:
-  #    - "<text>Основное здание Вашего поселения. Является"
-  #    - "<text>точкой возрождения команды"
-  #    - ""
-  #    - "<blue>? Является точкой возрождения команды"
-  #  order: 0
-  #  tags:
-  #    texture: "CAMP_FIRE"
-  #  icon: "minecraft:stick"
-  #  pos: "1:1"
-#  BUILDER_HUT:
-#    component: "UIView"
-#    displayName: "Хижина строителя"
-#    description:
-#      - "<text>Необходимо для возведения иных зданий <yellow>Т1"
-#      - "<text>Может быть улучшено до <blue>Дом строителей"
-#      - ""
-#      - "<blue>? Разблокирует здания <yellow>Т1"
-#    order: 0
-#    tags:
-#      texture: "BUILDER_HUT"
-#    icon: "minecraft:stick"
-#    pos: "2:1"
-  #CRAFTSMAN_HOUSE:
-  #  component: "UIView"
-  #  displayName: "Дом ремесленника (Дерево)"
-  #  description:
-  #    - "<text>Открывает доступ к инструментам, что"
-  #    - "<text>значительно упрощает добычу ресурсов"
-  #    - ""
-  #    - "<blue>? Базовые нструменты"
-  #  order: 0
-  #  tags:
-  #    texture: "WOOD_CRAFTSMAN_HOUSE"
-  #  icon: "minecraft:stick"
-  #  pos: "3:1"
-  #MILL:
-  #  component: "UIView"
-  #  displayName: "Мельница"
-  #  description:
-  #    - "<text>Вас замучал голод? Тогда данное здание"
-  #    - "<text>именно то, что вам нужно."
-  #    - ""
-  #    - "<blue>? Можно преобрести еду"
-  #  order: 0
-  #  tags:
-  #    texture: "MILL"
-  #  icon: "minecraft:stick"
-  #  pos: "4:1"
-#  TOWER:
-#    component: "UIView"
-#    displayName: "Деревянная Башня"
-#    description:
-#      - "<text>Базовое оборонительное сооружение. Мешает"
-#      - "<text>противнику передвигаться по Вашей территории"
-#      - ""
-#      - "<blue>? <text>Объединяется стенами с соседними башнями"
-#    order: 0
-#    tags:
-#      texture: "WOOD_TOWER"
-#    icon: "minecraft:stick"
-#    pos: "5:1"
+          trigger:
+            action-pay: false

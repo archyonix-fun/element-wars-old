@@ -2,7 +2,6 @@ package archyonix.ewars.game.handler
 
 import archyonix.ewars.entities.player.PlayerType
 import archyonix.ewars.entities.player.handler.SpectatorEventHandler
-import archyonix.ewars.entities.resource.handler.ResourceHandler
 import archyonix.ewars.entities.resource.handler.ResourceWaterHandler
 import archyonix.ewars.entities.structure.handler.StructureHandler
 import archyonix.ewars.entities.team.functions.distributeTeams
@@ -70,7 +69,6 @@ class GameEventHandler : PublicEventNode("game") {
 
         // Features
         addChild(ResourcePackHandler())
-        addChild(ResourceHandler())
         addChild(ResourceWaterHandler())
         addChild(HideInBushesHandler())
 

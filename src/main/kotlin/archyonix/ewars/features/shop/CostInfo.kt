@@ -8,7 +8,7 @@ import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.util.*
 
 class CostInfo(
-    private val resources: Map<Resource, Int> = EnumMap(Resource::class.java)
+    val resources: Map<Resource, Int> = EnumMap(Resource::class.java)
 ) {
     companion object {
         fun import(section: ConfigurationSection?): CostInfo? {

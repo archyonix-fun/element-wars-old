@@ -24,6 +24,7 @@ import net.minestom.server.entity.Player
 import net.minestom.server.instance.block.Block
 import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
+import org.yaml.snakeyaml.events.Event.ID
 import java.util.*
 
 class WallsController(
@@ -56,6 +57,7 @@ class WallsController(
 
     fun modify(offset: StructureOffset.Global2D, sampleType: Place.SampleType): Boolean {
         val neighbor = game.structureManager.findNeighborFromOffset(structure, offset) ?: return false
+        if(neighbor.getProcess().type != Structure.Process.Type.IDLE) return false
         if (neighbor.id != structure.id) return false
         val neighborController = neighbor.config
             .getController(Config::class.java)

@@ -14,8 +14,13 @@ variants:
       - "<blue>? Добывает природный кристалл из дерева 3-5шт."
     material: "minecraft:wooden_axe"
     icon: "axe_t1"
-    properties:
-      extractorMultiplier: 1
+    actions:
+      extract:
+        executor: "RESOURCE_EXTRACT"
+        properties:
+          multiplier: 1.0
+        trigger:
+          BLOCK_BREAK: false
   T2:
     name: "<t2>Каменный топор"
     description:
@@ -26,8 +31,13 @@ variants:
       - "<blue>? Добывает природный кристалл из дерева 7-10шт."
     material: "minecraft:stone_axe"
     icon: "axe_t2"
-    properties:
-      extractorMultiplier: 1
+    actions:
+      extract:
+        executor: "RESOURCE_EXTRACT"
+        properties:
+          multiplier: 2.0
+        trigger:
+          BLOCK_BREAK: false
   T3:
     name: "<t3>Железный топор"
     description:
@@ -38,8 +48,13 @@ variants:
       - "<blue>? Добывает природный кристалл из дерева 12-15шт."
     material: "minecraft:iron_axe"
     icon: "axe_t3"
-    properties:
-      extractorMultiplier: 1
+    actions:
+      extract:
+        executor: "RESOURCE_EXTRACT"
+        properties:
+          multiplier: 3.0
+        trigger:
+          BLOCK_BREAK: false
   T4:
     name: "<t4>Стихийный топор"
     description:
@@ -50,5 +65,10 @@ variants:
       - "<blue>? Добывает природный кристалл из дерева 17-20шт."
     material: "minecraft:diamond_axe"
     icon: "axe_t4"
-    properties:
-      extractorMultiplier: 1
+    actions:
+      extract:
+        executor: "RESOURCE_EXTRACT"
+        properties:
+          multiplier: 5.0
+        trigger:
+          BLOCK_BREAK: false

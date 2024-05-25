@@ -13,12 +13,12 @@ private fun loadTeams(count: Int): Set<GameTeam> {
     val teamSet: MutableSet<GameTeam> = HashSet()
     val configFile = File("config/teams.yaml")
     val config = YamlConfiguration.loadConfiguration(configFile)
-    for (name in config.getKeys(false)) {
-        val displayName = config.getString("$name.displayName")!!
-        val color = config.getString("$name.color")!!
-        val bannerColorFirst = config.getString("$name.bannerColorFirst")!!
-        val bannerColorSecond = config.getString("$name.bannerColorSecond")!!
-        val teamData = GameTeam(name, displayName, bannerColorFirst, bannerColorSecond, color)
+    for (id in config.getKeys(false)) {
+        val name = config.getString("$id.name")!!
+        val color = config.getString("$id.color")!!
+        val bannerColorFirst = config.getString("$id.bannerColorFirst")!!
+        val bannerColorSecond = config.getString("$id.bannerColorSecond")!!
+        val teamData = GameTeam(id, name, bannerColorFirst, bannerColorSecond, color)
         teamSet.add(teamData)
         if (teamSet.size >= count) break
     }

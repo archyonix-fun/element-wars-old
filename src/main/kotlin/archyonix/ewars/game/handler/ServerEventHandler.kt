@@ -9,10 +9,11 @@ import archyonix.ewars.game.events.PlayerJoinTheGameEvent
 import archyonix.ewars.game.functions.findPlayerByUsername
 import archyonix.ewars.gameArgs
 import net.minestom.server.event.PublicEventNode
-import net.minestom.server.event.item.ItemDropEvent
+import net.minestom.server.event.inventory.InventoryPreClickEvent
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
 import net.minestom.server.event.player.PlayerPacketOutEvent
 import net.minestom.server.event.player.PlayerSpawnEvent
+import net.minestom.server.inventory.click.ClickType
 import net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket
 
 class ServerEventHandler() : PublicEventNode("server") {
@@ -34,8 +35,8 @@ class ServerEventHandler() : PublicEventNode("server") {
             events.call(PlayerJoinTheGameEvent(player, player.getRole()))
         }
 
-        addListener(ItemDropEvent::class.java) { event ->
-            event.isCancelled = true
+        addListener(InventoryPreClickEvent::class.java) { event ->
+            if (event.clickType == ClickType.DROP) event.isCancelled = true
         }
 
         addListener(PlayerPacketOutEvent::class.java) { event ->

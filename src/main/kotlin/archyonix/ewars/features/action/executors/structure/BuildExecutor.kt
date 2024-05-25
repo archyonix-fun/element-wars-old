@@ -2,6 +2,7 @@ package archyonix.ewars.features.action.executors.structure
 
 import archyonix.ewars.entities.item.GameItem
 import archyonix.ewars.entities.item.hasCharged
+import archyonix.ewars.entities.item.resetCharge
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.features.action.Action
@@ -20,6 +21,7 @@ class BuildExecutor(
     override fun run(player: Player, caller: Any): Boolean {
         if (caller !is GameItem.Variant) throw RuntimeException("Executor can only be called by the game item")
         if (!player.itemInMainHand.hasCharged()) return false
+        player.itemInMainHand.resetCharge()
 
         val point = player.getTargetBlockPosition(5) ?: return false
         val structure = game.structureManager.findStructure3D(point) ?: return false

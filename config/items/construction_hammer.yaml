@@ -2,7 +2,7 @@ id: "CONSTRUCTION_HAMMER"
 union: "build_tool"
 default:
   material: "minecraft:wooden_pickaxe"
-  recharge: 0
+  recharge: 30
   flags:
     - "TOOL"
   properties:
@@ -20,6 +20,11 @@ default:
       executor: "STRUCTURE_WALLS_PLACE"
       trigger:
         action-build: true
+    extract:
+      executor: "RESOURCE_EXTRACT"
+      trigger:
+        action-build: true
+        BLOCK_BREAK: false
 
 
 variants:
@@ -36,7 +41,9 @@ variants:
         properties:
           buildPower: 1
         trigger:
-          LEFT_CLICK_BLOCK: false
+          DEFAULT?OR:
+            LEFT_CLICK_BLOCK: false
+            BLOCK_BREAK: false
   T1:
     name: "<t1>Каменный молот строителя"
     description:
@@ -44,8 +51,15 @@ variants:
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>2"
     icon: "construction_hammer_t1"
-    properties:
-      buildPower: 2
+    actions:
+      build:
+        executor: "STRUCTURE_BUILD"
+        properties:
+          buildPower: 2
+        trigger:
+          DEFAULT?OR:
+            LEFT_CLICK_BLOCK: false
+            BLOCK_BREAK: false
   T2:
     name: "<t2>Железный молот строителя"
     description:
@@ -53,8 +67,15 @@ variants:
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>3"
     icon: "construction_hammer_t2"
-    properties:
-      buildPower: 3
+    actions:
+      build:
+        executor: "STRUCTURE_BUILD"
+        properties:
+          buildPower: 3
+        trigger:
+          DEFAULT?OR:
+            LEFT_CLICK_BLOCK: false
+            BLOCK_BREAK: false
   T3:
     name: "<t3>Стихийный молот строителя"
     description:
@@ -62,5 +83,12 @@ variants:
       - "<text>все здания и даже добыть некоторые ресурсы."
       - "<blue>Скорость строительства: <text>5"
     icon: "construction_hammer_t3"
-    properties:
-      buildPower: 5
+    actions:
+      build:
+        executor: "STRUCTURE_BUILD"
+        properties:
+          buildPower: 5
+        trigger:
+          DEFAULT?OR:
+            LEFT_CLICK_BLOCK: false
+            BLOCK_BREAK: false

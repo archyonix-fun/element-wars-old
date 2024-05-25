@@ -51,7 +51,7 @@ class UI(
 
             val player = event.player
             if (!sample.checkConditions(player)) return@addListener
-            if (sample.pay(player)) sample.executeActions(player, this)
+            sample.executeActions(player, this)
         }
         addListener(InventoryCloseEvent::class.java) {
             if (it.inventory == inventory) unregister()
@@ -150,7 +150,6 @@ class UI(
             val id: String = config.id
             private val view: View = View(config.view)
 
-            fun pay(player: Player) = config.cost.pay(player)
             fun executeActions(player: Player, ui: UI, conditions: MutableMap<String, Boolean> = mutableMapOf()) {
                 val conditionMap = HashMap(player.getConditions())
                 conditionMap.putAll(conditions)
@@ -177,10 +176,6 @@ class UI(
                         player.showActionBar("Не все требования выполнены", MessageType.WARNING)
                         return false
                     }
-                }
-                if (!config.cost.check(gameTeam)) {
-                    player.showActionBar("У команды недостаточно средств", MessageType.WARNING)
-                    return false
                 }
                 return true
             }

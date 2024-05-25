@@ -24,11 +24,6 @@ class PlaceExecutor(
         game.handler.call(placeEvent)
         if (placeEvent.isCancelled) return false
 
-        return if (game.structureManager.createStructure(structureId, player)) {
-            player.itemInMainHand =
-                if (item.amount() > 1) item.withAmount(item.amount() - 1)
-                else ItemStack.AIR
-            true
-        } else false
+        return game.structureManager.createStructure(structureId, player)
     }
 }
