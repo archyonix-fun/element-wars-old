@@ -17,7 +17,7 @@ default:
           RIGHT_CLICK: false
           RIGHT_CLICK_BLOCK: false
     build_walls:
-      executor: "STRUCTURE_WALLS_BUILD"
+      executor: "STRUCTURE_WALLS_PLACE"
       trigger:
         action-build: true
 

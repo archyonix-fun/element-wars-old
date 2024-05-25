@@ -7,6 +7,7 @@ buildingLimit: 1
 variants:
   CAMP_FIRE:
     name: "Костёр"
+    ui: "campfire-menu.yaml"
     schema: "campfire.schem"
     buildPoints: 10
     cost:

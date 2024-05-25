@@ -8,6 +8,7 @@ buildingLimit: 1
 variants:
   BUILDER_HUT:
     name: "Хижина строителя"
+    ui: "shop.yaml"
     schema: "builder_hut.schem"
     buildPoints: 15
     cost:

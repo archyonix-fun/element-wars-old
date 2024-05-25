@@ -32,8 +32,10 @@ controllers:
   WALLS:
     samples:
       WALL_STRAIGHT:
+        ui: "$wallStraightUI"
         schema: "$wallStraightSchema"
         gateConfig:
+          ui: "$gateStraightUI"
           schema: "$gateStraightSchema"
           block: "$gateBlock"
           openDistance: 3
@@ -41,6 +43,7 @@ controllers:
             startPoint: "3:0:1"
             endPoint: "3:2:2"
       WALL_SLOPE:
+        ui: "$wallSlopeUI"
         schema: "$wallSlopeSchema"
     places:
       NORTH_WEST:
@@ -77,7 +80,10 @@ variants:
     cost:
       NATURAL_CRYSTAL: 50
     properties:
+      wallStraightUI: "gate-available.yaml"
       wallStraightSchema: "wood_wall-straight.schem"
+      gateStraightUI: "gate.yaml"
       gateStraightSchema: "wood_gate.schem"
+      wallSlopeUI: "gate-not-available.yaml"
       wallSlopeSchema: "wood_wall-slope.schem"
       gateBlock: "minecraft:stripped_oak_log"

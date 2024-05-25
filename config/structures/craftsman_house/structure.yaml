@@ -7,6 +7,7 @@ buildingLimit: 1
 variants:
   WOOD_CRAFTSMAN_HOUSE:
     name: "Дом ремесленника (Дерево)"
+    ui: "wood-shop.yaml"
     schema: "craftsman_house-wood.schem"
     buildPoints: 20
     dependencies:
@@ -16,6 +17,7 @@ variants:
       EARTH_CRYSTAL: 20
   STONE_CRAFTSMAN_HOUSE:
     name: "Дом ремесленника (Камень)"
+    ui: "stone-shop.yaml"
     schema: "craftsman_house-stone.schem"
     buildPoints: 50
     cost:

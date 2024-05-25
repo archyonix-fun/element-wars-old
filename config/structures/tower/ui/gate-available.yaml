@@ -1,0 +1,40 @@
+name: ""
+size: "CHEST_6_ROW"
+
+content:
+  slot[10]:
+    DEFAULT:
+      view:
+        name: "<blue>Построить врата"
+        description:
+          - "<text>В стене появляются ворота, пропускающие"
+          - "<text>только членов поселения"
+        icon: "wood_gate"
+      cost:
+        EARTH_CRYSTAL: 25
+        FLAME_CRYSTAL: 50
+      actions:
+        modify:
+          executor: "STRUCTURE_WALLS_MODIFY"
+          properties:
+            sampleType: "GATE"
+        close:
+          executor: "UI_CLOSE"
+          trigger:
+            action-modify: false
+  slot[43]:
+    DEFAULT:
+      view:
+        name: "<red>Разобрать"
+        description:
+          - "<text>Разрушает выбранную стену"
+        icon: "deconstruct"
+      actions:
+        modify:
+          executor: "STRUCTURE_WALLS_MODIFY"
+          properties:
+            sampleType: "NONE"
+        close:
+          executor: "UI_CLOSE"
+          trigger:
+            action-modify: false

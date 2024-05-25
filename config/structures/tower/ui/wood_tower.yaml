@@ -8,7 +8,11 @@ content:
         name: "<red>Разобрать"
         description:
           - "<text>Разрушает здание возвращая некоторое кол-во ресурсов"
-        icon: "icon:deconstruct"
-      cost:
+        icon: "deconstruct"
       actions:
-      dependencies:
+        deconstruct:
+          executor: "STRUCTURE_DECONSTRUCT"
+        close:
+          executor: "UI_CLOSE"
+          trigger:
+            action-deconstruct: false

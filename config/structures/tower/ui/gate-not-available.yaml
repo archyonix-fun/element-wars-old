@@ -1,0 +1,20 @@
+name: ""
+size: "CHEST_6_ROW"
+
+content:
+  slot[43]:
+    DEFAULT:
+      view:
+        name: "<red>Разобрать"
+        description:
+          - "<text>Разрушает выбранную стену"
+        icon: "deconstruct"
+      actions:
+        modify:
+          executor: "STRUCTURE_WALLS_MODIFY"
+          properties:
+            sampleType: "NONE"
+        close:
+          executor: "UI_CLOSE"
+          trigger:
+            action-modify: false
