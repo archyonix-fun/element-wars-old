@@ -11,9 +11,9 @@ content:
           - "<text>все здания и даже добыть некоторые ресурсы."
           - "<blue>Скорость строительства: <text>2"
         icon: "construction_hammer_t1"
-        cost:
-          NATURAL_CRYSTAL: 50
-          EARTH_CRYSTAL: 50
+      cost:
+        NATURAL_CRYSTAL: 50
+        EARTH_CRYSTAL: 50
       actions:
         give_item:
           executor: "ITEM_GIVE"

@@ -11,7 +11,7 @@ variants:
     schema: "mill.schem"
     buildPoints: 25
     dependencies:
-      - "STRUCTURE:BUILDER_HUT"
+      - "STRUCTURE:BUILDER_HUT-T1"
     cost:
       NATURAL_CRYSTAL: 75
       WATER_CRYSTAL: 50

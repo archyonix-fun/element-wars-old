@@ -8,6 +8,7 @@ import archyonix.ewars.entities.team.functions.distributeTeams
 import archyonix.ewars.entities.team.functions.useGameTeams
 import archyonix.ewars.events
 import archyonix.ewars.features.action.handler.ActionsHandler
+import archyonix.ewars.features.dependencies.handler.ConditionsHandler
 import archyonix.ewars.features.hide_in_bushes.HideInBushesHandler
 import archyonix.ewars.game
 import archyonix.ewars.game.enums.GameStage
@@ -71,6 +72,7 @@ class GameEventHandler : PublicEventNode("game") {
         addChild(ResourcePackHandler())
         addChild(ResourceWaterHandler())
         addChild(HideInBushesHandler())
+        addChild(ConditionsHandler())
 
         addChild(StructureHandler())
         addChild(ActionsHandler())

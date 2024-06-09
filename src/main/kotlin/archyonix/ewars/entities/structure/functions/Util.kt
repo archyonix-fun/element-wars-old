@@ -2,6 +2,8 @@ package archyonix.ewars.entities.structure.functions
 
 import archyonix.ewars.entities.region.Region2D
 import archyonix.ewars.entities.region.Region3D
+import archyonix.ewars.entities.structure.Structure
+import archyonix.ewars.game
 import net.minestom.server.coordinate.Point
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
@@ -80,4 +82,22 @@ fun showEffect(player: Player, pos: Point) {
             ByteArray(0)
         )
     )
+}
+
+fun Structure.kickFromRegion() {
+    game.getPlayers()
+        .filter { region3D.contains(it.position) }
+        .forEach {
+            val x = if (it.position.x > position.x()) config.area.radius else -config.area.radius
+            val z = if (it.position.z > position.z()) config.area.radius else -config.area.radius
+            val point = Pos(
+                position.x() + x,
+                it.position.y,
+                position.z() + z
+            ).withView(
+                it.position.yaw,
+                it.position.pitch
+            )
+            it.teleport(point)
+        }
 }

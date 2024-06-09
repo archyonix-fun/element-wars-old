@@ -1,8 +1,10 @@
-package archyonix.ewars.features.shop
+package archyonix.ewars.features.dependencies
 
+import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.game
+import net.minestom.server.entity.Player
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 
 class Dependence(
@@ -35,25 +37,32 @@ class Dependence(
     private fun findVariants(): List<Structure.Config.Variant> {
         val variants = mutableListOf<Structure.Config.Variant>()
         for (target in targets) {
-            val variant = game.structureManager.configMap().values
-                .find { config -> config.variants.find { it.id == target } != null }
-                ?.variants
-                ?.find { it.id == target }
+            val split = target.split("-")
+            val structureId = split[0]
+            val variantId = split[1]
+
+            val variant = game.structureManager.configMap()[structureId]
+                ?.variants?.find { it.id == variantId }
             if (variant != null) variants.add(variant)
         }
         return variants
     }
 
     fun check(team: GameTeam): Boolean {
-        return when (type) {
-            DependenceType.STRUCTURE -> {
-                val structure = game.structureManager
-                    .findStructures(team)
-                    .filter { it.getProcess().type != Structure.Process.Type.BUILDING }
-                    .find { targets.contains(it.getVariant()?.id) }
-                structure != null
-            }
+        for (target in targets) {
+            if (!team.conditions.checkCondition(Condition(type, target)))
+                return false
         }
+        return true
+    }
+
+    fun check(player: Player): Boolean {
+        val team = player.gameTeam()
+        for (target in targets) {
+            if (!team.conditions.checkCondition(player, Condition(type, target)))
+                return false
+        }
+        return true
     }
 
     // Child classes

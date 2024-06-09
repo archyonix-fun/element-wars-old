@@ -77,6 +77,8 @@ variants:
     buildPoints: 5
     schema: "wood_tower.schem"
     ui: "wood_tower.yaml"
+    dependencies:
+      - "STRUCTURE:BUILDER_HUT-T1"
     cost:
       NATURAL_CRYSTAL: 50
     properties:

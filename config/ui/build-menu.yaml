@@ -61,7 +61,7 @@ content:
           - "<blue>? Позволяет покупать/ремонтировать инструменты."
         icon: "wood_craftsman_house"
       dependencies:
-        - "STRUCTURE:BUILDER_HUT"
+        - "STRUCTURE:BUILDER_HUT-T1"
       cost:
         NATURAL_CRYSTAL: 20
         EARTH_CRYSTAL: 20
@@ -88,7 +88,7 @@ content:
           - "<blue>? Позволяет покупать еду."
         icon: "mill"
       dependencies:
-        - "STRUCTURE:BUILDER_HUT"
+        - "STRUCTURE:BUILDER_HUT-T1"
       cost:
         NATURAL_CRYSTAL: 75
         WATER_CRYSTAL: 50
@@ -116,7 +116,7 @@ content:
           - "<blue>? Мешает передвижению противника."
         icon: "wood_tower"
       dependencies:
-        - "STRUCTURE:BUILDER_HUT"
+        - "STRUCTURE:BUILDER_HUT-T1"
       cost:
         NATURAL_CRYSTAL: 75
         WATER_CRYSTAL: 50

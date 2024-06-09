@@ -1,26 +1,27 @@
 package archyonix.ewars.entities.resource
 
+import archyonix.ewars.game
 import kotlin.math.max
 import kotlin.math.min
 
 class ResourceStorage {
-    var NATURAL_CRYSTAL: Int = 9999
+    var NATURAL_CRYSTAL: Int = if(game.isDebug) 9999 else 0
         set(value) {
             field = max(0, min(value, 9999))
         }
-    var FLAME_CRYSTAL: Int = 9999
+    var FLAME_CRYSTAL: Int = if(game.isDebug) 9999 else 0
         set(value) {
             field = max(0, min(value, 9999))
         }
-    var EARTH_CRYSTAL: Int = 9999
+    var EARTH_CRYSTAL: Int = if(game.isDebug) 9999 else 0
         set(value) {
             field = max(0, min(value, 9999))
         }
-    var WATER_CRYSTAL: Int = 9999
+    var WATER_CRYSTAL: Int = if(game.isDebug) 9999 else 0
         set(value) {
             field = max(0, min(value, 9999))
         }
-    var ENERGY_LIMIT: Int = 24
+    var ENERGY_LIMIT: Int = 4
         set(value) {
             field = max(0, value)
         }

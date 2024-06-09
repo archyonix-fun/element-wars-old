@@ -5,11 +5,12 @@ import archyonix.ewars.entities.region.Region3D
 import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.entities.structure.controllers.DefaultController
 import archyonix.ewars.entities.structure.events.*
+import archyonix.ewars.entities.structure.functions.kickFromRegion
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.entities.ui.UI
 import archyonix.ewars.features.classlibrary.ClassLibrary
+import archyonix.ewars.features.dependencies.Dependence
 import archyonix.ewars.features.shop.CostInfo
-import archyonix.ewars.features.shop.Dependence
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.AppSchema
 import archyonix.ewars.shared.libs.config.Properties
@@ -22,7 +23,6 @@ import net.minestom.server.instance.block.Block
 import net.minestom.server.utils.Direction
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
@@ -60,6 +60,8 @@ class Structure(
 
         buildZone.fill(Block.AIR)
         process = Process(processType, currentVariant!!.buildPoints, 0)
+
+        kickFromRegion()
         currentVariant?.installBlueprint(this)
         return true
     }
@@ -73,7 +75,11 @@ class Structure(
         process.addProgress(buildEvent.buildPoints)
 
         return if (startProgress < process.getProgress()) {
-            if (process.hasFinished()) process = Process(Process.Type.IDLE)
+            if (process.hasFinished()) {
+                val buildProcessFinishEvent = StructureProcessFinishEvent(this, process.type)
+                config.handler.call(buildProcessFinishEvent)
+                process = Process(Process.Type.IDLE)
+            }
             build(startProgress)
             true
         } else false
@@ -210,7 +216,7 @@ class Structure(
             val ui: String? = config?.getString("ui")
             val cost: CostInfo? = CostInfo
                 .import(config?.getConfigurationSection("cost"))
-            val dependencies: List<Dependence> = if(config != null) Dependence
+            val dependencies: List<Dependence> = if (config != null) Dependence
                 .import(config) else ArrayList()
             val buildPoints: Int = config?.getInt("buildPoints", -1) ?: -1
             val properties: Map<String, Any> = run {
@@ -262,7 +268,15 @@ class Structure(
             }
 
             fun installBlueprint(structure: Structure) {
-                schema.fillWithOutAir(game.instance, structure.buildPosition, structure.direction, Block.SCAFFOLDING)
+                val fillBlock =
+                    Block.fromNamespaceId("minecraft:${structure.team.bannerColorFirst.lowercase()}_stained_glass")
+                        ?: Block.WHITE_STAINED_GLASS
+                schema.fillWithOutAir(
+                    game.instance,
+                    structure.buildPosition,
+                    structure.direction,
+                    fillBlock
+                )
             }
 
             fun checkDependencies(team: GameTeam): Boolean {

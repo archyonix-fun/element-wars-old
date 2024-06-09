@@ -3,6 +3,7 @@ package archyonix.ewars.entities.structure.controllers
 import archyonix.ewars.entities.region.Zone
 import archyonix.ewars.entities.structure.Structure
 import archyonix.ewars.entities.structure.events.*
+import archyonix.ewars.features.dependencies.handler.StructureConditionHandler
 import archyonix.ewars.shared.libs.getDirection
 import net.minestom.server.instance.block.Block
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
@@ -58,6 +59,8 @@ class DefaultController(
                     Block.DIRT
                 )
             }
+
+            addChild(StructureConditionHandler())
         }
 
         override fun getController(structure: Structure): DefaultController =

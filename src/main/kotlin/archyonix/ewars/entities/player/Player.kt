@@ -56,19 +56,6 @@ fun Player.updateRecharge() {
     getAttribute(Attribute.ATTACK_SPEED).baseValue = recharge
 }
 
-fun Player.setCondition(name: String, state: Boolean = false) {
-    if (!gameTeam().playerConditions.containsKey(this)) {
-        gameTeam().playerConditions[this] = HashMap()
-    }
-    gameTeam().playerConditions[this]!![name] = state
-}
-
-fun Player.getConditions(): Map<String, Boolean> {
-    val conditions: MutableMap<String, Boolean> = HashMap(gameTeam().conditions)
-    conditions.putAll(gameTeam().playerConditions[this] ?: emptyMap())
-    return conditions
-}
-
 private val coolDown: MutableMap<Player, Long> = HashMap()
 fun Player.useCoolDown(): Boolean {
     val current = Date().time

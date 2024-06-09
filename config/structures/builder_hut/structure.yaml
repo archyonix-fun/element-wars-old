@@ -6,7 +6,7 @@ buildingLimit: 1
 
 
 variants:
-  BUILDER_HUT:
+  T1:
     name: "Хижина строителя"
     ui: "shop.yaml"
     schema: "builder_hut.schem"

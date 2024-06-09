@@ -11,7 +11,7 @@ variants:
     schema: "craftsman_house-wood.schem"
     buildPoints: 20
     dependencies:
-      - "STRUCTURE:BUILDER_HUT"
+      - "STRUCTURE:BUILDER_HUT-T1"
     cost:
       NATURAL_CRYSTAL: 20
       EARTH_CRYSTAL: 20

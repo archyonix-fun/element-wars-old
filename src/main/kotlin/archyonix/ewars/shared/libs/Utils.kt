@@ -2,7 +2,7 @@ package archyonix.ewars.shared.libs
 
 import archyonix.ewars.entities.resource.Resource
 import archyonix.ewars.features.shop.CostInfo
-import archyonix.ewars.features.shop.Dependence
+import archyonix.ewars.features.dependencies.Dependence
 import archyonix.ewars.game
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration

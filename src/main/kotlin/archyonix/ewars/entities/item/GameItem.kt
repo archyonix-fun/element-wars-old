@@ -2,11 +2,10 @@ package archyonix.ewars.entities.item
 
 import archyonix.ewars.entities.item.enums.ItemFlag
 import archyonix.ewars.entities.item.enums.ItemVariant
+import archyonix.ewars.entities.item.functions.GameItemIconTag
 import archyonix.ewars.entities.item.functions.GameItemIdTag
 import archyonix.ewars.entities.item.functions.GameItemRechargeTag
-import archyonix.ewars.entities.item.functions.GameItemIconTag
 import archyonix.ewars.entities.item.functions.GameItemVariantTag
-import archyonix.ewars.entities.player.getConditions
 import archyonix.ewars.features.action.Action
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.withColors
@@ -23,7 +22,6 @@ import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
 import java.lang.reflect.Modifier
 import java.util.*
-import kotlin.collections.HashSet
 
 class GameItem private constructor(
     config: ConfigurationSection
@@ -126,11 +124,10 @@ class GameItem private constructor(
         }
 
         fun executeActions(player: Player, conditions: MutableMap<String, Boolean> = mutableMapOf()) {
-            val conditionMap = HashMap(player.getConditions())
-            conditionMap.putAll(conditions)
+            val conditionMap = HashMap(conditions)
 
             actions.filter { it.trigger.contains(conditionMap) }.forEach {
-                if(!conditions.containsKey("action-${it.id}")) {
+                if (!conditions.containsKey("action-${it.id}")) {
                     conditions["action-${it.id}"] = it.execute(player, this)
                     executeActions(player, conditions)
                 }

@@ -88,6 +88,9 @@
                     <option name="path" value="**/ui/*.yaml" />
                     <option name="mappingKind" value="Pattern" />
                   </Item>
+                  <Item>
+                    <option name="path" value="config/structures/builder_hut/ui/shop.yaml" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>

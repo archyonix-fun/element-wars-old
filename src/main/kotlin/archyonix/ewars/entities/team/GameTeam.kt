@@ -2,6 +2,7 @@ package archyonix.ewars.entities.team
 
 import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.resource.ResourceStorage
+import archyonix.ewars.features.dependencies.ConditionInfo
 import archyonix.ewars.game
 import archyonix.ewars.game.bars.TeamBar
 import archyonix.ewars.shared.libs.withColors
@@ -27,8 +28,7 @@ class GameTeam(
     var resources: ResourceStorage = ResourceStorage()
     var infoBar: TeamBar = TeamBar(resources)
     var spawn = Pos(.0, .0, .0)
-    val conditions: MutableMap<String, Boolean> = HashMap()
-    val playerConditions: MutableMap<Player, MutableMap<String, Boolean>> = HashMap()
+    val conditions = ConditionInfo()
 
     fun getPlayers() = game.getPlayers().filter {
         try {

@@ -2,7 +2,7 @@ id: "CONSTRUCTION_HAMMER"
 union: "build_tool"
 default:
   material: "minecraft:wooden_pickaxe"
-  recharge: 30
+  recharge: 0
   flags:
     - "TOOL"
   properties:

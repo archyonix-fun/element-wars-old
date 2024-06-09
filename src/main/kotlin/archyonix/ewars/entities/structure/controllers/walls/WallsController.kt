@@ -66,11 +66,22 @@ class WallsController(
 
         when (sampleType) {
             Place.SampleType.NONE -> {
+                if(sampleTypeByOffset(offset) == Place.SampleType.GATE) {
+                    structure.team.resources.ENERGY_USED--
+                }
+
                 deconstruct(offset)
                 neighborController.deconstruct(offset.reflect())
             }
 
             else -> {
+                if(sampleType == Place.SampleType.GATE) {
+                    val used = structure.team.resources.ENERGY_USED
+                    val limit = structure.team.resources.ENERGY_LIMIT
+                    if(used + 1 > limit) return false
+                    else structure.team.resources.ENERGY_USED++
+                }
+
                 construct(offset, sampleType)
                 neighborController.construct(offset.reflect(), sampleType)
             }

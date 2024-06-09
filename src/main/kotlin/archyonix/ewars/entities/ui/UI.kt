@@ -2,12 +2,11 @@ package archyonix.ewars.entities.ui
 
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.player.gameTeam
-import archyonix.ewars.entities.player.getConditions
 import archyonix.ewars.entities.player.showActionBar
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.features.action.Action
+import archyonix.ewars.features.dependencies.Dependence
 import archyonix.ewars.features.shop.CostInfo
-import archyonix.ewars.features.shop.Dependence
 import archyonix.ewars.game
 import archyonix.ewars.shared.libs.Colors
 import archyonix.ewars.shared.libs.LoreUtils
@@ -151,8 +150,7 @@ class UI(
             private val view: View = View(config.view)
 
             fun executeActions(player: Player, ui: UI, conditions: MutableMap<String, Boolean> = mutableMapOf()) {
-                val conditionMap = HashMap(player.getConditions())
-                conditionMap.putAll(conditions)
+                val conditionMap = HashMap(conditions)
 
                 config.actions.filter { it.trigger.contains(conditionMap) }.forEach {
                     if (!conditions.containsKey("action-${it.id}")) {
@@ -170,9 +168,8 @@ class UI(
             }
 
             fun checkConditions(player: Player): Boolean {
-                val gameTeam = player.gameTeam()
                 for (dependency in config.dependencies) {
-                    if (!dependency.check(gameTeam)) {
+                    if (!dependency.check(player)) {
                         player.showActionBar("Не все требования выполнены", MessageType.WARNING)
                         return false
                     }
@@ -205,7 +202,7 @@ class UI(
                 private val config: Config
             ) {
                 fun buildItemStack(sampleConfig: Sample.Config, isConditions: Boolean): ItemStack {
-                    val description = config.description as MutableList<String>
+                    val description = ArrayList(config.description)
                     description.addAll(LoreUtils.buildCostLore(sampleConfig.cost))
                     description.addAll(LoreUtils.buildDependenciesLore(sampleConfig.dependencies))
                     return ItemStack.of(Material.STICK)
