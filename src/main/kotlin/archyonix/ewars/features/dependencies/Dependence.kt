@@ -26,12 +26,20 @@ class Dependence(
 
     private var variants: List<Structure.Config.Variant>? = null
 
-    fun generateLore(): String {
-        if (variants == null) variants = findVariants()
+    fun generateLore(): String? {
+        return when(type) {
+            DependenceType.STRUCTURE -> {
+                if (variants == null) variants = findVariants()
 
-        val names = mutableListOf<String>()
-        variants!!.forEach { names.add(it.name) }
-        return "${type.prefix}${names.joinToString(" или ")}"
+                val names = mutableListOf<String>()
+                variants!!.forEach { names.add(it.name) }
+                "${type.prefix}${names.joinToString(" или ")}"
+            }
+
+            else -> {
+                null
+            }
+        }
     }
 
     private fun findVariants(): List<Structure.Config.Variant> {
@@ -50,8 +58,10 @@ class Dependence(
 
     fun check(team: GameTeam): Boolean {
         for (target in targets) {
-            if (!team.conditions.checkCondition(Condition(type, target)))
-                return false
+            val isInvert = target.startsWith("!")
+            val cleanTarget = if(isInvert) target.substring(1) else target
+            if (!team.conditions.checkCondition(Condition(type, cleanTarget)))
+                if(isInvert) continue else return false
         }
         return true
     }
@@ -59,8 +69,10 @@ class Dependence(
     fun check(player: Player): Boolean {
         val team = player.gameTeam()
         for (target in targets) {
-            if (!team.conditions.checkCondition(player, Condition(type, target)))
-                return false
+            val isInvert = target.startsWith("!")
+            val cleanTarget = if(isInvert) target.substring(1) else target
+            val result = team.conditions.checkCondition(player, Condition(type, cleanTarget))
+            if (result == isInvert) return false
         }
         return true
     }
@@ -70,5 +82,6 @@ class Dependence(
         val prefix: String
     ) {
         STRUCTURE("<text>Здание - "),
+        UPGRADE("<text>Улучшение - "),
     }
 }

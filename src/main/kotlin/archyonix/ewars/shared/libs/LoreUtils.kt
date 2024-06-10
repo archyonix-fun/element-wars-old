@@ -20,7 +20,8 @@ class LoreUtils {
             if (dependencies.isNotEmpty()) {
                 val lines = mutableListOf<String>()
                 dependencies.forEach {
-                    lines.add(it.generateLore())
+                    it.generateLore()
+                        ?.let { line -> lines.add(line) }
                 }
                 if (lines.isNotEmpty()) {
                     lore.add("")

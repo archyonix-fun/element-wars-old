@@ -3,7 +3,7 @@ size: "CHEST_6_ROW"
 
 content:
   slot[10]:
-    T1-HAMMER:
+    CONSTRUCTION_HAMMER-T1:
       view:
         name: "<t1>Каменный молот строителя"
         description:
@@ -26,6 +26,12 @@ content:
             cost:
               NATURAL_CRYSTAL: 50
               EARTH_CRYSTAL: 50
+          trigger:
+            action-give_item: false
+        condition:
+          executor: "TEAM_CONDITION_ADD"
+          properties:
+            condition: "UPGRADE:CONSTRUCTION_HAMMER-T1"
           trigger:
             action-give_item: false
   slot[43]:

@@ -9,6 +9,7 @@ class Colors {
         val BLUE = TextColor.fromHexString("#0cb2aa")
         val YELLOW = TextColor.fromHexString("#d7a116")
         val RED = TextColor.fromHexString("#c51c29")
+        val GREEN = TextColor.fromHexString("#3fda51")
         val TEXT = TextColor.fromHexString("#a2a2a2")
 
         val T0 = TextColor.fromHexString("#ffffff")

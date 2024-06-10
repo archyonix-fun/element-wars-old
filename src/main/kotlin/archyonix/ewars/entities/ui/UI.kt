@@ -1,9 +1,7 @@
 package archyonix.ewars.entities.ui
 
 import archyonix.ewars.entities.player.enums.MessageType
-import archyonix.ewars.entities.player.gameTeam
 import archyonix.ewars.entities.player.showActionBar
-import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.features.action.Action
 import archyonix.ewars.features.dependencies.Dependence
 import archyonix.ewars.features.shop.CostInfo
@@ -51,6 +49,8 @@ class UI(
             val player = event.player
             if (!sample.checkConditions(player)) return@addListener
             sample.executeActions(player, this)
+
+            render()
         }
         addListener(InventoryCloseEvent::class.java) {
             if (it.inventory == inventory) unregister()
@@ -71,11 +71,17 @@ class UI(
     private fun render() {
         for (slot in content) {
             val sample = slot.samples
-                .lastOrNull { it.checkConditions(player.gameTeam()) }
+                .filter { !Dependence(Dependence.DependenceType.UPGRADE, setOf(it.id)).check(player) }
+                .lastOrNull { it.checkConditions(player) }
                 ?: slot.samples
-                    .firstOrNull { !it.checkConditions(player.gameTeam()) }
-                ?: continue
-            inventory.setItemStack(slot.index, sample.buildView(player.gameTeam()))
+                    .firstOrNull { !it.checkConditions(player) }
+            val itemStack = sample
+                ?.buildView(player)
+                ?: ItemStack
+                    .of(Material.STICK)
+                    .withDisplayName("<green>Уже куплено".withColors())
+                    .withTag(Tag.String("icon"), "complete")
+            inventory.setItemStack(slot.index, itemStack)
         }
     }
 
@@ -136,7 +142,8 @@ class UI(
             val samples: List<Sample.Config> = run {
                 val samples: MutableList<Sample.Config> = ArrayList()
                 for (sampleId in config.getKeys(false)) {
-                    val section = config.getConfigurationSection(sampleId) ?: continue
+                    val section = config
+                        .getConfigurationSection(sampleId) ?: continue
                     samples.add(Sample.Config(section))
                 }
                 return@run samples
@@ -160,13 +167,6 @@ class UI(
                 }
             }
 
-            fun checkConditions(gameTeam: GameTeam): Boolean {
-                for (dependency in config.dependencies) {
-                    if (!dependency.check(gameTeam)) return false
-                }
-                return true
-            }
-
             fun checkConditions(player: Player): Boolean {
                 for (dependency in config.dependencies) {
                     if (!dependency.check(player)) {
@@ -177,8 +177,8 @@ class UI(
                 return true
             }
 
-            fun buildView(gameTeam: GameTeam): ItemStack =
-                view.buildItemStack(config, checkConditions(gameTeam))
+            fun buildView(player: Player): ItemStack =
+                view.buildItemStack(config, checkConditions(player))
 
             // Child classes
             class Config(
