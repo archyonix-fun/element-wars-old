@@ -12,7 +12,7 @@ import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
-class WaveTask(
+class SwordWaveOld(
     private val origin: Point,
     private val direction: Float,
     private val type: Type,
@@ -21,7 +21,7 @@ class WaveTask(
     private val step: Double
 ) {
     companion object {
-        private val waveReg: MutableMap<UUID, WaveTask> = HashMap()
+        private val waveReg: MutableMap<UUID, SwordWaveOld> = HashMap()
     }
 
     private val uuid: UUID = UUID.randomUUID()

@@ -4,7 +4,7 @@ import archyonix.ewars.entities.item.hasCharged
 import archyonix.ewars.entities.item.resetCharge
 import archyonix.ewars.features.action.Action
 import archyonix.ewars.features.classlibrary.ClassLibrary
-import archyonix.ewars.features.pvp.WaveTask
+import archyonix.ewars.features.pvp.SwordWaveOld
 import net.minestom.server.entity.Player
 import net.minestom.server.entity.damage.DamageType
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket
@@ -23,10 +23,10 @@ class SwordHorizontalAttackExecutor(
         player.sendPacket(packet)
 
         val position = player.position.add(0.0, 1.5, 0.0)
-        WaveTask(
+        SwordWaveOld(
             position,
             player.position.yaw,
-            WaveTask.Type.HORIZONTAL,
+            SwordWaveOld.Type.HORIZONTAL,
             startRadius = 0.5,
             endRadius = 4.0,
             step = 0.5
