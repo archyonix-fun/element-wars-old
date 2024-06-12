@@ -66,10 +66,10 @@ fun showRegion(region3D: Region3D, player: Player) {
     }
 }
 
-fun showEffect(player: Player, pos: Point) {
+fun showEffect(player: Player, pos: Point, particle: Particle = Particle.FLAME) {
     player.sendPacket(
         ParticlePacket(
-            Particle.FLAME.id(),
+            particle.id(),
             false,
             pos.x(),
             pos.y(),

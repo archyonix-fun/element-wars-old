@@ -17,6 +17,7 @@ import net.minestom.server.item.ItemStack
 import net.minestom.server.item.Material
 import net.minestom.server.item.attribute.AttributeSlot
 import net.minestom.server.item.attribute.ItemAttribute
+import net.minestom.server.tag.Tag
 import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration
 import java.io.File
@@ -30,6 +31,7 @@ class GameItem private constructor(
         private const val configDir = "config/items"
 
         /* Items */
+        val SWORD = loadByName("sword")
         val CONSTRUCTION_HAMMER = loadByName("construction_hammer")
         val FISHING_ROD = loadByName("fishing_rod")
         val PICKAXE = loadByName("pickaxe")
@@ -141,6 +143,7 @@ class GameItem private constructor(
             .withTag(GameItemVariantTag, id)
             .withTag(GameItemIconTag, icon)
             .withTag(GameItemRechargeTag, recharge.toFloat())
+            .withTag(Tag.UUID("uuid"), UUID.randomUUID())
             .withMeta {
                 it.attributes(
                     listOf(

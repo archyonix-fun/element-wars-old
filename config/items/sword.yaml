@@ -1,0 +1,24 @@
+id: "SWORD"
+union: "sword"
+default:
+  recharge: 10
+  flags:
+    - "WEAPON_MELEE"
+variants:
+  T1:
+    name: "<t1>Примитивный меч"
+    material: "minecraft:wooden_sword"
+    icon: "sword_t1"
+    actions:
+      vertical_attack:
+        executor: "SWORD_MELEE_ATTACK_VERTICAL"
+        trigger:
+          DEFAULT?OR:
+            RIGHT_CLICK: false
+            RIGHT_CLICK_BLOCK: false
+      horizontal_attack:
+        executor: "SWORD_MELEE_ATTACK_HORIZONTAL"
+        trigger:
+          DEFAULT?OR:
+            LEFT_CLICK: false
+            LEFT_CLICK_BLOCK: false

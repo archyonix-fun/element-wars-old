@@ -3,18 +3,20 @@ package archyonix.ewars.entities.item
 import archyonix.ewars.entities.item.functions.asItemVariant
 import archyonix.ewars.entities.item.functions.hasGameItem
 import net.minestom.server.item.ItemStack
+import net.minestom.server.tag.Tag
+import org.jetbrains.annotations.UnknownNullability
 import java.util.*
 import kotlin.math.min
 
 
-private val weaponCharge: MutableMap<ItemStack, Long> = HashMap()
+private val weaponCharge: MutableMap<UUID, Long> = HashMap()
 fun ItemStack.getChargeValue(): Float {
     if (!hasGameItem()) return 1f
     val gameItem = asItemVariant()!!
 
     val currentTime = Date().time
-    if (weaponCharge.contains(this)) {
-        val lastTime = weaponCharge[this]!!
+    if (weaponCharge.contains(getUUID())) {
+        val lastTime = weaponCharge[getUUID()]!!
         val time = currentTime - lastTime
         val ticks = time / 50f
 
@@ -24,7 +26,7 @@ fun ItemStack.getChargeValue(): Float {
 }
 
 fun ItemStack.hasCharged(): Boolean {
-    if(!weaponCharge.contains(this)) {
+    if (!weaponCharge.contains(getUUID())) {
         resetCharge()
         return true
     }
@@ -32,5 +34,9 @@ fun ItemStack.hasCharged(): Boolean {
 }
 
 fun ItemStack.resetCharge() {
-    weaponCharge[this] = Date().time
+    weaponCharge[getUUID()!!] = Date().time
+}
+
+fun ItemStack.getUUID(): @UnknownNullability UUID? {
+    return getTag(Tag.UUID("uuid"))
 }
