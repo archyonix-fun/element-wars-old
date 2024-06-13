@@ -2,6 +2,7 @@ package archyonix.ewars.features.action.executors.weapon_melee
 
 import archyonix.ewars.entities.item.hasCharged
 import archyonix.ewars.entities.item.resetCharge
+import archyonix.ewars.entities.player.getFocus
 import archyonix.ewars.entities.player.setFocus
 import archyonix.ewars.features.action.Action
 import archyonix.ewars.features.pvp.PVPManager
@@ -21,7 +22,13 @@ abstract class SwordAttackExecutor(
 ) : Action.Executor(properties) {
     private val waveReg: MutableMap<Player, Task> = HashMap()
     override fun run(player: Player, caller: Any): Boolean {
-        if (player.isSneaking) return false
+        if (player.isSneaking) {
+            player.setFocus(PVPManager.Focus.RED)
+            game.schedule.buildTask {
+                player.setFocus(PVPManager.Focus.NONE)
+            }.delay(Duration.ofMillis(300)).schedule()
+            return false
+        }
 
         if (game.pvpManager.charging(player)) {
             player.sendActionBar(
@@ -62,10 +69,34 @@ abstract class SwordAttackExecutor(
                 targets
                     .filter { it != player }
                     .forEach {
-                        val tackDamageAnimation =
+                        val currentDamageAnimation =
+                            EntityAnimationPacket(player.entityId, EntityAnimationPacket.Animation.CRITICAL_EFFECT)
+                        val targetDamageAnimation =
                             EntityAnimationPacket(it.entityId, EntityAnimationPacket.Animation.CRITICAL_EFFECT)
-                        it.viewers.forEach { viewer -> viewer.sendPacket(tackDamageAnimation) }
-                        it.damage(DamageType.PLAYER_ATTACK, 1f)
+                        when (it.getFocus()) {
+                            PVPManager.Focus.BLUE -> {
+                                it.viewers.forEach { viewer -> viewer.sendPacket(targetDamageAnimation) }
+
+                                if (wave.waveType == ShockWave.Type.CHARGED) {
+                                    it.damage(DamageType.PLAYER_ATTACK, 4f)
+                                } else it.damage(DamageType.PLAYER_ATTACK, 1f)
+                            }
+
+                            PVPManager.Focus.RED -> {
+                                if (wave.waveType == ShockWave.Type.CHARGED) {
+                                    it.viewers.forEach { viewer -> viewer.sendPacket(currentDamageAnimation) }
+                                    player.damage(DamageType.PLAYER_ATTACK, 4f)
+                                } else {
+                                    it.viewers.forEach { viewer -> viewer.sendPacket(targetDamageAnimation) }
+                                    it.damage(DamageType.PLAYER_ATTACK, 1f)
+                                }
+                            }
+
+                            else -> {
+                                it.viewers.forEach { viewer -> viewer.sendPacket(targetDamageAnimation) }
+                                it.damage(DamageType.PLAYER_ATTACK, 1f)
+                            }
+                        }
                     }
             }
         }.delay(Duration.ofMillis(250)).schedule()

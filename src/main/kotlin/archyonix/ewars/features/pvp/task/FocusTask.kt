@@ -32,6 +32,6 @@ class FocusTask : Runnable {
             }
             game.getPlayers().forEach { it.sendPacket(packet) }
         }
-        game.schedule.buildTask(this::run).delay(Duration.ofMillis(250)).schedule()
+        game.schedule.buildTask(this::run).delay(Duration.ofMillis(100)).schedule()
     }
 }
