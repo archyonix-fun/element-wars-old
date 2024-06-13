@@ -10,6 +10,7 @@ import archyonix.ewars.events
 import archyonix.ewars.features.action.handler.ActionsHandler
 import archyonix.ewars.features.dependencies.handler.ConditionsHandler
 import archyonix.ewars.features.hide_in_bushes.HideInBushesHandler
+import archyonix.ewars.features.pvp.handler.PVPHandler
 import archyonix.ewars.game
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
@@ -73,6 +74,7 @@ class GameEventHandler : PublicEventNode("game") {
         addChild(ResourceWaterHandler())
         addChild(HideInBushesHandler())
         addChild(ConditionsHandler())
+        addChild(PVPHandler())
 
         addChild(StructureHandler())
         addChild(ActionsHandler())

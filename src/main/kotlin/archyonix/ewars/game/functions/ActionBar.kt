@@ -5,6 +5,7 @@ import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.TextColor
 import net.minestom.server.entity.Player
 import kotlin.math.floor
+import kotlin.math.max
 
 class ActionBar(
     vararg components: ActionBarComponent
@@ -21,15 +22,16 @@ class ActionBar(
     }
 
     class Progress(
-        private val progress: Float
+        progress: Float
     ) : ActionBarComponent {
+        private val progress = max(1f, progress)
         private val size = 128
-        private val color = when (progress) {
+        private val color = when (this.progress) {
             in 0f..0.3f -> "#d42f2f"
             in 0.3f..0.7f -> "#d48e1e"
             else -> "#57cb47"
         }
-        private val first = floor(size * progress).toInt()
+        private val first = floor(size * this.progress).toInt()
         private val second = size - first
 
         override fun buildComponent() = Component.join(

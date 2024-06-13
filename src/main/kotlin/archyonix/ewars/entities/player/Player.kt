@@ -6,6 +6,8 @@ import archyonix.ewars.entities.item.functions.hasGameItem
 import archyonix.ewars.entities.player.enums.MessageType
 import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.entities.team.functions.findTeamById
+import archyonix.ewars.features.pvp.PVPManager
+import archyonix.ewars.game
 import archyonix.ewars.shared.libs.withColors
 import net.kyori.adventure.text.Component
 import net.minestom.server.attribute.Attribute
@@ -70,3 +72,6 @@ fun Player.useCoolDown(): Boolean {
     }
     return true
 }
+
+fun Player.getFocus() = game.pvpManager.getFocus(this)
+fun Player.setFocus(focus: PVPManager.Focus) = game.pvpManager.setFocus(this, focus)

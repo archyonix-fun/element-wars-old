@@ -9,6 +9,7 @@ import archyonix.ewars.entities.team.GameTeam
 import archyonix.ewars.events
 import archyonix.ewars.features.action.ActionManager
 import archyonix.ewars.features.classlibrary.ClassLibrary
+import archyonix.ewars.features.pvp.PVPManager
 import archyonix.ewars.game.enums.GameStage
 import archyonix.ewars.game.events.ChangeGameStageEvent
 import archyonix.ewars.game.handler.GameEventHandler
@@ -30,6 +31,7 @@ class Game {
     lateinit var resourceManager: ResourceManager
     lateinit var handler: GameEventHandler
     lateinit var structureManager: StructureManager
+    lateinit var pvpManager: PVPManager
 
     val isDebug: Boolean = gameArgs.IS_DEBUG.toBooleanStrictOrNull() ?: false
 
@@ -39,6 +41,7 @@ class Game {
         this.resourceManager = ResourceManager()
         this.handler = GameEventHandler()
         this.structureManager = StructureManager()
+        this.pvpManager = PVPManager()
 
         return this
     }
