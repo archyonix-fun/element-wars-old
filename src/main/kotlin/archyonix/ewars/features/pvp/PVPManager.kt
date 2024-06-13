@@ -1,29 +1,36 @@
 package archyonix.ewars.features.pvp
 
+import archyonix.ewars.entities.item.getChargeValue
 import archyonix.ewars.entities.item.getUUID
+import archyonix.ewars.entities.item.hasCharged
 import net.minestom.server.entity.Player
 import java.util.*
 
 class PVPManager {
-    private val chargeCD: MutableMap<Player, Long> = HashMap()
+    private val chargeDelay: MutableMap<Player, Long> = HashMap()
     private val weaponCharge: MutableMap<UUID, Float> = HashMap()
-    private val playerFocus: MutableMap<Player, Focus> = HashMap()
+    val focus: FocusController = FocusController()
 
-    fun charging(player: Player): Boolean {
-        val itemId = player.itemInMainHand.getUUID() ?: return false
-        val cd = chargeCD[player] ?: 0
+    fun charging(player: Player, overload: () -> Unit = {}): Boolean {
         val current = Date().time
+        val delay = chargeDelay[player] ?: 0
+        val itemId = player.itemInMainHand.getUUID() ?: return false
+        chargeDelay[player] = current
 
-        chargeCD[player] = current
-        if (current - cd > 200 && cd != 0L) {
+        if (current - delay < 150 || player.itemInMainHand.getChargeValue() < 1f) return false
+        val charge = weaponCharge[itemId] ?: 0f
+        if (charge > 2f) {
+            overload()
             weaponCharge.remove(itemId)
-            chargeCD.remove(player)
             return false
         }
-        val charge = weaponCharge[itemId] ?: 0f
-        if (charge > 2f) return false
         weaponCharge[itemId] = charge + 0.1f
         return true
+    }
+
+    fun calcDelay(player: Player): Long {
+        val delay = chargeDelay[player] ?: 0
+        return Date().time - delay
     }
 
     fun chargeProgress(player: Player): Float {
@@ -34,21 +41,12 @@ class PVPManager {
     fun hasCharged(player: Player): Boolean {
         val itemId = player.itemInMainHand.getUUID() ?: return false
         val charge = weaponCharge[itemId] ?: 0f
-        return charge >= 10f
+        return charge >= 1f
     }
 
     fun resetCharge(player: Player) {
         val itemId = player.itemInMainHand.getUUID() ?: return
         weaponCharge.remove(itemId)
-        chargeCD.remove(player)
+        chargeDelay.remove(player)
     }
-
-    fun getFocus(player: Player): Focus =
-        playerFocus[player] ?: Focus.NONE
-
-    fun setFocus(player: Player, focus: Focus) {
-        playerFocus[player] = focus
-    }
-
-    enum class Focus { NONE, BLUE, RED }
 }

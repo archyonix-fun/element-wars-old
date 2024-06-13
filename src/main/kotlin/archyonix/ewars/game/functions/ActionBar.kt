@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.TextColor
 import net.minestom.server.entity.Player
 import kotlin.math.floor
 import kotlin.math.max
+import kotlin.math.min
 
 class ActionBar(
     vararg components: ActionBarComponent
@@ -24,7 +25,7 @@ class ActionBar(
     class Progress(
         progress: Float
     ) : ActionBarComponent {
-        private val progress = max(1f, progress)
+        private val progress = max(0f, min(1f, progress))
         private val size = 128
         private val color = when (this.progress) {
             in 0f..0.3f -> "#d42f2f"

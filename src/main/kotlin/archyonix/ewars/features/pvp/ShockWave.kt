@@ -1,5 +1,6 @@
 package archyonix.ewars.features.pvp
 
+import archyonix.ewars.features.pvp.enums.Particles
 import archyonix.ewars.game
 import net.minestom.server.coordinate.Point
 import net.minestom.server.entity.Player
@@ -22,7 +23,7 @@ abstract class ShockWave(
     val targets: MutableSet<Player> = HashSet()
     var isCancel: Boolean = false
     abstract fun spawn(callback: (targets: Set<Player>) -> Unit)
-    abstract fun createPoint(time: Double, radius: Double): ShockPoint
+    abstract fun createPoint(time: Double, radius: Double, multiplier: Double = 0.0): ShockPoint
     fun isCollide(wave: ShockWave): Boolean {
         val offset = radius * 2
         val minX = position.x() - offset
@@ -70,9 +71,9 @@ abstract class ShockWave(
         }
 
         fun draw(waveType: Type) {
-            val effect = if (waveType == Type.CHARGED) Particle.DRIPPING_WATER
-            else Particle.CRIT
-            game.getPlayers().forEach { Util.showEffect(it, position, effect) }
+            val effect = if (waveType == Type.CHARGED) Particles.CHARGED else Particles.DEFAULT
+            val packet = effect.buildPacket(position)
+            game.getPlayers().forEach { it.sendPacket(packet) }
         }
     }
 }

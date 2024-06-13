@@ -24,9 +24,10 @@ class SwordWave(
     private val random: Random = Random()
     override fun spawn(callback: (targets: Set<Player>) -> Unit) {
         var r = offset
+        val multiplier = multipliers[random.nextInt(multipliers.size)]
         game.schedule.submitTask {
             if (r <= this.radius && !isCancel) {
-                drawArc(r)
+                drawArc(r, multiplier)
                 r += 0.5
                 return@submitTask TaskSchedule.millis(25)
             } else callback(targets)
@@ -35,14 +36,14 @@ class SwordWave(
         }
     }
 
-    private fun drawArc(radius: Double) {
+    private fun drawArc(radius: Double, multiplier: Double) {
         var time = Math.PI / 3.0
         val stepCount = (radius * 3).roundToInt()
         val step = time * 2 / stepCount
 
         shockPointSet.clear()
         for (i in 0 until stepCount) {
-            createPoint(time, radius).draw(waveType)
+            createPoint(time, radius, multiplier).draw(waveType)
             time -= step
         }
         shockWaves
@@ -65,13 +66,13 @@ class SwordWave(
             }
     }
 
-    override fun createPoint(time: Double, radius: Double): ShockPoint {
+    override fun createPoint(time: Double, radius: Double, multiplier: Double): ShockPoint {
         val x = radius * cos(time)
         val y = radius * sin(time)
 
         val offset = when(waveDirection) {
-            Direction.VERTICAL -> Vec(x, y, time * multipliers[random.nextInt(multipliers.size)])
-            Direction.HORIZONTAL -> Vec(x, time * multipliers[random.nextInt(multipliers.size)], y)
+            Direction.VERTICAL -> Vec(x, y, time * multiplier)
+            Direction.HORIZONTAL -> Vec(x, time * multiplier, y)
         }
         val shockPoint = ShockPoint(Util.rotate(position, direction, position.add(offset)))
         shockPointSet.add(shockPoint)

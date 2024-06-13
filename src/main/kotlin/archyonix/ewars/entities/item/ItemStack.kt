@@ -34,7 +34,8 @@ fun ItemStack.hasCharged(): Boolean {
 }
 
 fun ItemStack.resetCharge() {
-    weaponCharge[getUUID()!!] = Date().time
+    val uuid = getUUID() ?: return
+    weaponCharge[uuid] = Date().time
 }
 
 fun ItemStack.getUUID(): @UnknownNullability UUID? {
