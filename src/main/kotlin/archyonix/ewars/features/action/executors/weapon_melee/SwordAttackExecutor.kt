@@ -11,6 +11,7 @@ import archyonix.ewars.features.pvp.ShockWave
 import archyonix.ewars.features.pvp.SwordWave
 import archyonix.ewars.game
 import archyonix.ewars.game.functions.ActionBar
+import net.kyori.adventure.text.Component
 import net.minestom.server.entity.Player
 import net.minestom.server.entity.damage.DamageType
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket
@@ -43,15 +44,17 @@ abstract class SwordAttackExecutor(
             waveType = if (hasCharged) ShockWave.Type.CHARGED else ShockWave.Type.DEFAULT,
             waveDirection = attackDirection,
             offset = 0.5,
-            distance = if (hasCharged) 8.0 else 4.0
+            distance = if (hasCharged) 12.0 else 4.0
         )
         return game.schedule.buildTask {
             if(!force) {
+                if(wave.waveType == ShockWave.Type.CHARGED && !game.pvpManager.hasCharged(player)) return@buildTask
                 if (!player.itemInMainHand.hasCharged() && wave.waveType != ShockWave.Type.CHARGED) return@buildTask
                 if (game.pvpManager.calcDelay(player) < 250) return@buildTask
             }
             game.pvpManager.resetCharge(player)
             player.itemInMainHand.resetCharge()
+            player.sendActionBar(Component.empty())
             player.setFocus(FocusController.Focus.NONE)
             wave.spawn { targets ->
                 targets
