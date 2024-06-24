@@ -13,6 +13,7 @@ import net.minestom.server.MinecraftServer
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
 import net.minestom.server.scoreboard.Team
+import java.util.UUID
 
 class GameTeam(
     val id: String,
@@ -52,6 +53,7 @@ class GameTeam(
     }
 
     private fun createMinecraftTeam(): Team {
+        val id = "$id:${UUID.randomUUID()}"
         val manager = MinecraftServer.getTeamManager()
         var team = manager.getTeam(id)
 
