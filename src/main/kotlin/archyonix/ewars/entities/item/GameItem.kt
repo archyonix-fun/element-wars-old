@@ -59,6 +59,9 @@ class GameItem private constructor(
 
     val id: String = config.getString("id") ?: throw RuntimeException("Field id is null")
     val union: String? = config.getString("union")
+    val flags: Set<ItemFlag> = config.contains("flags").run {
+        return@run config.getStringList("flags").map { ItemFlag.valueOf(it) }.toSet()
+    }
     private val default = loadDefault(config.getConfigurationSection("default"))
     private val variants = loadVariants(config.getConfigurationSection("variants"))
 
@@ -104,10 +107,6 @@ class GameItem private constructor(
                 )
             }
             return@run defaultProperties
-        }
-        val flags: Set<ItemFlag> = config.contains("flags").run {
-            if (this) return@run config.getStringList("flags").map { ItemFlag.valueOf(it) }.toSet()
-            return@run default?.flags ?: emptySet()
         }
         private val icon: String? = config.getString("icon") ?: default?.icon
         val recharge: Int = config.contains("recharge").run {

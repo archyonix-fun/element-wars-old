@@ -1,9 +1,9 @@
 id: "SWORD"
 union: "sword"
+flags:
+- "WEAPON_MELEE"
 default:
   recharge: 10
-  flags:
-    - "WEAPON_MELEE"
 variants:
   T1:
     name: "<t1>Примитивный меч"
